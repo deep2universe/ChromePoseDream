@@ -1,0 +1,38 @@
+{
+  "name": "posedream",
+  "version": "1.0.0",
+  "description": "Chrome YouTube AI pose dream extension",
+  "main": "src/background.js",
+  "scripts": {
+    "copyJS": "cp src/popup.js dist/ && cp src/options.js dist/ && cp src/background.js dist/",
+    "copyHTML": "cp src/*.html dist/",
+    "copyManifest": "cp src/manifest.json dist/",
+    "copyImages": "cp -r src/images dist/",
+    "copyCSS": "cp src/*.css dist/",
+    "copy": "npm run copyManifest && npm run copyJS && npm run copyHTML && npm run copyImages && npm run copyCSS",
+    "build": "parcel build src/content.js -d dist -o content --no-minify && npm run copy"
+  },
+  "keywords": [
+    "Chrome",
+    "extension",
+    "AI",
+    "pose",
+    "pose tracking",
+    "tracking",
+    "dream",
+    "style",
+    "styleGAN",
+    "tensorflow",
+    "tf",
+    "tfjs"
+  ],
+  "author": "Mario M.",
+  "license": "MIT",
+  "dependencies": {
+    "@tensorflow-models/pose-detection": "^0.0.5",
+    "@tensorflow/tfjs-converter": "^3.8.0",
+    "@tensorflow/tfjs-core": "^3.8.0",
+    "proton-engine": "^4.2.1",
+    "regenerator-runtime": "^0.13.9"
+  }
+}

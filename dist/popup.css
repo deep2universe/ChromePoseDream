@@ -1,0 +1,19 @@
+body{
+    width: 400px;
+    height: 500px;
+}
+
+ol {
+    list-style-type: none;
+    counter-reset: li;
+}
+li {
+    font-size: 1rem;
+}
+
+li:before {
+    counter-increment: li;
+    content: counter(li, decimal-leading-zero);
+    color: red;
+    margin-right: 0.25em;
+}
