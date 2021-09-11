@@ -74,7 +74,7 @@ Supernovas are constantly exploding on the nose.
 
 ### Hands track from border
 The yellow ray is connected to the right hand.  
-The red beam is connected to the left hand.  
+The red ray is connected to the left hand.  
 If the hands are too far away from the edge, the connection is interrupted.  
 ![show ](assets/handTrackFromBorder.png)
 
@@ -82,7 +82,7 @@ If the hands are too far away from the edge, the connection is interrupted.
 # Installation
 ## Download this repository
 ```shell
-git clone 
+git clone https://github.com/deep2universe/ChromePoseDream.git
 ```
 ## Open Chrome extensions
 Open this [URL](chrome://extensions):
