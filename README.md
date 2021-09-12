@@ -2,7 +2,7 @@
 
 YouTube pose dream is a Chrome AI extension to visualize videos.
 
-When you're old enough, you may remember Winamp. There was the possibility to visualize music. However, this extension makes similar with videos. The human pose in the video is used as input for the visualization.
+When you're old enough, you may remember [Winamp](http://www.winamp.com/). There was the possibility to visualize music. However, this extension makes similar with videos. The human pose in the video is used as input for the visualization.
 
 Pose estimation is done with [TensorFlow.js](https://www.tensorflow.org/js)  
 Particle animation is done with [Proton](https://github.com/drawcall/Proton)  
@@ -41,7 +41,7 @@ The eyes are used as a reference for displaying the image.
 ![cat face](assets/cat.png)
 
 ### Smiley
-![smily face](assets/smiley.png)
+![smiley face](assets/smiley.png)
 
 ### Sun
 ![sun as face](assets/sun.png)
@@ -102,7 +102,7 @@ You should now see the following entry.
 ![extension](assets/extension.png)
 
 ## Check Chrome settings
-Got to this [URL](chrome://settings/accessibility)
+Go to this [URL](chrome://settings/accessibility)
 ```
 chrome://settings/accessibility
 ```
@@ -134,20 +134,22 @@ npm run build
 <a name="Further-development"></a>
 # Further development
 
-The following should still be implemented.
+The following is still on the TODO list:
 - Support for other video platforms (e.g. Vimeo)
-- Support for multi-pose detection
+- Support for multi-pose detection.
 - Internationalization
-- Export of the pose detection keypoints for other applications
-- Use pose detection keypoints to feed GAN or VAE model and display result in webpage
+- Export of the pose detection keypoints for other applications.
+- Use pose detection keypoints to feed GAN or VAE model and display result in webpage.
 - After the video finishes, the drawing canvas will not be removed. Therefore, the suggested next videos cannot be clicked in the video window. But you can click the right Video suggestions.
-- It should be possible to deactivate the extension. Currently it has to be uninstalled.
+- It should be possible to deactivate the extension. Currently, it has to be uninstalled.
 - Fill settings page with content (default animation, disable extension, language settings etc.)
-- Publish to chrome extension store
+- Publish to Chrome extension store.
 - Check size changes during video playback.
 - Enlarge the drawing canvas area over the whole video and move the video control bar down.
-- Clean up code
-
+- Clean up code.
+- Add support for [three.proton](https://github.com/drawcall/three.proton/) to enable 3D particles.
+- Check content.js video event listener, - sometimes you have to reload the page to start pose dream.
+- Add more particle animations.
 
 If you want to support, pull requests are always welcome.  
 If you find any bugs please report them.

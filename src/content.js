@@ -170,7 +170,9 @@ chrome.runtime.onMessage.addListener(
     }
 );
 
-
+/**
+ * Prepare particle system
+ */
 function initParticles(){
     if(!currentAnimation.startsWith("particle")){
         return;
@@ -179,11 +181,12 @@ function initParticles(){
 
     if(particlesEffectType===0){
         // hand left + hand right
+        // ### Hand power balls
         proton = new Proton();
         var emitter = new Proton.Emitter();
         // right hand
         emitter.addInitialize(new Proton.Mass(10));
-        var particleImage = new Image();
+        let particleImage = new Image();
         particleImage.src = chrome.runtime.getURL("/images/particle.png");
         particleImage.onload = () => {
             emitter.addInitialize(new Proton.Body(particleImage));
@@ -202,10 +205,10 @@ function initParticles(){
         // left hand
         emitter = new Proton.Emitter();
         emitter.addInitialize(new Proton.Mass(10));
-        var particleImage = new Image();
-        particleImage.src = chrome.runtime.getURL("/images/particle.png");
-        particleImage.onload = () => {
-            emitter.addInitialize(new Proton.Body(particleImage));
+        let particleImage2 = new Image();
+        particleImage2.src = chrome.runtime.getURL("/images/particle.png");
+        particleImage2.onload = () => {
+            emitter.addInitialize(new Proton.Body(particleImage2));
         }
         emitter.addInitialize(new Proton.Life(.1, .4));
         emitter.rate = new Proton.Rate(new Proton.Span(20, 20), .1);
@@ -219,28 +222,26 @@ function initParticles(){
         proton.addEmitter(emitter);
         protonEmitterArray[1]=emitter;
 
-        // var renderer = new Proton.CanvasRenderer(canvas);
-        // proton.addRenderer(renderer);
-
-        // renderer = new Proton.WebGlRenderer(canvas);
-        // renderer.blendFunc("SRC_ALPHA", "ONE")
-        // proton.addRenderer(renderer);
-        renderer = new Proton.CanvasRenderer(canvas);
+        // tryWebGLRendererInit();
+        let renderer = new Proton.CanvasRenderer(canvas);
         proton.addRenderer(renderer);
 
     } else if(particlesEffectType===1){
-
+        // ### Two head balls
         proton = new Proton();
         protonEmitterArray[0] = createImageEmitter(canvas.width / 2 + conf.radius, canvas.height / 2, '#4F1500', '#0029FF');
         protonEmitterArray[1] = createImageEmitter(canvas.width / 2 - conf.radius, canvas.height / 2, '#004CFE', '#6600FF');
 
+
         // renderer = new Proton.WebGlRenderer(canvas);
         // renderer.blendFunc("SRC_ALPHA", "ONE");
         // proton.addRenderer(renderer);
-        renderer = new Proton.CanvasRenderer(canvas);
+        // tryWebGLRendererInit();
+        let renderer = new Proton.CanvasRenderer(canvas);
         proton.addRenderer(renderer);
 
     }else if (particlesEffectType===2){
+        // ### Right hand line
         proton = new Proton();
         protonEmitterArray[0] = new Proton.Emitter();
         protonEmitterArray[0].rate = new Proton.Rate(new Proton.Span(1, 50));
@@ -253,16 +254,17 @@ function initParticles(){
         protonEmitterArray[0].emit();
         proton.addEmitter(protonEmitterArray[0]);
 
-        renderer = new Proton.CanvasRenderer(canvas);
+        let renderer = new Proton.CanvasRenderer(canvas);
         proton.addRenderer(renderer);
     }else if(particlesEffectType===3){
+        // ### Nose gravity
         proton = new Proton;
 
         protonEmitterArray[0] = new Proton.Emitter();
         protonEmitterArray[0].damping = 0.0075;
         protonEmitterArray[0].rate = new Proton.Rate(300);
 
-        var particleImage = new Image();
+        let particleImage = new Image();
         particleImage.src = chrome.runtime.getURL("/images/particle.png");
         particleImage.onload = () => {
             emitter.addInitialize(new Proton.Body(particleImage, 128, 128));
@@ -291,14 +293,16 @@ function initParticles(){
         // var renderer = new Proton.WebGLRenderer(canvas);
         // renderer.blendFunc("SRC_ALPHA", "ONE")
         // proton.addRenderer(renderer);
-        renderer = new Proton.CanvasRenderer(canvas);
+        // tryWebGLRendererInit();
+        let renderer = new Proton.CanvasRenderer(canvas);
         proton.addRenderer(renderer);
     }else if(particlesEffectType===4){
+        // ### Nose supernova
         proton = new Proton();
         protonEmitterArray[0] = new Proton.Emitter();
         protonEmitterArray[0].rate = new Proton.Rate(new Proton.Span(5, 10), new Proton.Span(.05, .2));
 
-        var particleImage = new Image();
+        let particleImage = new Image();
         particleImage.src = chrome.runtime.getURL("/images/particle2.png");
         particleImage.onload = () => {
             protonEmitterArray[0].addInitialize(new Proton.Body(particleImage));
@@ -319,14 +323,27 @@ function initParticles(){
         protonEmitterArray[0].emit();
         proton.addEmitter(protonEmitterArray[0]);
 
-        var renderer = new Proton.CanvasRenderer(canvas);
+        let renderer = new Proton.CanvasRenderer(canvas);
         proton.addRenderer(renderer);
     }else if(particlesEffectType===5){
+        // ### Hands track from border
         proton = new Proton(4000);
 
         createEmitter(canvas.width+50, canvas.height / 2, 0, '#fdf753', rightHandPosition, 0);
         createEmitter(canvas.width-50, canvas.height / 2, 180, '#f80610', leftHandPosition, 1);
-        renderer = new Proton.CanvasRenderer(canvas);
+        let renderer = new Proton.CanvasRenderer(canvas);
+        proton.addRenderer(renderer);
+    }
+}
+
+function tryWebGLRendererInit(){
+    // Try WebGLRender. If not posssible fallback to Canvas renderer
+    try {
+        let renderer = new Proton.WebGlRenderer(canvas);
+        renderer.blendFunc("SRC_ALPHA", "ONE")
+        proton.addRenderer(renderer);
+    }catch (e){
+        let renderer = new Proton.CanvasRenderer(canvas);
         proton.addRenderer(renderer);
     }
 }
@@ -431,6 +448,9 @@ function updateParticles(keypoints){
     }
 }
 
+/**
+ * Particle animation frame
+ */
 function tick() {
     requestAnimationFrame(tick);
     if(!currentAnimation.startsWith("particle")){
@@ -450,6 +470,10 @@ function loadImage() {
     }
 }
 
+/**
+ * Video event listener.
+ * If video is playing, start detection interval
+ */
 mainVideo.addEventListener('loadeddata', (event) => {
 
     mainVideo.onplaying = function (){
@@ -480,14 +504,8 @@ mainVideo.addEventListener('loadeddata', (event) => {
     canvas.style.bottom  = "0px";
 
     ctx = canvas.getContext('2d');
-    // ctx.fillStyle = 'green';
-    // ctx.fillRect(0, 0, canv.width, canv.height);
-
-    // const img = new Image()
-    // img.src = chrome.runtime.getURL("/images/cat.png");
 
     loadImage();
-
 
         intervalVideoPlayId= setInterval(function (){
 
@@ -548,6 +566,7 @@ function drawImage(keypoints, ctx){
     if(keypoints!== undefined){
         let spaceBetweenRightLeftEye = keypoints[1].x - keypoints[2].x;
         let ratio = spaceBetweenRightLeftEye/imgArray[usedImageArrayIndex].pixelsBetweenEyes;
+        ratio = ratio === 0 ? 1 : ratio;
         ctx.drawImage(img, keypoints[2].x-imgArray[usedImageArrayIndex].rightEyeToLeft*ratio, keypoints[2].y-imgArray[usedImageArrayIndex].rightEyeToTop*ratio, imgArray[usedImageArrayIndex].imgWidth*ratio, imgArray[usedImageArrayIndex].imgHeight*ratio);
     }
 
@@ -565,7 +584,7 @@ function drawKeyPoints(keypoints, ctx){
 }
 
 
-function drawSkeleton(keypoints, ctx, poseId){
+function drawSkeleton(keypoints, ctx){
     ctx.fillStyle = 'white';
     ctx.strokeStyle = 'red';
     ctx.lineWidth = 1;
