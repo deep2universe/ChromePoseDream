@@ -52,7 +52,7 @@ The Chrome extension becomes active, when you watch a YouTube video.
 
 The extension use MoveNet as model.  
 Visual representation of the keypoints:  
-![keypoints](assets/keypoints.png)
+![keypoints](assets/keypoints.png)  
 [Image from tensorflow.js pose-detection model](https://github.com/tensorflow/tfjs-models/tree/master/pose-detection#coco-keypoints-used-in-movenet-and-posenet)  
 We use these keypoints to place animations or static content in the video.
 
