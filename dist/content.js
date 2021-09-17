@@ -85941,7 +85941,9 @@ var img = new Image();
 
 var currentAnimation = "skeleton";
 var ctx;
-var canvas; // Proton stuff (particles)
+var webGLtx;
+var canvas;
+var canvasGL; // Proton stuff (particles)
 
 var proton;
 var protonEmitterArray = [];
@@ -85963,7 +85965,11 @@ var rightHandPosition = {
 var conf = {
   radius: 170,
   tha: 0
-}; // Config images to replace face
+};
+var isParticleInit = false; // only once init the particle system
+
+var rendererGL;
+var startTick = false; // Config images to replace face
 
 var usedImageArrayIndex = 0;
 var imgArray = [{
@@ -86034,6 +86040,8 @@ function onUrlChange() {
 
 
 chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
+  clearWebGL();
+
   if (request.animation === "skeleton") {
     currentAnimation = "skeleton";
   } else if (request.animation === "imgCat") {
@@ -86076,6 +86084,22 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
     currentAnimation = "particle";
     particlesEffectType = 5;
     initParticles();
+  } else if (request.animation === "particleUpperBodyGlow") {
+    currentAnimation = "particle";
+    particlesEffectType = 6;
+    initParticles();
+  } else if (request.animation === "particleGlowPainting") {
+    currentAnimation = "particle";
+    particlesEffectType = 7;
+    initParticles();
+  } else if (request.animation === "particlePainting") {
+    currentAnimation = "particle";
+    particlesEffectType = 8;
+    initParticles();
+  } else if (request.animation === "particlePaintRandomDrift") {
+    currentAnimation = "particle";
+    particlesEffectType = 9;
+    initParticles();
   }
 });
 /**
@@ -86087,7 +86111,9 @@ function initParticles() {
     return;
   }
 
-  protonEmitterArray = [];
+  protonEmitterArray = []; // clear canvas2D content
+
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
 
   if (particlesEffectType === 0) {
     // hand left + hand right
@@ -86109,8 +86135,8 @@ function initParticles() {
     emitter.addBehaviour(new _protonEngine.default.Alpha(1, 0));
     emitter.addBehaviour(new _protonEngine.default.Color("#3366b2", "#1155b2"));
     emitter.addBehaviour(new _protonEngine.default.Scale(_protonEngine.default.getSpan(1, 1.6), _protonEngine.default.getSpan(0, .1)));
-    emitter.p.x = canvas.width / 2;
-    emitter.p.y = canvas.height / 2;
+    emitter.p.x = canvasGL.width / 2;
+    emitter.p.y = canvasGL.height / 2;
     emitter.emit();
     proton.addEmitter(emitter);
     protonEmitterArray[0] = emitter; // left hand
@@ -86130,26 +86156,18 @@ function initParticles() {
     emitter.addBehaviour(new _protonEngine.default.Alpha(1, 0));
     emitter.addBehaviour(new _protonEngine.default.Color("#fdf753", "#f63a3f"));
     emitter.addBehaviour(new _protonEngine.default.Scale(_protonEngine.default.getSpan(1, 1.6), _protonEngine.default.getSpan(0, .1)));
-    emitter.p.x = canvas.width / 2;
-    emitter.p.y = canvas.height / 2;
+    emitter.p.x = canvasGL.width / 2;
+    emitter.p.y = canvasGL.height / 2;
     emitter.emit();
     proton.addEmitter(emitter);
-    protonEmitterArray[1] = emitter; // tryWebGLRendererInit();
-
-    var renderer = new _protonEngine.default.CanvasRenderer(canvas);
-    proton.addRenderer(renderer);
+    protonEmitterArray[1] = emitter;
+    tryWebGLRendererInit();
   } else if (particlesEffectType === 1) {
     // ### Two head balls
     proton = new _protonEngine.default();
     protonEmitterArray[0] = createImageEmitter(canvas.width / 2 + conf.radius, canvas.height / 2, '#4F1500', '#0029FF');
-    protonEmitterArray[1] = createImageEmitter(canvas.width / 2 - conf.radius, canvas.height / 2, '#004CFE', '#6600FF'); // renderer = new Proton.WebGlRenderer(canvas);
-    // renderer.blendFunc("SRC_ALPHA", "ONE");
-    // proton.addRenderer(renderer);
-    // tryWebGLRendererInit();
-
-    var _renderer = new _protonEngine.default.CanvasRenderer(canvas);
-
-    proton.addRenderer(_renderer);
+    protonEmitterArray[1] = createImageEmitter(canvas.width / 2 - conf.radius, canvas.height / 2, '#004CFE', '#6600FF');
+    tryWebGLRendererInit();
   } else if (particlesEffectType === 2) {
     // ### Right hand line
     proton = new _protonEngine.default();
@@ -86163,10 +86181,8 @@ function initParticles() {
     protonEmitterArray[0].p.y = canvas.height / 2;
     protonEmitterArray[0].emit();
     proton.addEmitter(protonEmitterArray[0]);
-
-    var _renderer2 = new _protonEngine.default.CanvasRenderer(canvas);
-
-    proton.addRenderer(_renderer2);
+    var renderer = new _protonEngine.default.CanvasRenderer(canvas);
+    proton.addRenderer(renderer);
   } else if (particlesEffectType === 3) {
     // ### Nose gravity
     proton = new _protonEngine.default();
@@ -86203,9 +86219,9 @@ function initParticles() {
     // proton.addRenderer(renderer);
     // tryWebGLRendererInit();
 
-    var _renderer3 = new _protonEngine.default.CanvasRenderer(canvas);
+    var _renderer = new _protonEngine.default.CanvasRenderer(canvas);
 
-    proton.addRenderer(_renderer3);
+    proton.addRenderer(_renderer);
   } else if (particlesEffectType === 4) {
     // ### Nose supernova
     proton = new _protonEngine.default();
@@ -86233,31 +86249,166 @@ function initParticles() {
     protonEmitterArray[0].emit();
     proton.addEmitter(protonEmitterArray[0]);
 
-    var _renderer4 = new _protonEngine.default.CanvasRenderer(canvas);
+    var _renderer2 = new _protonEngine.default.CanvasRenderer(canvas);
 
-    proton.addRenderer(_renderer4);
+    proton.addRenderer(_renderer2);
   } else if (particlesEffectType === 5) {
     // ### Hands track from border
     proton = new _protonEngine.default(4000);
     createEmitter(canvas.width + 50, canvas.height / 2, 0, '#fdf753', rightHandPosition, 0);
     createEmitter(canvas.width - 50, canvas.height / 2, 180, '#f80610', leftHandPosition, 1);
 
-    var _renderer5 = new _protonEngine.default.CanvasRenderer(canvas);
+    var _renderer3 = new _protonEngine.default.CanvasRenderer(canvas);
 
-    proton.addRenderer(_renderer5);
+    proton.addRenderer(_renderer3);
+  } else if (particlesEffectType === 6) {
+    // ### points glow
+    proton = new _protonEngine.default();
+
+    var _particleImage3 = new Image();
+
+    _particleImage3.src = chrome.runtime.getURL("/images/particle.png");
+
+    _particleImage3.onload = function () {
+      createEmitterPointGlow(0, "#4F1500", "#e7af22", 90, _particleImage3);
+      createEmitterPointGlow(1, "#4F1500", "#0029FF", 65, _particleImage3);
+      createEmitterPointGlow(2, "#4F1500", "#6974f8", 0, _particleImage3);
+      createEmitterPointGlow(3, "#4F1500", "#59b9e3", 0, _particleImage3);
+      createEmitterPointGlow(4, "#4F1500", "#aa40e0", -65, _particleImage3);
+      createEmitterPointGlow(5, "#4F1500", "#32fd16", -90, _particleImage3);
+    };
+
+    tryWebGLRendererInit();
+  } else if (particlesEffectType === 7) {
+    // ### points glow
+    proton = new _protonEngine.default();
+
+    var _particleImage4 = new Image();
+
+    _particleImage4.src = chrome.runtime.getURL("/images/particle.png");
+
+    _particleImage4.onload = function () {
+      createEmitterDrawGlow(0, "#4F1500", "#e7af22", 90, _particleImage4);
+      createEmitterDrawGlow(1, "#4F1500", "#0029FF", -90, _particleImage4);
+    };
+
+    tryWebGLRendererInit();
+  } else if (particlesEffectType === 8) {
+    // ### points glow
+    proton = new _protonEngine.default();
+
+    var _particleImage5 = new Image();
+
+    _particleImage5.src = chrome.runtime.getURL("/images/particle.png");
+
+    _particleImage5.onload = function () {
+      createEmitterPointDraw(0, "#4F1500", "#e7af22", 90, _particleImage5);
+      createEmitterPointDraw(1, "#4F1500", "#0029FF", -90, _particleImage5);
+    };
+
+    tryWebGLRendererInit();
+  } else if (particlesEffectType === 9) {
+    // ### points glow
+    proton = new _protonEngine.default();
+
+    var _particleImage6 = new Image();
+
+    _particleImage6.src = chrome.runtime.getURL("/images/particle.png");
+
+    _particleImage6.onload = function () {
+      createEmitterPointDrawRandomDrift(0, "#4F1500", "#e7af22", 90, _particleImage6);
+      createEmitterPointDrawRandomDrift(1, "#4F1500", "#0029FF", -90, _particleImage6);
+    };
+
+    tryWebGLRendererInit();
   }
 }
 
+function createEmitterPointDrawRandomDrift(emitterIndex, colorT, colorE, angle, image) {
+  protonEmitterArray[emitterIndex] = new _protonEngine.default.Emitter();
+  protonEmitterArray[emitterIndex].rate = new _protonEngine.default.Rate(new _protonEngine.default.Span(.1, .2), new _protonEngine.default.Span(.01, .015)); // protonEmitterArray[emitterIndex].rate = new Proton.Rate(new Proton.Span(3, 6), new Proton.Span(.15, .3));
+
+  protonEmitterArray[emitterIndex].addInitialize(new _protonEngine.default.Mass(10));
+  protonEmitterArray[emitterIndex].addInitialize(new _protonEngine.default.Life(1, 2));
+  protonEmitterArray[emitterIndex].addInitialize(new _protonEngine.default.Body(image, 4));
+  protonEmitterArray[emitterIndex].addInitialize(new _protonEngine.default.Radius(2));
+  protonEmitterArray[emitterIndex].addInitialize(new _protonEngine.default.V(new _protonEngine.default.Span(1, 2), angle, 'polar'));
+  protonEmitterArray[emitterIndex].addBehaviour(new _protonEngine.default.Alpha(0.8, 0));
+  protonEmitterArray[emitterIndex].addBehaviour(new _protonEngine.default.RandomDrift(30, 30, 0));
+  protonEmitterArray[emitterIndex].addBehaviour(new _protonEngine.default.Color(colorT, colorE));
+  protonEmitterArray[emitterIndex].addBehaviour(new _protonEngine.default.Scale(1, 0));
+  protonEmitterArray[emitterIndex].addBehaviour(new _protonEngine.default.CrossZone(new _protonEngine.default.RectZone(0, 0, canvasGL.width, canvasGL.height), 'dead'));
+  protonEmitterArray[emitterIndex].p.x = canvasGL.width / 2;
+  protonEmitterArray[emitterIndex].p.y = canvasGL.height / 2;
+  protonEmitterArray[emitterIndex].emit();
+  proton.addEmitter(protonEmitterArray[emitterIndex]);
+}
+
+function createEmitterPointDraw(emitterIndex, colorT, colorE, angle, image) {
+  protonEmitterArray[emitterIndex] = new _protonEngine.default.Emitter();
+  protonEmitterArray[emitterIndex].rate = new _protonEngine.default.Rate(new _protonEngine.default.Span(.1, .2), new _protonEngine.default.Span(.01, .015));
+  protonEmitterArray[emitterIndex].addInitialize(new _protonEngine.default.Mass(1));
+  protonEmitterArray[emitterIndex].addInitialize(new _protonEngine.default.Life(1, 50));
+  protonEmitterArray[emitterIndex].addInitialize(new _protonEngine.default.Body(image, 4));
+  protonEmitterArray[emitterIndex].addInitialize(new _protonEngine.default.Radius(2));
+  protonEmitterArray[emitterIndex].addInitialize(new _protonEngine.default.V(new _protonEngine.default.Span(1, 2), angle, 'polar'));
+  protonEmitterArray[emitterIndex].addBehaviour(new _protonEngine.default.Alpha(0.8, 0));
+  protonEmitterArray[emitterIndex].addBehaviour(new _protonEngine.default.Color(colorT, colorE));
+  protonEmitterArray[emitterIndex].addBehaviour(new _protonEngine.default.Scale(1, 0.1));
+  protonEmitterArray[emitterIndex].addBehaviour(new _protonEngine.default.CrossZone(new _protonEngine.default.RectZone(0, 0, canvasGL.width, canvasGL.height), 'dead'));
+  protonEmitterArray[emitterIndex].p.x = canvasGL.width / 2;
+  protonEmitterArray[emitterIndex].p.y = canvasGL.height / 2;
+  protonEmitterArray[emitterIndex].emit();
+  proton.addEmitter(protonEmitterArray[emitterIndex]);
+}
+
+function createEmitterPointGlow(emitterIndex, colorT, colorE, angle, image) {
+  protonEmitterArray[emitterIndex] = new _protonEngine.default.Emitter();
+  protonEmitterArray[emitterIndex].rate = new _protonEngine.default.Rate(new _protonEngine.default.Span(.1, .2), new _protonEngine.default.Span(.01, .015));
+  protonEmitterArray[emitterIndex].addInitialize(new _protonEngine.default.Mass(1));
+  protonEmitterArray[emitterIndex].addInitialize(new _protonEngine.default.Life(1, 2));
+  protonEmitterArray[emitterIndex].addInitialize(new _protonEngine.default.Body(image, 32));
+  protonEmitterArray[emitterIndex].addInitialize(new _protonEngine.default.Radius(2));
+  protonEmitterArray[emitterIndex].addInitialize(new _protonEngine.default.V(new _protonEngine.default.Span(1, 2), angle, 'polar'));
+  protonEmitterArray[emitterIndex].addBehaviour(new _protonEngine.default.Alpha(0.2, 0));
+  protonEmitterArray[emitterIndex].addBehaviour(new _protonEngine.default.Color(colorT, colorE));
+  protonEmitterArray[emitterIndex].addBehaviour(new _protonEngine.default.Scale(3, 0.1));
+  protonEmitterArray[emitterIndex].addBehaviour(new _protonEngine.default.CrossZone(new _protonEngine.default.RectZone(0, 0, canvasGL.width, canvasGL.height), 'dead'));
+  protonEmitterArray[emitterIndex].p.x = canvasGL.width / 2;
+  protonEmitterArray[emitterIndex].p.y = canvasGL.height / 2;
+  protonEmitterArray[emitterIndex].emit();
+  proton.addEmitter(protonEmitterArray[emitterIndex]);
+}
+
+function createEmitterDrawGlow(emitterIndex, colorT, colorE, angle, image) {
+  protonEmitterArray[emitterIndex] = new _protonEngine.default.Emitter();
+  protonEmitterArray[emitterIndex].rate = new _protonEngine.default.Rate(new _protonEngine.default.Span(.1, .2), new _protonEngine.default.Span(.01, .015));
+  protonEmitterArray[emitterIndex].addInitialize(new _protonEngine.default.Mass(1));
+  protonEmitterArray[emitterIndex].addInitialize(new _protonEngine.default.Life(1, 50));
+  protonEmitterArray[emitterIndex].addInitialize(new _protonEngine.default.Body(image, 32));
+  protonEmitterArray[emitterIndex].addInitialize(new _protonEngine.default.Radius(2));
+  protonEmitterArray[emitterIndex].addInitialize(new _protonEngine.default.V(new _protonEngine.default.Span(1, 2), angle, 'polar'));
+  protonEmitterArray[emitterIndex].addBehaviour(new _protonEngine.default.Alpha(0.2, 0));
+  protonEmitterArray[emitterIndex].addBehaviour(new _protonEngine.default.Color(colorT, colorE));
+  protonEmitterArray[emitterIndex].addBehaviour(new _protonEngine.default.Scale(3, 0.1));
+  protonEmitterArray[emitterIndex].addBehaviour(new _protonEngine.default.CrossZone(new _protonEngine.default.RectZone(0, 0, canvasGL.width, canvasGL.height), 'dead'));
+  protonEmitterArray[emitterIndex].p.x = canvasGL.width / 2;
+  protonEmitterArray[emitterIndex].p.y = canvasGL.height / 2;
+  protonEmitterArray[emitterIndex].emit();
+  proton.addEmitter(protonEmitterArray[emitterIndex]);
+}
+
 function tryWebGLRendererInit() {
+  var removeOtherRenderer = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : false;
+
   // Try WebGLRender. If not posssible fallback to Canvas renderer
   try {
-    var renderer = new _protonEngine.default.WebGlRenderer(canvas);
-    renderer.blendFunc("SRC_ALPHA", "ONE");
-    proton.addRenderer(renderer);
+    rendererGL = new _protonEngine.default.WebGLRenderer(canvasGL);
+    rendererGL.blendFunc("SRC_ALPHA", "ONE");
+    proton.addRenderer(rendererGL);
   } catch (e) {
-    var _renderer6 = new _protonEngine.default.CanvasRenderer(canvas);
-
-    proton.addRenderer(_renderer6);
+    var renderer = new _protonEngine.default.CanvasRenderer(canvas);
+    proton.addRenderer(renderer);
   }
 }
 
@@ -86360,6 +86511,62 @@ function updateParticles(keypoints) {
       rightHandPosition.y = keypoints[10].y;
       break;
 
+    case 6:
+      /**
+       * Mapping emitter to pos in array (->)
+       0: nose
+       1: left_eye
+       2: right_eye
+       3: left_ear
+       4: right_ear
+       5: left_shoulder   -> 2
+       6: right_shoulder  -> 3
+       7: left_elbow      -> 1
+       8: right_elbow     -> 4
+       9: left_wrist      -> 0
+       10: right_wrist    -> 5
+       11: left_hip
+       12: right_hip
+       13: left_knee
+       14: right_knee
+       15: left_ankle
+       16: right_ankle
+       */
+      protonEmitterArray[0].p.x = keypoints[9].x;
+      protonEmitterArray[0].p.y = keypoints[9].y;
+      protonEmitterArray[1].p.x = keypoints[7].x;
+      protonEmitterArray[1].p.y = keypoints[7].y;
+      protonEmitterArray[2].p.x = keypoints[5].x;
+      protonEmitterArray[2].p.y = keypoints[5].y;
+      protonEmitterArray[3].p.x = keypoints[6].x;
+      protonEmitterArray[3].p.y = keypoints[6].y;
+      protonEmitterArray[4].p.x = keypoints[8].x;
+      protonEmitterArray[4].p.y = keypoints[8].y;
+      protonEmitterArray[5].p.x = keypoints[10].x;
+      protonEmitterArray[5].p.y = keypoints[10].y;
+      break;
+
+    case 7:
+      protonEmitterArray[0].p.x = keypoints[9].x;
+      protonEmitterArray[0].p.y = keypoints[9].y;
+      protonEmitterArray[1].p.x = keypoints[10].x;
+      protonEmitterArray[1].p.y = keypoints[10].y;
+      break;
+
+    case 8:
+      protonEmitterArray[0].p.x = keypoints[9].x;
+      protonEmitterArray[0].p.y = keypoints[9].y;
+      protonEmitterArray[1].p.x = keypoints[10].x;
+      protonEmitterArray[1].p.y = keypoints[10].y;
+      break;
+
+    case 9:
+      protonEmitterArray[0].p.x = keypoints[9].x;
+      protonEmitterArray[0].p.y = keypoints[9].y;
+      protonEmitterArray[1].p.x = keypoints[10].x;
+      protonEmitterArray[1].p.y = keypoints[10].y;
+      break;
+
     default:
       break;
   }
@@ -86376,9 +86583,18 @@ function tick() {
     return;
   }
 
-  if (proton !== null || proton !== undefined) {
+  if (proton !== null) {
     proton.update();
   }
+}
+
+function clearWebGL() {
+  // clear WebGLCanvas and particles
+  protonEmitterArray.forEach(function (emitter) {
+    emitter.removeAllParticles();
+    emitter.destroy();
+  });
+  webGLtx.clear(webGLtx.DEPTH_BUFFER_BIT | webGLtx.COLOR_BUFFER_BIT | webGLtx.STENCIL_BUFFER_BIT);
 }
 /**
  * Loads image for head replacement
@@ -86397,6 +86613,14 @@ function loadImage() {
 
 
 mainVideo.addEventListener('loadeddata', function (event) {
+  function setCanvasStyle(tmpCanvas) {
+    tmpCanvas.style.position = "absolute";
+    tmpCanvas.style.top = "0px";
+    tmpCanvas.style.right = "0px";
+    tmpCanvas.style.left = mainVideo.style.cssText.split("; ")[2].split(": ")[1];
+    tmpCanvas.style.bottom = "0px";
+  }
+
   mainVideo.onplaying = function () {
     resizeObserver.observe(mainVideo);
 
@@ -86416,20 +86640,43 @@ mainVideo.addEventListener('loadeddata', function (event) {
 
       var playlerContainerDIV = document.getElementById("player-container");
       playlerContainerDIV.appendChild(canvas); // adds the canvas to the body element
+
+      setCanvasStyle(canvas);
+      ctx = canvas.getContext('2d');
     }
 
-    initParticles();
-    canvas.style.position = "absolute";
-    canvas.style.top = "0px";
-    canvas.style.right = "0px";
-    canvas.style.left = mainVideo.style.cssText.split("; ")[2].split(": ")[1];
-    canvas.style.bottom = "0px";
-    ctx = canvas.getContext('2d');
-    loadImage();
+    if (document.getElementById("canvasdummyGL") === null) {
+      canvasGL = document.createElement('canvas'); // creates new canvas element
+
+      canvasGL.id = 'canvasdummyGL'; // gives canvas id
+
+      if (mainVideo.length !== 0) {
+        canvasGL.height = mainVideo.clientHeight - 50; //get original canvas height
+
+        canvasGL.width = mainVideo.clientWidth; // get original canvas width
+      } else {
+        canvasGL.height = 600;
+        canvasGL.width = 600;
+      }
+
+      var _playlerContainerDIV = document.getElementById("player-container");
+
+      _playlerContainerDIV.appendChild(canvasGL); // adds the canvas to the body element
+
+
+      setCanvasStyle(canvasGL);
+      webGLtx = canvasGL.getContext("experimental-webgl");
+    }
+
+    if (isParticleInit === false) {
+      isParticleInit = true;
+      initParticles();
+    }
+
     intervalVideoPlayId = setInterval(function () {
       if (detector !== undefined) {
         detector.then(function (poseDetector) {
-          if (mainVideo === undefined) {
+          if (mainVideo === undefined || !location.href.includes("watch")) {
             return;
           }
 
@@ -86453,8 +86700,12 @@ mainVideo.addEventListener('loadeddata', function (event) {
           });
         });
       }
-    }, 100);
-    tick();
+    }, 100); // only call tick once.
+
+    if (startTick === false) {
+      startTick = true;
+      tick();
+    }
   };
 });
 
@@ -86468,6 +86719,11 @@ var resizeObserver = new ResizeObserver(function (entries) {
   canvas.height = entries[0].target.clientHeight - 50;
   ctx.width = entries[0].target.clientWidth;
   ctx.height = entries[0].target.clientHeight - 50;
+  canvasGL.style.left = mainVideo.style.cssText.split("; ")[2].split(": ")[1];
+  canvasGL.width = entries[0].target.clientWidth;
+  canvasGL.height = entries[0].target.clientHeight - 50;
+  webGLtx.width = entries[0].target.clientWidth;
+  webGLtx.height = entries[0].target.clientHeight - 50;
 });
 
 function drawImage(keypoints, ctx) {

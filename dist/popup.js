@@ -62,3 +62,23 @@ document.getElementById("particleHandsTrackFromBorder").addEventListener("click"
         chrome.tabs.sendMessage(tabs[0].id, {animation: "particleHandsTrackFromBorder"});
     });
 });
+document.getElementById("particleUpperBodyGlow").addEventListener("click", async ()=>{
+    chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
+        chrome.tabs.sendMessage(tabs[0].id, {animation: "particleUpperBodyGlow"});
+    });
+});
+document.getElementById("particleGlowPainting").addEventListener("click", async ()=>{
+    chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
+        chrome.tabs.sendMessage(tabs[0].id, {animation: "particleGlowPainting"});
+    });
+});
+document.getElementById("particlePainting").addEventListener("click", async ()=>{
+    chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
+        chrome.tabs.sendMessage(tabs[0].id, {animation: "particlePainting"});
+    });
+});
+document.getElementById("particlePaintRandomDrift").addEventListener("click", async ()=>{
+    chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
+        chrome.tabs.sendMessage(tabs[0].id, {animation: "particlePaintRandomDrift"});
+    });
+});
