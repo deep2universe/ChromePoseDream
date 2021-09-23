@@ -79,7 +79,16 @@ const imgArray = [
         "rightEyeToLeft": 37,
         "rightEyeToTop": 33,
         "pixelsBetweenEyes": 35
+    },
+    {
+        "imgWidth": 100,
+        "imgHeight": 45,
+        "url": "/images/anonymous.png",
+        "rightEyeToLeft": 33,
+        "rightEyeToTop": 20,
+        "pixelsBetweenEyes": 25
     }
+
 ];
 
 
@@ -121,6 +130,12 @@ chrome.runtime.onMessage.addListener(
         if (request.animation === "skeleton"){
             currentAnimation="skeleton";
 
+        }else if (request.animation === "puppetsPlayer"){
+            currentAnimation="puppetsPlayer";
+
+        }else if (request.animation === "spiderWeb"){
+            currentAnimation="spiderWeb";
+
         }else if(request.animation === "imgCat"){
             usedImageArrayIndex=0;
             loadImage();
@@ -136,8 +151,12 @@ chrome.runtime.onMessage.addListener(
             loadImage();
             currentAnimation="img";
 
-        }else if(request.animation === "imgMonkey"){
-            usedImageArrayIndex=3;
+        }else if(request.animation === "imgMonkey") {
+            usedImageArrayIndex = 3;
+            loadImage();
+            currentAnimation = "img";
+        }else if(request.animation === "imgAnonymous"){
+            usedImageArrayIndex=4;
             loadImage();
             currentAnimation="img";
 
@@ -191,7 +210,23 @@ chrome.runtime.onMessage.addListener(
             particlesEffectType=9;
             initParticles();
 
+        }else if(request.animation === "particleCometThrower"){
+            currentAnimation="particle";
+            particlesEffectType=10;
+            initParticles();
+
+        }else if(request.animation === "particleBodyGlow"){
+            currentAnimation="particle";
+            particlesEffectType=11;
+            initParticles();
+
+        }else if(request.animation === "particleBurningMan"){
+            currentAnimation="particle";
+            particlesEffectType=12;
+            initParticles();
+
         }
+
 
     }
 );
@@ -300,22 +335,14 @@ function initParticles(){
             y: canvas.height / 2
         };
         attractionBehaviour = new Proton.Attraction(nosePosition, 10, 100);
-        // repulsionBehaviour = new Proton.Repulsion(nosePosition, 30, 350);
-        // crossZoneBehaviour = new Proton.CrossZone(new Proton.RectZone(0, 0, canvas.width, canvas.height), 'cross');
-        // emitter.addBehaviour(attractionBehaviour, repulsionBehaviour, new Proton.Color('random'));
         protonEmitterArray[0].addBehaviour(attractionBehaviour,  new Proton.Color('random'));
         protonEmitterArray[0].addBehaviour(new Proton.Scale(Proton.getSpan(.1, .7)));
-        // emitter.addBehaviour(new Proton.Rotate(Proton.getSpan(0, 180), Proton.getSpan(-5, 5), 'add'));
 
         protonEmitterArray[0].p.x = canvas.width / 2;
         protonEmitterArray[0].p.y = canvas.height / 2;
         protonEmitterArray[0].emit('once');
         proton.addEmitter(protonEmitterArray[0]);
 
-        // var renderer = new Proton.WebGLRenderer(canvas);
-        // renderer.blendFunc("SRC_ALPHA", "ONE")
-        // proton.addRenderer(renderer);
-        // tryWebGLRendererInit();
         let renderer = new Proton.CanvasRenderer(canvas);
         proton.addRenderer(renderer);
     }else if(particlesEffectType===4){
@@ -356,7 +383,7 @@ function initParticles(){
         let renderer = new Proton.CanvasRenderer(canvas);
         proton.addRenderer(renderer);
     }else if(particlesEffectType===6){
-        // ### points glow
+        // ### upper body glow
         proton = new Proton;
         let particleImage = new Image();
         particleImage.src = chrome.runtime.getURL("/images/particle.png");
@@ -371,7 +398,7 @@ function initParticles(){
 
         tryWebGLRendererInit();
     }else if(particlesEffectType===7){
-        // ### points glow
+        // ### glow painting
         proton = new Proton;
         let particleImage = new Image();
         particleImage.src = chrome.runtime.getURL("/images/particle.png");
@@ -383,7 +410,7 @@ function initParticles(){
 
         tryWebGLRendererInit();
     }else if(particlesEffectType===8){
-        // ### points glow
+        // ### particle painting
         proton = new Proton;
         let particleImage = new Image();
         particleImage.src = chrome.runtime.getURL("/images/particle.png");
@@ -395,7 +422,7 @@ function initParticles(){
 
         tryWebGLRendererInit();
     }else if(particlesEffectType===9){
-        // ### points glow
+        // ### particle painting with random drift
         proton = new Proton;
         let particleImage = new Image();
         particleImage.src = chrome.runtime.getURL("/images/particle.png");
@@ -406,13 +433,110 @@ function initParticles(){
         }
 
         tryWebGLRendererInit();
+    }else if(particlesEffectType===10){
+        // ### particleCometThrower
+        proton = new Proton;
+
+        let imageComet1 = new Image();
+        imageComet1.src = chrome.runtime.getURL("/images/Comet_1.png");
+        imageComet1.onload = () => {
+            createEmitterCometThrower(0, imageComet1);
+        }
+
+        let imageComet2 = new Image();
+        imageComet2.src = chrome.runtime.getURL("/images/Comet_2.png");
+        imageComet2.onload = () => {
+            createEmitterCometThrower(1, imageComet2);
+        }
+
+        let renderer = new Proton.CanvasRenderer(canvas);
+        renderer.onProtonUpdate = function() {
+            ctx.clearRect(0,0,canvas.width,canvas.height);
+        };
+        proton.addRenderer(renderer);
+    }else if(particlesEffectType===11){
+        // ### body glow
+        proton = new Proton;
+        let particleImage = new Image();
+        particleImage.src = chrome.runtime.getURL("/images/particle.png");
+        particleImage.onload = () => {
+            createEmitterPointGlow(0, "#4F1500","#e7af22",90, particleImage);
+            createEmitterPointGlow(1, "#4F1500","#0029FF",65, particleImage);
+            createEmitterPointGlow(2, "#4F1500","#6974f8",0, particleImage);
+            createEmitterPointGlow(3, "#4F1500","#59b9e3",0, particleImage);
+            createEmitterPointGlow(4, "#4F1500","#aa40e0",-65, particleImage);
+            createEmitterPointGlow(5, "#4F1500","#32fd16",-90, particleImage);
+
+            createEmitterPointGlow(6, "#031a17","#e7af22",90, particleImage);
+            createEmitterPointGlow(7, "#44011b","#0029FF",65, particleImage);
+            createEmitterPointGlow(8, "#493b01","#6974f8",0, particleImage);
+
+            createEmitterPointGlow(9, "#0e0601","#5cff24",-90, particleImage);
+            createEmitterPointGlow(10, "#054b01","#aa40e0",-65, particleImage);
+            createEmitterPointGlow(11, "#1e012c","#32fd16",0, particleImage);
+        }
+
+        tryWebGLRendererInit();
+    }else if(particlesEffectType===12){
+        // ### burning man
+        proton = new Proton;
+        let particleImage = new Image();
+        particleImage.src = chrome.runtime.getURL("/images/particle.png");
+        particleImage.onload = () => {
+            createEmitterPointGlow(0, "#C97024","#290000",90, particleImage);
+            createEmitterPointGlow(1, "#C97024","#290000",65, particleImage);
+            createEmitterPointGlow(2, "#C97024","#290000",0, particleImage);
+            createEmitterPointGlow(3, "#C97024","#290000",0, particleImage);
+            createEmitterPointGlow(4, "#C97024","#290000",-65, particleImage);
+            createEmitterPointGlow(5, "#C97024","#290000",-90, particleImage);
+
+            createEmitterPointGlow(6, "#C97024","#290000",90, particleImage);
+            createEmitterPointGlow(7, "#C97024","#290000",65, particleImage);
+            createEmitterPointGlow(8, "#C97024","#290000",0, particleImage);
+
+            createEmitterPointGlow(9, "#C97024","#290000",-90, particleImage);
+            createEmitterPointGlow(10, "#C97024","#290000",-65, particleImage);
+            createEmitterPointGlow(11, "#C97024","#290000",0, particleImage);
+
+            createEmitterPointGlow(12, "#C97024","#290000",225, particleImage);
+            createEmitterPointGlow(13, "#C97024","#290000",-225, particleImage);
+
+            createEmitterPointGlow(14, "#C97024","#290000",-65, particleImage);
+            createEmitterPointGlow(15, "#C97024","#290000",65, particleImage);
+
+            createEmitterPointGlow(16, "#C97024","#290000",0, particleImage);
+            createEmitterPointGlow(17, "#C97024","#290000",65, particleImage);
+            createEmitterPointGlow(18, "#C97024","#290000",-65, particleImage);
+
+        }
+
+        tryWebGLRendererInit();
     }
 
 }
+
+function createEmitterCometThrower(emitterIndex, image){
+    protonEmitterArray[emitterIndex] = new Proton.Emitter();
+    protonEmitterArray[emitterIndex].rate = new Proton.Rate(new Proton.Span(2, 5), .05);
+    protonEmitterArray[emitterIndex].addInitialize(new Proton.Body(image, 20, 40));
+    protonEmitterArray[emitterIndex].addInitialize(new Proton.Mass(1));
+    protonEmitterArray[emitterIndex].addInitialize(new Proton.Life(1.5, 2.2));
+    protonEmitterArray[emitterIndex].addInitialize(new Proton.Velocity(2, Proton.getSpan(0, 360), 'polar'));
+
+    protonEmitterArray[emitterIndex].addBehaviour(new Proton.Rotate());
+    protonEmitterArray[emitterIndex].addBehaviour(new Proton.Gravity(3));
+    protonEmitterArray[emitterIndex].addBehaviour(new Proton.Alpha(0.6, 1));
+    // protonEmitterArray[emitterIndex].addBehaviour(new Proton.CrossZone(new Proton.RectZone(0, 0, canvas.width, canvas.height), 'bound'));
+
+    protonEmitterArray[emitterIndex].p.x = canvas.width / 2;
+    protonEmitterArray[emitterIndex].p.y = canvas.height / 2;
+    proton.addEmitter(protonEmitterArray[emitterIndex]);
+    protonEmitterArray[emitterIndex].emit();
+}
+
 function createEmitterPointDrawRandomDrift(emitterIndex, colorT, colorE, angle, image){
     protonEmitterArray[emitterIndex]= new Proton.Emitter();
     protonEmitterArray[emitterIndex].rate = new Proton.Rate(new Proton.Span(.1, .2), new Proton.Span(.01, .015));
-    // protonEmitterArray[emitterIndex].rate = new Proton.Rate(new Proton.Span(3, 6), new Proton.Span(.15, .3));
 
     protonEmitterArray[emitterIndex].addInitialize(new Proton.Mass(10));
     protonEmitterArray[emitterIndex].addInitialize(new Proton.Life(1, 2));
@@ -536,7 +660,6 @@ function createImageEmitter(x, y, color1, color2) {
     particleImage.onload = () => {
         emitter.addInitialize(new Proton.Body(particleImage, 32));
     }
-    // emitter.addInitialize(new Proton.Body(['image/particle.png'], 32));
     emitter.addInitialize(new Proton.Radius(40));
 
     emitter.addBehaviour(new Proton.Alpha(1, 0));
@@ -636,28 +759,104 @@ function updateParticles(keypoints){
             protonEmitterArray[5].p.y=keypoints[10].y;
             break;
         case 7:
-            protonEmitterArray[0].p.x=keypoints[9].x;
-            protonEmitterArray[0].p.y=keypoints[9].y;
-            protonEmitterArray[1].p.x=keypoints[10].x;
-            protonEmitterArray[1].p.y=keypoints[10].y;
+            leftRightWristUpdate(keypoints);
             break;
         case 8:
-            protonEmitterArray[0].p.x=keypoints[9].x;
-            protonEmitterArray[0].p.y=keypoints[9].y;
-            protonEmitterArray[1].p.x=keypoints[10].x;
-            protonEmitterArray[1].p.y=keypoints[10].y;
+            leftRightWristUpdate(keypoints);
             break;
         case 9:
+            leftRightWristUpdate(keypoints);
+            break;
+        case 10:
+            leftRightWristUpdate(keypoints);
+            break;
+        case 11:
             protonEmitterArray[0].p.x=keypoints[9].x;
             protonEmitterArray[0].p.y=keypoints[9].y;
-            protonEmitterArray[1].p.x=keypoints[10].x;
-            protonEmitterArray[1].p.y=keypoints[10].y;
+            protonEmitterArray[1].p.x=keypoints[7].x;
+            protonEmitterArray[1].p.y=keypoints[7].y;
+            protonEmitterArray[2].p.x=keypoints[5].x;
+            protonEmitterArray[2].p.y=keypoints[5].y;
+            protonEmitterArray[3].p.x=keypoints[6].x;
+            protonEmitterArray[3].p.y=keypoints[6].y;
+            protonEmitterArray[4].p.x=keypoints[8].x;
+            protonEmitterArray[4].p.y=keypoints[8].y;
+            protonEmitterArray[5].p.x=keypoints[10].x;
+            protonEmitterArray[5].p.y=keypoints[10].y;
+
+            protonEmitterArray[6].p.x=keypoints[11].x;
+            protonEmitterArray[6].p.y=keypoints[11].y;
+            protonEmitterArray[7].p.x=keypoints[13].x;
+            protonEmitterArray[7].p.y=keypoints[13].y;
+            protonEmitterArray[8].p.x=keypoints[15].x;
+            protonEmitterArray[8].p.y=keypoints[15].y;
+            protonEmitterArray[9].p.x=keypoints[12].x;
+            protonEmitterArray[9].p.y=keypoints[12].y;
+            protonEmitterArray[10].p.x=keypoints[14].x;
+            protonEmitterArray[10].p.y=keypoints[14].y;
+            protonEmitterArray[11].p.x=keypoints[16].x;
+            protonEmitterArray[11].p.y=keypoints[16].y;
+            break;
+        case 12:
+            protonEmitterArray[0].p.x=keypoints[9].x;
+            protonEmitterArray[0].p.y=keypoints[9].y;
+            protonEmitterArray[1].p.x=keypoints[7].x;
+            protonEmitterArray[1].p.y=keypoints[7].y;
+            protonEmitterArray[2].p.x=keypoints[5].x;
+            protonEmitterArray[2].p.y=keypoints[5].y;
+            protonEmitterArray[3].p.x=keypoints[6].x;
+            protonEmitterArray[3].p.y=keypoints[6].y;
+            protonEmitterArray[4].p.x=keypoints[8].x;
+            protonEmitterArray[4].p.y=keypoints[8].y;
+            protonEmitterArray[5].p.x=keypoints[10].x;
+            protonEmitterArray[5].p.y=keypoints[10].y;
+
+            protonEmitterArray[6].p.x=keypoints[11].x;
+            protonEmitterArray[6].p.y=keypoints[11].y;
+            protonEmitterArray[7].p.x=keypoints[13].x;
+            protonEmitterArray[7].p.y=keypoints[13].y;
+            protonEmitterArray[8].p.x=keypoints[15].x;
+            protonEmitterArray[8].p.y=keypoints[15].y;
+            protonEmitterArray[9].p.x=keypoints[12].x;
+            protonEmitterArray[9].p.y=keypoints[12].y;
+            protonEmitterArray[10].p.x=keypoints[14].x;
+            protonEmitterArray[10].p.y=keypoints[14].y;
+            protonEmitterArray[11].p.x=keypoints[16].x;
+            protonEmitterArray[11].p.y=keypoints[16].y;
+
+            protonEmitterArray[12].p.x=keypoints[5].x;
+            protonEmitterArray[12].p.y=keypoints[5].y;
+            protonEmitterArray[13].p.x=keypoints[6].x;
+            protonEmitterArray[13].p.y=keypoints[6].y;
+
+            protonEmitterArray[14].p.x=keypoints[15].x;
+            protonEmitterArray[14].p.y=keypoints[15].y;
+            protonEmitterArray[15].p.x=keypoints[16].x;
+            protonEmitterArray[15].p.y=keypoints[16].y;
+
+            protonEmitterArray[16].p.x=keypoints[0].x;
+            protonEmitterArray[16].p.y=keypoints[0].y;
+            protonEmitterArray[17].p.x=keypoints[3].x;
+            protonEmitterArray[17].p.y=keypoints[3].y;
+            protonEmitterArray[18].p.x=keypoints[4].x;
+            protonEmitterArray[18].p.y=keypoints[4].y;
+
 
             break;
         default:
             break;
 
     }
+}
+
+/**
+ * Update proton emitter position for left/right wrist from keypoint detection
+ */
+function leftRightWristUpdate(keypoints){
+    protonEmitterArray[0].p.x=keypoints[9].x;
+    protonEmitterArray[0].p.y=keypoints[9].y;
+    protonEmitterArray[1].p.x=keypoints[10].x;
+    protonEmitterArray[1].p.y=keypoints[10].y;
 }
 
 /**
@@ -687,6 +886,7 @@ function clearWebGL(){
 function loadImage() {
     img.src = chrome.runtime.getURL(imgArray[usedImageArrayIndex].url);
     img.onload = () => {
+        // This is intentional
     }
 }
 
@@ -719,8 +919,8 @@ mainVideo.addEventListener('loadeddata', (event) => {
             canvas.width = 600;
         }
 
-        let playlerContainerDIV = document.getElementById("player-container");
-        playlerContainerDIV.appendChild(canvas); // adds the canvas to the body element
+        let videoContainerDIV = document.getElementsByClassName("html5-video-container")[0];
+        videoContainerDIV.appendChild(canvas); // adds the canvas to the body element
         setCanvasStyle(canvas);
         ctx = canvas.getContext('2d');
     }
@@ -736,8 +936,8 @@ mainVideo.addEventListener('loadeddata', (event) => {
             canvasGL.width = 600;
         }
 
-        let playlerContainerDIV = document.getElementById("player-container");
-        playlerContainerDIV.appendChild(canvasGL); // adds the canvas to the body element
+        let videoContainerDIV = document.getElementsByClassName("html5-video-container")[0];
+        videoContainerDIV.appendChild(canvasGL); // adds the canvas to the body element
         setCanvasStyle(canvasGL);
         webGLtx = canvasGL.getContext("experimental-webgl");
     }
@@ -761,13 +961,23 @@ mainVideo.addEventListener('loadeddata', (event) => {
                     if(pose !== undefined && pose[0] !== undefined && pose[0].keypoints !== undefined){
                         if(currentAnimation==="skeleton"){
                             ctx.clearRect(0,0,canvas.width,canvas.height);
-                            drawKeyPoints(pose[0].keypoints, ctx);
-                            drawSkeleton(pose[0].keypoints, ctx);
+                            drawKeyPoints(pose[0].keypoints);
+                            drawSkeleton(pose[0].keypoints);
+                        }
+
+                        if(currentAnimation==="puppetsPlayer"){
+                            ctx.clearRect(0,0,canvas.width,canvas.height);
+                            drawPuppets(pose[0].keypoints);
+                        }
+
+                        if(currentAnimation==="spiderWeb"){
+                            ctx.clearRect(0,0,canvas.width,canvas.height);
+                            drawSpiderWeb(pose[0].keypoints);
                         }
 
                         if(currentAnimation === "img"){
                             ctx.clearRect(0,0,canvas.width,canvas.height);
-                            drawImage(pose[0].keypoints,ctx);
+                            drawImage(pose[0].keypoints);
                         }
 
                         if(currentAnimation === "particle"){
@@ -816,7 +1026,7 @@ const resizeObserver = new ResizeObserver(entries => {
 
 
 
-function drawImage(keypoints, ctx){
+function drawImage(keypoints){
     if(keypoints!== undefined){
         let spaceBetweenRightLeftEye = keypoints[1].x - keypoints[2].x;
         let ratio = spaceBetweenRightLeftEye/imgArray[usedImageArrayIndex].pixelsBetweenEyes;
@@ -827,9 +1037,8 @@ function drawImage(keypoints, ctx){
 }
 
 
-function drawKeyPoints(keypoints, ctx){
-    for(let i=0; i<keypoints.length; i++){
-        const keypoint = keypoints[i];
+function drawKeyPoints(keypoints){
+    for(let keypoint of keypoints){
         ctx.beginPath();
         ctx.arc(keypoint.x, keypoint.y, 2, 0, 2 * Math.PI);
         ctx.fillStyle = 'blue';
@@ -838,7 +1047,7 @@ function drawKeyPoints(keypoints, ctx){
 }
 
 
-function drawSkeleton(keypoints, ctx){
+function drawSkeleton(keypoints){
     ctx.fillStyle = 'white';
     ctx.strokeStyle = 'red';
     ctx.lineWidth = 1;
@@ -859,4 +1068,57 @@ function drawSkeleton(keypoints, ctx){
             ctx.stroke();
         }
     });
+}
+
+function drawPuppets(keypoints){
+    ctx.fillStyle = 'white';
+    ctx.strokeStyle = 'blue';
+    ctx.lineWidth = 2;
+
+    drawLine(keypoints[10].x, keypoints[10].y, keypoints[10].x, 0);
+    drawLine(keypoints[9].x, keypoints[9].y, keypoints[9].x, 0);
+    drawLine(keypoints[0].x, keypoints[0].y, keypoints[0].x, 0);
+    drawLine(keypoints[6].x, keypoints[6].y, keypoints[6].x, 0);
+    drawLine(keypoints[5].x, keypoints[5].y, keypoints[5].x, 0);
+    drawLine(keypoints[15].x, keypoints[15].y, keypoints[15].x, 0);
+    drawLine(keypoints[16].x, keypoints[16].y, keypoints[16].x, 0);
+
+}
+
+function drawLine(startX, startY, endX, endY){
+    ctx.beginPath();
+    ctx.moveTo(startX, startY);
+    ctx.lineTo(endX, endY);
+    ctx.stroke();
+}
+
+function drawSpiderWeb(keypoints){
+    ctx.fillStyle = 'white';
+    ctx.strokeStyle = 'yellow';
+    ctx.lineWidth = 2;
+
+    drawLine(keypoints[0].x, keypoints[0].y, canvas.width/2, 0);
+    drawLine(keypoints[1].x, keypoints[1].y, canvas.width/2 *(1+0.25), 0);
+    drawLine(keypoints[3].x, keypoints[3].y, canvas.width/2 *(1+0.5), 0);
+
+    drawLine(keypoints[2].x, keypoints[2].y, canvas.width/2 *(1-0.25), 0);
+    drawLine(keypoints[4].x, keypoints[4].y, canvas.width/2 *(1-0.5), 0);
+
+    drawLine(keypoints[6].x, keypoints[6].y, 0, canvas.height/2 *(1-0.5));
+    drawLine(keypoints[8].x, keypoints[8].y, 0, canvas.height/2 *(1-0.25));
+
+    drawLine(keypoints[9].x, keypoints[9].y, canvas.width, canvas.height/2);
+    drawLine(keypoints[10].x, keypoints[10].y, 0, canvas.height/2);
+
+    drawLine(keypoints[12].x, keypoints[12].y, 0, canvas.height/2 *(1+0.3));
+    drawLine(keypoints[14].x, keypoints[14].y, 0, canvas.height/2 *(1+0.6));
+    drawLine(keypoints[16].x, keypoints[16].y, 0, canvas.height/2 *(1+0.9));
+
+    drawLine(keypoints[5].x, keypoints[5].y, canvas.width, canvas.height/2 *(1-0.5));
+    drawLine(keypoints[7].x, keypoints[7].y, canvas.width, canvas.height/2 *(1-0.25));
+
+    drawLine(keypoints[11].x, keypoints[11].y, canvas.width, canvas.height/2 *(1+0.3));
+    drawLine(keypoints[13].x, keypoints[13].y, canvas.width, canvas.height/2 *(1+0.6));
+    drawLine(keypoints[15].x, keypoints[15].y, canvas.width, canvas.height/2 *(1+0.9));
+
 }

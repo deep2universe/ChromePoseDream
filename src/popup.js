@@ -8,6 +8,16 @@ document.getElementById("skeleton").addEventListener("click", async ()=>{
         chrome.tabs.sendMessage(tabs[0].id, {animation: "skeleton"});
     });
 });
+document.getElementById("puppetsPlayer").addEventListener("click", async ()=>{
+    chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
+        chrome.tabs.sendMessage(tabs[0].id, {animation: "puppetsPlayer"});
+    });
+});
+document.getElementById("spiderWeb").addEventListener("click", async ()=>{
+    chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
+        chrome.tabs.sendMessage(tabs[0].id, {animation: "spiderWeb"});
+    });
+});
 
 // -- img animations ---
 document.getElementById("imgCat").addEventListener("click", async ()=>{
@@ -28,6 +38,11 @@ document.getElementById("imgSun").addEventListener("click", async ()=>{
 document.getElementById("imgMonkey").addEventListener("click", async ()=>{
     chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
         chrome.tabs.sendMessage(tabs[0].id, {animation: "imgMonkey"});
+    });
+});
+document.getElementById("imgAnonymous").addEventListener("click", async ()=>{
+    chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
+        chrome.tabs.sendMessage(tabs[0].id, {animation: "imgAnonymous"});
     });
 });
 
@@ -80,5 +95,20 @@ document.getElementById("particlePainting").addEventListener("click", async ()=>
 document.getElementById("particlePaintRandomDrift").addEventListener("click", async ()=>{
     chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
         chrome.tabs.sendMessage(tabs[0].id, {animation: "particlePaintRandomDrift"});
+    });
+});
+document.getElementById("particleCometThrower").addEventListener("click", async ()=>{
+    chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
+        chrome.tabs.sendMessage(tabs[0].id, {animation: "particleCometThrower"});
+    });
+});
+document.getElementById("particleBodyGlow").addEventListener("click", async ()=>{
+    chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
+        chrome.tabs.sendMessage(tabs[0].id, {animation: "particleBodyGlow"});
+    });
+});
+document.getElementById("particleBurningMan").addEventListener("click", async ()=>{
+    chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
+        chrome.tabs.sendMessage(tabs[0].id, {animation: "particleBurningMan"});
     });
 });

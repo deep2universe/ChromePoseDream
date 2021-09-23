@@ -1925,7 +1925,45 @@ function isPromise(object) {
   //  pre-patched Promise.
   return object && object.then && typeof object.then === 'function';
 }
-},{}],"vpgN":[function(require,module,exports) {
+},{}],"kMIn":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.warn = warn;
+exports.log = log;
+
+var _environment = require("./environment");
+
+/**
+ * @license
+ * Copyright 2018 Google LLC. All Rights Reserved.
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ * =============================================================================
+ */
+function warn(...msg) {
+  if (!((0, _environment.env)().getBool('IS_TEST') || (0, _environment.env)().getBool('PROD'))) {
+    console.warn(...msg);
+  }
+}
+
+function log(...msg) {
+  if (!((0, _environment.env)().getBool('IS_TEST') || (0, _environment.env)().getBool('PROD'))) {
+    console.log(...msg);
+  }
+}
+},{"./environment":"vpgN"}],"vpgN":[function(require,module,exports) {
 var global = arguments[3];
 "use strict";
 
@@ -1938,6 +1976,12 @@ exports.setEnvironmentGlobal = setEnvironmentGlobal;
 exports.ENV = exports.Environment = void 0;
 
 var _util_base = require("./util_base");
+
+var log = _interopRequireWildcard(require("./log"));
+
+function _getRequireWildcardCache(nodeInterop) { if (typeof WeakMap !== "function") return null; var cacheBabelInterop = new WeakMap(); var cacheNodeInterop = new WeakMap(); return (_getRequireWildcardCache = function (nodeInterop) { return nodeInterop ? cacheNodeInterop : cacheBabelInterop; })(nodeInterop); }
+
+function _interopRequireWildcard(obj, nodeInterop) { if (!nodeInterop && obj && obj.__esModule) { return obj; } if (obj === null || typeof obj !== "object" && typeof obj !== "function") { return { default: obj }; } var cache = _getRequireWildcardCache(nodeInterop); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (key !== "default" && Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj.default = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
 
 /**
  * @license
@@ -1979,7 +2023,7 @@ class Environment {
 
   setPlatform(platformName, platform) {
     if (this.platform != null) {
-      console.warn(`Platform ${this.platformName} has already been set. ` + `Overwriting the platform with ${platform}.`);
+      log.warn(`Platform ${this.platformName} has already been set. ` + `Overwriting the platform with ${platform}.`);
     }
 
     this.platformName = platformName;
@@ -1995,7 +2039,7 @@ class Environment {
 
     if (this.urlFlags[flagName] != null) {
       const flagValue = this.urlFlags[flagName];
-      console.warn(`Setting feature override from URL ${flagName}: ${flagValue}.`);
+      log.warn(`Setting feature override from URL ${flagName}: ${flagValue}.`);
       this.set(flagName, flagValue);
     }
   }
@@ -2135,7 +2179,7 @@ exports.ENV = ENV;
 function setEnvironmentGlobal(environment) {
   exports.ENV = ENV = environment;
 }
-},{"./util_base":"uID4"}],"UloM":[function(require,module,exports) {
+},{"./util_base":"uID4","./log":"kMIn"}],"UloM":[function(require,module,exports) {
 
 // shim for using process in browser
 var process = module.exports = {}; // cached from whatever global is present so that test runners that stub it
@@ -2436,8 +2480,8 @@ function getGlobal(key, init) {
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.NotEqual = exports.Neg = exports.Multiply = exports.Multinomial = exports.Mod = exports.MirrorPad = exports.Minimum = exports.Min = exports.Mean = exports.MaxPoolWithArgmax = exports.MaxPool3DGrad = exports.MaxPool3D = exports.MaxPoolGrad = exports.MaxPool = exports.Maximum = exports.Max = exports.LRNGrad = exports.LRN = exports.LogSoftmax = exports.LogicalOr = exports.LogicalNot = exports.LogicalAnd = exports.Log1p = exports.Log = exports.LinSpace = exports.LessEqual = exports.Less = exports.LeakyRelu = exports.IsNan = exports.IsInf = exports.IsFinite = exports.Imag = exports.IFFT = exports.Identity = exports.GreaterEqual = exports.Greater = exports.GatherNd = exports.GatherV2 = exports.FusedBatchNorm = exports.FloorDiv = exports.Floor = exports.FlipLeftRight = exports.Fill = exports.FFT = exports.Expm1 = exports.ExpandDims = exports.Exp = exports.Equal = exports.Erf = exports.EluGrad = exports.Elu = exports.Einsum = exports.RealDiv = exports.Dilation2DBackpropFilter = exports.Dilation2DBackpropInput = exports.Dilation2D = exports.Diag = exports.DepthwiseConv2dNativeBackpropInput = exports.DepthwiseConv2dNativeBackpropFilter = exports.DepthwiseConv2dNative = exports.DepthToSpace = exports.DenseBincount = exports.CropAndResize = exports.Cumsum = exports.Cosh = exports.Cos = exports.Conv3DBackpropInputV2 = exports.Conv3DBackpropFilterV2 = exports.Conv3D = exports.Conv2DBackpropInput = exports.Conv2DBackpropFilter = exports.Conv2D = exports.Concat = exports.ComplexAbs = exports.Complex = exports.ClipByValue = exports.Ceil = exports.Cast = exports.BroadcastTo = exports.Bincount = exports.BatchToSpaceND = exports.BatchMatMul = exports.AvgPool3DGrad = exports.AvgPool3D = exports.AvgPoolGrad = exports.AvgPool = exports.Atan2 = exports.Atanh = exports.Atan = exports.Asinh = exports.Asin = exports.ArgMin = exports.ArgMax = exports.Any = exports.All = exports.AddN = exports.Add = exports.Acosh = exports.Acos = exports.Abs = void 0;
-exports.FusedDepthwiseConv2D = exports.FusedConv2D = exports._FusedMatMul = exports.RotateWithOffset = exports.FromPixels = exports.Step = exports.ZerosLike = exports.UnsortedSegmentSum = exports.Unpack = exports.Unique = exports.Transpose = exports.Transform = exports.TopK = exports.Tile = exports.Tanh = exports.Tan = exports.Sub = exports.StringToHashBucketFast = exports.StringSplit = exports.StringNGrams = exports.StridedSlice = exports.Square = exports.SquaredDifference = exports.SparseToDense = exports.SparseSegmentSum = exports.SparseSegmentMean = exports.SparseReshape = exports.SparseFillEmptyRows = exports.Softmax = exports.SplitV = exports.SpaceToBatchND = exports.Sum = exports.Sqrt = exports.Softplus = exports.Sigmoid = exports.Sign = exports.Sinh = exports.Sin = exports.Slice = exports.Selu = exports.Select = exports.ScatterNd = exports.Rsqrt = exports.Round = exports.Reverse = exports.Relu6 = exports.ResizeBilinearGrad = exports.ResizeBilinear = exports.ResizeNearestNeighborGrad = exports.ResizeNearestNeighbor = exports.Reshape = exports.Relu = exports.Reciprocal = exports.Real = exports.Range = exports.Prod = exports.Prelu = exports.Pow = exports.Pool = exports.PadV2 = exports.Pack = exports.OneHot = exports.OnesLike = exports.NonMaxSuppressionV5 = exports.NonMaxSuppressionV4 = exports.NonMaxSuppressionV3 = void 0;
+exports.Neg = exports.Multiply = exports.Multinomial = exports.Mod = exports.MirrorPad = exports.Minimum = exports.Min = exports.Mean = exports.MaxPoolWithArgmax = exports.MaxPool3DGrad = exports.MaxPool3D = exports.MaxPoolGrad = exports.MaxPool = exports.Maximum = exports.Max = exports.LRNGrad = exports.LRN = exports.LogSoftmax = exports.LogicalOr = exports.LogicalNot = exports.LogicalAnd = exports.Log1p = exports.Log = exports.LinSpace = exports.LessEqual = exports.Less = exports.LeakyRelu = exports.IsNan = exports.IsInf = exports.IsFinite = exports.Imag = exports.IFFT = exports.Identity = exports.GreaterEqual = exports.Greater = exports.GatherNd = exports.GatherV2 = exports.FusedBatchNorm = exports.FloorDiv = exports.Floor = exports.FlipLeftRight = exports.Fill = exports.FFT = exports.Expm1 = exports.ExpandDims = exports.Exp = exports.Equal = exports.Erf = exports.EluGrad = exports.Elu = exports.Einsum = exports.RealDiv = exports.Dilation2DBackpropFilter = exports.Dilation2DBackpropInput = exports.Dilation2D = exports.Diag = exports.DepthwiseConv2dNativeBackpropInput = exports.DepthwiseConv2dNativeBackpropFilter = exports.DepthwiseConv2dNative = exports.DepthToSpace = exports.DenseBincount = exports.CropAndResize = exports.Cumsum = exports.Cosh = exports.Cos = exports.Conv3DBackpropInputV2 = exports.Conv3DBackpropFilterV2 = exports.Conv3D = exports.Conv2DBackpropInput = exports.Conv2DBackpropFilter = exports.Conv2D = exports.Concat = exports.ComplexAbs = exports.Complex = exports.ClipByValue = exports.Ceil = exports.Cast = exports.BroadcastArgs = exports.BroadcastTo = exports.Bincount = exports.BatchToSpaceND = exports.BatchMatMul = exports.AvgPool3DGrad = exports.AvgPool3D = exports.AvgPoolGrad = exports.AvgPool = exports.Atan2 = exports.Atanh = exports.Atan = exports.Asinh = exports.Asin = exports.ArgMin = exports.ArgMax = exports.Any = exports.All = exports.AddN = exports.Add = exports.Acosh = exports.Acos = exports.Abs = void 0;
+exports.FusedDepthwiseConv2D = exports.FusedConv2D = exports._FusedMatMul = exports.RotateWithOffset = exports.FromPixels = exports.Step = exports.ZerosLike = exports.UnsortedSegmentSum = exports.Unpack = exports.Unique = exports.Transpose = exports.Transform = exports.TopK = exports.Tile = exports.Tanh = exports.Tan = exports.Sub = exports.StringToHashBucketFast = exports.StringSplit = exports.StringNGrams = exports.StridedSlice = exports.Square = exports.SquaredDifference = exports.SparseToDense = exports.SparseSegmentSum = exports.SparseSegmentMean = exports.SparseReshape = exports.SparseFillEmptyRows = exports.Softmax = exports.SplitV = exports.SpaceToBatchND = exports.Sum = exports.Sqrt = exports.Softplus = exports.Sigmoid = exports.Sign = exports.Sinh = exports.Sin = exports.Slice = exports.Selu = exports.Select = exports.ScatterNd = exports.Rsqrt = exports.Round = exports.Reverse = exports.Relu6 = exports.ResizeBilinearGrad = exports.ResizeBilinear = exports.ResizeNearestNeighborGrad = exports.ResizeNearestNeighbor = exports.Reshape = exports.Relu = exports.Reciprocal = exports.Real = exports.Range = exports.Prod = exports.Prelu = exports.Pow = exports.Pool = exports.PadV2 = exports.Pack = exports.OneHot = exports.OnesLike = exports.NonMaxSuppressionV5 = exports.NonMaxSuppressionV4 = exports.NonMaxSuppressionV3 = exports.NotEqual = void 0;
 const Abs = 'Abs';
 exports.Abs = Abs;
 const Acos = 'Acos';
@@ -2482,6 +2526,8 @@ const Bincount = 'Bincount';
 exports.Bincount = Bincount;
 const BroadcastTo = 'BroadcastTo';
 exports.BroadcastTo = BroadcastTo;
+const BroadcastArgs = 'BroadcastArgs';
+exports.BroadcastArgs = BroadcastArgs;
 const Cast = 'Cast';
 exports.Cast = Cast;
 const Ceil = 'Ceil';
@@ -2793,6 +2839,12 @@ var _environment = require("./environment");
 
 var _global_util = require("./global_util");
 
+var log = _interopRequireWildcard(require("./log"));
+
+function _getRequireWildcardCache(nodeInterop) { if (typeof WeakMap !== "function") return null; var cacheBabelInterop = new WeakMap(); var cacheNodeInterop = new WeakMap(); return (_getRequireWildcardCache = function (nodeInterop) { return nodeInterop ? cacheNodeInterop : cacheBabelInterop; })(nodeInterop); }
+
+function _interopRequireWildcard(obj, nodeInterop) { if (!nodeInterop && obj && obj.__esModule) { return obj; } if (obj === null || typeof obj !== "object" && typeof obj !== "function") { return { default: obj }; } var cache = _getRequireWildcardCache(nodeInterop); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (key !== "default" && Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj.default = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
+
 /**
  * @license
  * Copyright 2019 Google LLC. All Rights Reserved.
@@ -2877,7 +2929,7 @@ function registerKernel(config) {
   const key = makeKey(kernelName, backendName);
 
   if (kernelRegistry.has(key)) {
-    console.warn(`The kernel '${kernelName}' for backend ` + `'${backendName}' is already registered`);
+    log.warn(`The kernel '${kernelName}' for backend ` + `'${backendName}' is already registered`);
   }
 
   kernelRegistry.set(key, config);
@@ -2901,7 +2953,7 @@ function registerGradient(config) {
     // TODO (yassogba) after 3.0 assess whether we need to keep this gated
     // to debug mode.
     if ((0, _environment.env)().getBool('DEBUG')) {
-      console.warn(`Overriding the gradient for '${kernelName}'`);
+      log.warn(`Overriding the gradient for '${kernelName}'`);
     }
   }
 
@@ -2956,7 +3008,7 @@ function copyRegisteredKernels(registeredBackendName, newBackendName) {
 function makeKey(kernelName, backendName) {
   return `${backendName}_${kernelName}`;
 }
-},{"./environment":"vpgN","./global_util":"TJmh"}],"YvD4":[function(require,module,exports) {
+},{"./environment":"vpgN","./global_util":"TJmh","./log":"kMIn"}],"YvD4":[function(require,module,exports) {
 module.exports = Long;
 
 /**
@@ -5914,6 +5966,8 @@ var _tensor_util = require("./tensor_util");
 
 var util = _interopRequireWildcard(require("./util"));
 
+var log = _interopRequireWildcard(require("./log"));
+
 function _getRequireWildcardCache(nodeInterop) { if (typeof WeakMap !== "function") return null; var cacheBabelInterop = new WeakMap(); var cacheNodeInterop = new WeakMap(); return (_getRequireWildcardCache = function (nodeInterop) { return nodeInterop ? cacheNodeInterop : cacheBabelInterop; })(nodeInterop); }
 
 function _interopRequireWildcard(obj, nodeInterop) { if (!nodeInterop && obj && obj.__esModule) { return obj; } if (obj === null || typeof obj !== "object" && typeof obj !== "function") { return { default: obj }; } var cache = _getRequireWildcardCache(nodeInterop); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (key !== "default" && Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj.default = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
@@ -6075,7 +6129,7 @@ class Engine {
 
   registerBackend(backendName, factory, priority = 1) {
     if (backendName in this.registryFactory) {
-      console.warn(`${backendName} backend was already registered. ` + `Reusing existing backend factory.`);
+      log.warn(`${backendName} backend was already registered. ` + `Reusing existing backend factory.`);
       return false;
     }
 
@@ -6171,8 +6225,8 @@ class Engine {
           }
 
           this.pendingBackendInit = null;
-          console.warn(`Initialization of backend ${backendName} failed`);
-          console.warn(err.stack || err.message);
+          log.warn(`Initialization of backend ${backendName} failed`);
+          log.warn(err.stack || err.message);
           return false;
         });
         this.pendingBackendInit = success;
@@ -6188,8 +6242,8 @@ class Engine {
         };
       }
     } catch (err) {
-      console.warn(`Initialization of backend ${backendName} failed`);
-      console.warn(err.stack || err.message);
+      log.warn(`Initialization of backend ${backendName} failed`);
+      log.warn(err.stack || err.message);
       return {
         success: false,
         asyncInit: false
@@ -7136,7 +7190,7 @@ function add(a, b) {
   };
   return ENGINE.runKernel(_kernel_names.Add, inputs);
 }
-},{"./backends/backend":"Sk1f","./environment":"vpgN","./global_util":"TJmh","./kernel_names":"rJl6","./kernel_registry":"PlaY","./profiler":"g3XT","./tape":"s88o","./tensor":"eFW4","./tensor_util":"wtFc","./util":"XXxQ"}],"g3Z1":[function(require,module,exports) {
+},{"./backends/backend":"Sk1f","./environment":"vpgN","./global_util":"TJmh","./kernel_names":"rJl6","./kernel_registry":"PlaY","./profiler":"g3XT","./tape":"s88o","./tensor":"eFW4","./tensor_util":"wtFc","./util":"XXxQ","./log":"kMIn"}],"g3Z1":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -7177,7 +7231,14 @@ function isMobile(nav) {
     } // tslint:disable-next-line:no-any
 
 
-    const a = nav.userAgent || nav.vendor || window.opera; // tslint:disable-next-line:max-line-length
+    const a = nav.userAgent || nav.vendor || (typeof window !== 'undefined' ? window.opera : ''); // Use `navigator.userAgentData.mobile` as fallback.
+
+    if (!a) {
+      // tslint:disable-next-line:no-any
+      const navAny = nav;
+      return navAny.userAgentData && navAny.userAgentData.mobile;
+    } // tslint:disable-next-line:max-line-length
+
 
     return /(android|bb\d+|meego).+mobile|avantgo|bada\/|blackberry|blazer|compal|elaine|fennec|hiptop|iemobile|ip(hone|od)|iris|kindle|lge |maemo|midp|mmp|mobile.+firefox|netfront|opera m(ob|in)i|palm( os)?|phone|p(ixi|re)\/|plucker|pocket|psp|series(4|6)0|symbian|treo|up\.(browser|link)|vodafone|wap|windows ce|xda|xiino/i.test(a) || // tslint:disable-next-line:max-line-length
     /1207|6310|6590|3gso|4thp|50[1-6]i|770s|802s|a wa|abac|ac(er|oo|s\-)|ai(ko|rn)|al(av|ca|co)|amoi|an(ex|ny|yw)|aptu|ar(ch|go)|as(te|us)|attw|au(di|\-m|r |s )|avan|be(ck|ll|nq)|bi(lb|rd)|bl(ac|az)|br(e|v)w|bumb|bw\-(n|u)|c55\/|capi|ccwa|cdm\-|cell|chtm|cldc|cmd\-|co(mp|nd)|craw|da(it|ll|ng)|dbte|dc\-s|devi|dica|dmob|do(c|p)o|ds(12|\-d)|el(49|ai)|em(l2|ul)|er(ic|k0)|esl8|ez([4-7]0|os|wa|ze)|fetc|fly(\-|_)|g1 u|g560|gene|gf\-5|g\-mo|go(\.w|od)|gr(ad|un)|haie|hcit|hd\-(m|p|t)|hei\-|hi(pt|ta)|hp( i|ip)|hs\-c|ht(c(\-| |_|a|g|p|s|t)|tp)|hu(aw|tc)|i\-(20|go|ma)|i230|iac( |\-|\/)|ibro|idea|ig01|ikom|im1k|inno|ipaq|iris|ja(t|v)a|jbro|jemu|jigs|kddi|keji|kgt( |\/)|klon|kpt |kwc\-|kyo(c|k)|le(no|xi)|lg( g|\/(k|l|u)|50|54|\-[a-w])|libw|lynx|m1\-w|m3ga|m50\/|ma(te|ui|xo)|mc(01|21|ca)|m\-cr|me(rc|ri)|mi(o8|oa|ts)|mmef|mo(01|02|bi|de|do|t(\-| |o|v)|zz)|mt(50|p1|v )|mwbp|mywa|n10[0-2]|n20[2-3]|n30(0|2)|n50(0|2|5)|n7(0(0|1)|10)|ne((c|m)\-|on|tf|wf|wg|wt)|nok(6|i)|nzph|o2im|op(ti|wv)|oran|owg1|p800|pan(a|d|t)|pdxg|pg(13|\-([1-8]|c))|phil|pire|pl(ay|uc)|pn\-2|po(ck|rt|se)|prox|psio|pt\-g|qa\-a|qc(07|12|21|32|60|\-[2-7]|i\-)|qtek|r380|r600|raks|rim9|ro(ve|zo)|s55\/|sa(ge|ma|mm|ms|ny|va)|sc(01|h\-|oo|p\-)|sdk\/|se(c(\-|0|1)|47|mc|nd|ri)|sgh\-|shar|sie(\-|m)|sk\-0|sl(45|id)|sm(al|ar|b3|it|t5)|so(ft|ny)|sp(01|h\-|v\-|v )|sy(01|mb)|t2(18|50)|t6(00|10|18)|ta(gt|lk)|tcl\-|tdg\-|tel(i|m)|tim\-|t\-mo|to(pl|sh)|ts(70|m\-|m3|m5)|tx\-9|up(\.b|g1|si)|utst|v400|v750|veri|vi(rg|te)|vk(40|5[0-3]|\-v)|vm40|voda|vulc|vx(52|53|60|61|70|80|81|83|85|98)|w3c(\-| )|webc|whit|wi(g |nc|nw)|wmlb|wonu|x700|yas\-|your|zeto|zte\-/i.test(a.substr(0, 4));
@@ -14944,7 +15005,7 @@ exports.version = void 0;
 
 /** @license See the LICENSE file. */
 // This code is auto-generated, do not modify this file!
-const version = '3.8.0';
+const version = '3.9.0';
 exports.version = version;
 },{}],"TsQp":[function(require,module,exports) {
 "use strict";
@@ -18237,7 +18298,77 @@ const bincount = (0, _operation.op)({
   bincount_
 });
 exports.bincount = bincount;
-},{"../engine":"phT7","../kernel_names":"rJl6","../tensor_util_env":"y4X4","../util":"XXxQ","./operation":"uE86"}],"ZDfb":[function(require,module,exports) {
+},{"../engine":"phT7","../kernel_names":"rJl6","../tensor_util_env":"y4X4","../util":"XXxQ","./operation":"uE86"}],"PJAz":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.broadcastArgs = void 0;
+
+var _engine = require("../engine");
+
+var _kernel_names = require("../kernel_names");
+
+var _tensor_util_env = require("../tensor_util_env");
+
+var _operation = require("./operation");
+
+/**
+ * @license
+ * Copyright 2021 Google LLC. All Rights Reserved.
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ * =============================================================================
+ */
+
+/**
+ * Return the shape of s0 op s1 with broadcast.
+ *
+ * compute r0, the broadcasted shape as a tensor.
+ * s0, s1 and r0 are all integer vectors.
+ *
+ * This function returns the shape of the result of an operation between
+ * two tensors of size s0 and s1 performed with broadcast.
+ *
+ * @param s0 A tensor representing a shape
+ * @param s1 A tensor representing a shape
+ *
+ * @doc {heading: 'Tensors', subheading: 'Transformations'}
+ */
+function broadcastArgs_(s0, s1) {
+  const shape1Input = (0, _tensor_util_env.convertToTensor)(s0, 's0', 'broadcastArgs', 'int32');
+  const shape2Input = (0, _tensor_util_env.convertToTensor)(s1, 's1', 'broadcastArgs', 'int32');
+
+  if (shape1Input.rank !== 1) {
+    throw new Error('broadcastArgs(): first input must be a vector (rank=1). ' + `Has rank ${shape1Input.rank}`);
+  }
+
+  if (shape2Input.rank !== 1) {
+    throw new Error('broadcastArgs(): second input must be a vector (rank=1). ' + `Has rank ${shape2Input.rank}`);
+  }
+
+  const inputs = {
+    s0: shape1Input,
+    s1: shape2Input
+  };
+  return _engine.ENGINE.runKernel(_kernel_names.BroadcastArgs, inputs);
+}
+
+const broadcastArgs = (0, _operation.op)({
+  broadcastArgs_
+});
+exports.broadcastArgs = broadcastArgs;
+},{"../engine":"phT7","../kernel_names":"rJl6","../tensor_util_env":"y4X4","./operation":"uE86"}],"ZDfb":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -20571,7 +20702,7 @@ var _operation = require("./operation");
  */
 
 /**
- * Computes exponential linear element-wise: `x > 0 ? e ^ x - 1 : 0`.
+ * Computes exponential linear element-wise: `x > 0 ? x : (e ^ x) - 1`.
  *
  * ```js
  * const x = tf.tensor1d([-1, 1, -3, 2]);
@@ -32858,7 +32989,68 @@ const flipLeftRight = (0, _operation.op)({
   flipLeftRight_
 });
 exports.flipLeftRight = flipLeftRight;
-},{"../../engine":"phT7","../../kernel_names":"rJl6","../../tensor_util_env":"y4X4","../../util":"XXxQ","../operation":"uE86"}],"t1ei":[function(require,module,exports) {
+},{"../../engine":"phT7","../../kernel_names":"rJl6","../../tensor_util_env":"y4X4","../../util":"XXxQ","../operation":"uE86"}],"QqQU":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.grayscaleToRGB = void 0;
+
+var _tensor_util_env = require("../../tensor_util_env");
+
+var util = _interopRequireWildcard(require("../../util"));
+
+var _operation = require("../operation");
+
+var _tile = require("../tile");
+
+function _getRequireWildcardCache(nodeInterop) { if (typeof WeakMap !== "function") return null; var cacheBabelInterop = new WeakMap(); var cacheNodeInterop = new WeakMap(); return (_getRequireWildcardCache = function (nodeInterop) { return nodeInterop ? cacheNodeInterop : cacheBabelInterop; })(nodeInterop); }
+
+function _interopRequireWildcard(obj, nodeInterop) { if (!nodeInterop && obj && obj.__esModule) { return obj; } if (obj === null || typeof obj !== "object" && typeof obj !== "function") { return { default: obj }; } var cache = _getRequireWildcardCache(nodeInterop); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (key !== "default" && Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj.default = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
+
+/**
+ * @license
+ * Copyright 2021 Google LLC. All Rights Reserved.
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ * =============================================================================
+ */
+
+/**
+ * Converts images from grayscale to RGB format.
+ *
+ * @param image A grayscale tensor to convert. The `image`'s last dimension must
+ *     be size 1 with at least a two-dimensional shape.
+ *
+ * @doc {heading: 'Operations', subheading: 'Images', namespace: 'image'}
+ */
+function grayscaleToRGB_(image) {
+  const $image = (0, _tensor_util_env.convertToTensor)(image, 'image', 'grayscaleToRGB');
+  const lastDimsIdx = $image.rank - 1;
+  const lastDims = $image.shape[lastDimsIdx];
+  util.assert($image.rank >= 2, () => 'Error in grayscaleToRGB: images must be at least rank 2, ' + `but got rank ${$image.rank}.`);
+  util.assert(lastDims === 1, () => 'Error in grayscaleToRGB: last dimension of a grayscale image ' + `should be size 1, but got size ${lastDims}.`);
+  const reps = new Array($image.rank);
+  reps.fill(1, 0, lastDimsIdx);
+  reps[lastDimsIdx] = 3;
+  return (0, _tile.tile)($image, reps);
+}
+
+const grayscaleToRGB = (0, _operation.op)({
+  grayscaleToRGB_
+});
+exports.grayscaleToRGB = grayscaleToRGB;
+},{"../../tensor_util_env":"y4X4","../../util":"XXxQ","../operation":"uE86","../tile":"DlNu"}],"t1ei":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -36325,6 +36517,7 @@ var _exportNames = {
   batchNorm3d: true,
   batchNorm4d: true,
   bincount: true,
+  broadcastArgs: true,
   broadcastTo: true,
   buffer: true,
   cast: true,
@@ -36624,6 +36817,12 @@ Object.defineProperty(exports, "bincount", {
   enumerable: true,
   get: function () {
     return _bincount.bincount;
+  }
+});
+Object.defineProperty(exports, "broadcastArgs", {
+  enumerable: true,
+  get: function () {
+    return _broadcast_args.broadcastArgs;
   }
 });
 Object.defineProperty(exports, "broadcastTo", {
@@ -37640,6 +37839,8 @@ var _batchnorm4d = require("./batchnorm4d");
 
 var _bincount = require("./bincount");
 
+var _broadcast_args = require("./broadcast_args");
+
 var _broadcast_to = require("./broadcast_to");
 
 var _buffer = require("./buffer");
@@ -38116,6 +38317,8 @@ var _crop_and_resize = require("./image/crop_and_resize");
 
 var _flip_left_right = require("./image/flip_left_right");
 
+var _grayscale_to_rgb = require("./image/grayscale_to_rgb");
+
 var _rotate_with_offset = require("./image/rotate_with_offset");
 
 var _non_max_suppression = require("./image/non_max_suppression");
@@ -38214,6 +38417,7 @@ const signal = {
 exports.signal = signal;
 const image = {
   flipLeftRight: _flip_left_right.flipLeftRight,
+  grayscaleToRGB: _grayscale_to_rgb.grayscaleToRGB,
   resizeNearestNeighbor: _resize_nearest_neighbor.resizeNearestNeighbor,
   resizeBilinear: _resize_bilinear.resizeBilinear,
   rotateWithOffset: _rotate_with_offset.rotateWithOffset,
@@ -38263,7 +38467,7 @@ const string = {
 }; // Second level exports.
 
 exports.string = string;
-},{"./abs":"U9d5","./acos":"hDnd","./acosh":"zTvf","./add":"N73o","./add_n":"rS0T","./all":"zHmK","./any":"XocL","./arg_max":"dv7u","./arg_min":"y2ST","./asin":"kcJ4","./asinh":"mK5f","./atan":"Qawb","./atan2":"lkDZ","./atanh":"c4nq","./avg_pool":"LNDu","./avg_pool_3d":"gUgG","./basic_lstm_cell":"IrGh","./batch_to_space_nd":"vEiD","./batchnorm":"gYII","./batchnorm2d":"PwSx","./batchnorm3d":"zSL9","./batchnorm4d":"PGAU","./bincount":"rYQ1","./broadcast_to":"ZDfb","./buffer":"GfO2","./cast":"qnzc","./ceil":"VBn4","./clip_by_value":"OIQo","./clone":"Ot88","./complex":"e4je","./concat":"V5Ij","./concat_1d":"SY4F","./concat_2d":"rep6","./concat_3d":"La3N","./concat_4d":"UYxl","./conv1d":"RZoo","./conv2d":"CVMs","./conv2d_transpose":"v80f","./conv3d":"uOsG","./conv3d_transpose":"ndAv","./cos":"gHiU","./cosh":"dWiz","./cumsum":"s2nI","./dense_bincount":"IzLf","./depth_to_space":"o3IO","./depthwise_conv2d":"HEHz","./diag":"Qz11","./dilation2d":"XEeh","./div":"S2L5","./div_no_nan":"VrTr","./dot":"M98r","./einsum":"aqvb","./elu":"qSof","./equal":"haNF","./erf":"Ng3O","./exp":"xcz4","./expand_dims":"WqhD","./expm1":"NE5u","./eye":"MP6S","./fill":"gaCw","./floor":"EeTS","./floorDiv":"OIz3","./gather":"TfxI","./greater":"WT29","./greater_equal":"a6nY","./imag":"eG10","./is_finite":"uXDy","./is_inf":"d2YA","./is_nan":"cHRr","./leaky_relu":"RYa8","./less":"onA7","./less_equal":"vnhI","./linspace":"Eb8v","./local_response_normalization":"uT9U","./log":"f3PH","./log1p":"ODmc","./log_sigmoid":"h4az","./log_softmax":"rVC8","./log_sum_exp":"te98","./logical_and":"sHir","./logical_not":"jt3a","./logical_or":"cBH6","./logical_xor":"RGME","./mat_mul":"zVDr","./max":"KIVY","./max_pool":"g3Dm","./max_pool_3d":"Z3LC","./max_pool_with_argmax":"vORB","./maximum":"E33m","./mean":"DIOh","./meshgrid":"OeUD","./min":"pkmC","./minimum":"TKku","./mirror_pad":"y7Tc","./mod":"cyrT","./moments":"xfMn","./mul":"tBJ4","./multi_rnn_cell":"C2RS","./multinomial":"moMD","./neg":"i2LN","./not_equal":"TOzH","./one_hot":"HpS0","./ones":"iY3A","./ones_like":"nMI9","./outer_product":"mAdl","./pad":"y7nM","./pad1d":"c4D8","./pad2d":"Zzwk","./pad3d":"DYJf","./pad4d":"k9sb","./pool":"Zp2S","./pow":"o2Kl","./prelu":"Xs9q","./print":"avTA","./prod":"V8As","./rand":"DOKZ","./random_gamma":"KZ1e","./random_normal":"aurk","./random_uniform":"Imph","./range":"FAHd","./real":"j99O","./reciprocal":"kFd0","./relu":"JbIg","./relu6":"urTr","./reshape":"F0cm","./reverse":"JJIO","./reverse_1d":"AODX","./reverse_2d":"JN76","./reverse_3d":"hWz2","./reverse_4d":"X21a","./round":"NMXN","./rsqrt":"gHPL","./scalar":"TiGU","./selu":"HaUr","./separable_conv2d":"PKLM","./setdiff1d_async":"yk2k","./sigmoid":"DbGB","./sign":"CH4E","./sin":"zDLt","./sinh":"DmYY","./slice":"wIos","./slice1d":"vSl0","./slice2d":"bSki","./slice3d":"c5n3","./slice4d":"EHN5","./softmax":"TVVR","./softplus":"TLV5","./space_to_batch_nd":"ERrS","./spectral/fft":"lRSx","./spectral/ifft":"G5kM","./spectral/irfft":"Yh9k","./spectral/rfft":"FMnE","./split":"lgPf","./sqrt":"brr7","./square":"KiGo","./squared_difference":"hbAV","./squeeze":"pxYL","./stack":"Wzzr","./step":"vRkD","./strided_slice":"quwm","./sub":"SgzI","./sum":"kc8w","./tan":"fQEZ","./tanh":"djih","./tensor":"woAd","./tensor1d":"vKgg","./tensor2d":"UEzj","./tensor3d":"gE0c","./tensor4d":"CbDo","./tensor5d":"ViEa","./tensor6d":"j89l","./tile":"DlNu","./topk":"Hv3o","./truncated_normal":"YHjl","./unique":"LuF4","./unsorted_segment_sum":"oY1I","./unstack":"Smo9","./variable":"dH8d","./where":"TsgC","./where_async":"moUh","./zeros":"AsfN","./zeros_like":"qY0o","./boolean_mask":"JMVl","./transpose":"JmRY","./norm":"exuO","./moving_average":"SiXR","./scatter_nd":"r4bT","./sparse_to_dense":"s9K8","./gather_nd":"PYkI","./dropout":"jb36","./signal_ops_util":"Ubrm","./in_top_k":"oeUN","./operation":"uE86","./fused_ops":"Z9t3","./signal/hamming_window":"HdvD","./signal/hann_window":"bdTr","./signal/frame":"Go7t","./signal/stft":"jWvs","./image/crop_and_resize":"su0V","./image/flip_left_right":"tSJb","./image/rotate_with_offset":"t1ei","./image/non_max_suppression":"wp0Q","./image/non_max_suppression_async":"kFcs","./image/non_max_suppression_with_score":"KHDA","./image/non_max_suppression_with_score_async":"t65b","./image/non_max_suppression_padded":"zXJN","./image/non_max_suppression_padded_async":"sgWJ","./image/resize_bilinear":"JODz","./image/resize_nearest_neighbor":"rQ9Q","./image/threshold":"M9mR","./image/transform":"cGGF","./linalg/band_part":"KELI","./linalg/gram_schmidt":"uAHR","./linalg/qr":"Ppe5","./losses/absolute_difference":"coTE","./losses/compute_weighted_loss":"WmQQ","./losses/cosine_distance":"IpNr","./losses/hinge_loss":"QDEw","./losses/huber_loss":"wWxs","./losses/log_loss":"sLE3","./losses/mean_squared_error":"ZpcK","./losses/sigmoid_cross_entropy":"E5VI","./losses/softmax_cross_entropy":"w47l","./sparse/sparse_fill_empty_rows":"mqNF","./sparse/sparse_reshape":"zr2y","./sparse/sparse_segment_mean":"CqLM","./sparse/sparse_segment_sum":"bhoc","./string/string_n_grams":"IQZI","./string/string_split":"JNPF","./string/string_to_hash_bucket_fast":"ouv1"}],"zxzS":[function(require,module,exports) {
+},{"./abs":"U9d5","./acos":"hDnd","./acosh":"zTvf","./add":"N73o","./add_n":"rS0T","./all":"zHmK","./any":"XocL","./arg_max":"dv7u","./arg_min":"y2ST","./asin":"kcJ4","./asinh":"mK5f","./atan":"Qawb","./atan2":"lkDZ","./atanh":"c4nq","./avg_pool":"LNDu","./avg_pool_3d":"gUgG","./basic_lstm_cell":"IrGh","./batch_to_space_nd":"vEiD","./batchnorm":"gYII","./batchnorm2d":"PwSx","./batchnorm3d":"zSL9","./batchnorm4d":"PGAU","./bincount":"rYQ1","./broadcast_args":"PJAz","./broadcast_to":"ZDfb","./buffer":"GfO2","./cast":"qnzc","./ceil":"VBn4","./clip_by_value":"OIQo","./clone":"Ot88","./complex":"e4je","./concat":"V5Ij","./concat_1d":"SY4F","./concat_2d":"rep6","./concat_3d":"La3N","./concat_4d":"UYxl","./conv1d":"RZoo","./conv2d":"CVMs","./conv2d_transpose":"v80f","./conv3d":"uOsG","./conv3d_transpose":"ndAv","./cos":"gHiU","./cosh":"dWiz","./cumsum":"s2nI","./dense_bincount":"IzLf","./depth_to_space":"o3IO","./depthwise_conv2d":"HEHz","./diag":"Qz11","./dilation2d":"XEeh","./div":"S2L5","./div_no_nan":"VrTr","./dot":"M98r","./einsum":"aqvb","./elu":"qSof","./equal":"haNF","./erf":"Ng3O","./exp":"xcz4","./expand_dims":"WqhD","./expm1":"NE5u","./eye":"MP6S","./fill":"gaCw","./floor":"EeTS","./floorDiv":"OIz3","./gather":"TfxI","./greater":"WT29","./greater_equal":"a6nY","./imag":"eG10","./is_finite":"uXDy","./is_inf":"d2YA","./is_nan":"cHRr","./leaky_relu":"RYa8","./less":"onA7","./less_equal":"vnhI","./linspace":"Eb8v","./local_response_normalization":"uT9U","./log":"f3PH","./log1p":"ODmc","./log_sigmoid":"h4az","./log_softmax":"rVC8","./log_sum_exp":"te98","./logical_and":"sHir","./logical_not":"jt3a","./logical_or":"cBH6","./logical_xor":"RGME","./mat_mul":"zVDr","./max":"KIVY","./max_pool":"g3Dm","./max_pool_3d":"Z3LC","./max_pool_with_argmax":"vORB","./maximum":"E33m","./mean":"DIOh","./meshgrid":"OeUD","./min":"pkmC","./minimum":"TKku","./mirror_pad":"y7Tc","./mod":"cyrT","./moments":"xfMn","./mul":"tBJ4","./multi_rnn_cell":"C2RS","./multinomial":"moMD","./neg":"i2LN","./not_equal":"TOzH","./one_hot":"HpS0","./ones":"iY3A","./ones_like":"nMI9","./outer_product":"mAdl","./pad":"y7nM","./pad1d":"c4D8","./pad2d":"Zzwk","./pad3d":"DYJf","./pad4d":"k9sb","./pool":"Zp2S","./pow":"o2Kl","./prelu":"Xs9q","./print":"avTA","./prod":"V8As","./rand":"DOKZ","./random_gamma":"KZ1e","./random_normal":"aurk","./random_uniform":"Imph","./range":"FAHd","./real":"j99O","./reciprocal":"kFd0","./relu":"JbIg","./relu6":"urTr","./reshape":"F0cm","./reverse":"JJIO","./reverse_1d":"AODX","./reverse_2d":"JN76","./reverse_3d":"hWz2","./reverse_4d":"X21a","./round":"NMXN","./rsqrt":"gHPL","./scalar":"TiGU","./selu":"HaUr","./separable_conv2d":"PKLM","./setdiff1d_async":"yk2k","./sigmoid":"DbGB","./sign":"CH4E","./sin":"zDLt","./sinh":"DmYY","./slice":"wIos","./slice1d":"vSl0","./slice2d":"bSki","./slice3d":"c5n3","./slice4d":"EHN5","./softmax":"TVVR","./softplus":"TLV5","./space_to_batch_nd":"ERrS","./spectral/fft":"lRSx","./spectral/ifft":"G5kM","./spectral/irfft":"Yh9k","./spectral/rfft":"FMnE","./split":"lgPf","./sqrt":"brr7","./square":"KiGo","./squared_difference":"hbAV","./squeeze":"pxYL","./stack":"Wzzr","./step":"vRkD","./strided_slice":"quwm","./sub":"SgzI","./sum":"kc8w","./tan":"fQEZ","./tanh":"djih","./tensor":"woAd","./tensor1d":"vKgg","./tensor2d":"UEzj","./tensor3d":"gE0c","./tensor4d":"CbDo","./tensor5d":"ViEa","./tensor6d":"j89l","./tile":"DlNu","./topk":"Hv3o","./truncated_normal":"YHjl","./unique":"LuF4","./unsorted_segment_sum":"oY1I","./unstack":"Smo9","./variable":"dH8d","./where":"TsgC","./where_async":"moUh","./zeros":"AsfN","./zeros_like":"qY0o","./boolean_mask":"JMVl","./transpose":"JmRY","./norm":"exuO","./moving_average":"SiXR","./scatter_nd":"r4bT","./sparse_to_dense":"s9K8","./gather_nd":"PYkI","./dropout":"jb36","./signal_ops_util":"Ubrm","./in_top_k":"oeUN","./operation":"uE86","./fused_ops":"Z9t3","./signal/hamming_window":"HdvD","./signal/hann_window":"bdTr","./signal/frame":"Go7t","./signal/stft":"jWvs","./image/crop_and_resize":"su0V","./image/flip_left_right":"tSJb","./image/grayscale_to_rgb":"QqQU","./image/rotate_with_offset":"t1ei","./image/non_max_suppression":"wp0Q","./image/non_max_suppression_async":"kFcs","./image/non_max_suppression_with_score":"KHDA","./image/non_max_suppression_with_score_async":"t65b","./image/non_max_suppression_padded":"zXJN","./image/non_max_suppression_padded_async":"sgWJ","./image/resize_bilinear":"JODz","./image/resize_nearest_neighbor":"rQ9Q","./image/threshold":"M9mR","./image/transform":"cGGF","./linalg/band_part":"KELI","./linalg/gram_schmidt":"uAHR","./linalg/qr":"Ppe5","./losses/absolute_difference":"coTE","./losses/compute_weighted_loss":"WmQQ","./losses/cosine_distance":"IpNr","./losses/hinge_loss":"QDEw","./losses/huber_loss":"wWxs","./losses/log_loss":"sLE3","./losses/mean_squared_error":"ZpcK","./losses/sigmoid_cross_entropy":"E5VI","./losses/softmax_cross_entropy":"w47l","./sparse/sparse_fill_empty_rows":"mqNF","./sparse/sparse_reshape":"zr2y","./sparse/sparse_segment_mean":"CqLM","./sparse/sparse_segment_sum":"bhoc","./string/string_n_grams":"IQZI","./string/string_split":"JNPF","./string/string_to_hash_bucket_fast":"ouv1"}],"zxzS":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -38917,21 +39121,21 @@ var _serialization = require("../serialization");
 var _optimizer = require("./optimizer");
 
 /**
- * @license
- * Copyright 2018 Google LLC. All Rights Reserved.
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- * http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- * =============================================================================
- */
+* @license
+* Copyright 2018 Google LLC. All Rights Reserved.
+* Licensed under the Apache License, Version 2.0 (the "License");
+* you may not use this file except in compliance with the License.
+* You may obtain a copy of the License at
+*
+* http://www.apache.org/licenses/LICENSE-2.0
+*
+* Unless required by applicable law or agreed to in writing, software
+* distributed under the License is distributed on an "AS IS" BASIS,
+* WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+* See the License for the specific language governing permissions and
+* limitations under the License.
+* =============================================================================
+*/
 class AdamaxOptimizer extends _optimizer.Optimizer {
   constructor(learningRate, beta1, beta2, epsilon = null, decay = 0.0) {
     super();
@@ -40173,45 +40377,7 @@ const ERF_A4 = -1.453152027;
 exports.ERF_A4 = ERF_A4;
 const ERF_A5 = 1.061405429;
 exports.ERF_A5 = ERF_A5;
-},{}],"kMIn":[function(require,module,exports) {
-"use strict";
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.warn = warn;
-exports.log = log;
-
-var _environment = require("./environment");
-
-/**
- * @license
- * Copyright 2018 Google LLC. All Rights Reserved.
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- * http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- * =============================================================================
- */
-function warn(...msg) {
-  if (!(0, _environment.env)().getBool('IS_TEST')) {
-    console.warn(...msg);
-  }
-}
-
-function log(...msg) {
-  if (!(0, _environment.env)().getBool('IS_TEST')) {
-    console.log(...msg);
-  }
-}
-},{"./environment":"vpgN"}],"C9bx":[function(require,module,exports) {
+},{}],"C9bx":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -46640,6 +46806,19 @@ const json = [{
     'type': 'number[]'
   }],
   'attrs': []
+}, {
+  'tfOpName': 'BroadcastArgs',
+  'category': 'transformation',
+  'inputs': [{
+    'start': 0,
+    'name': 's0',
+    'type': 'tensor'
+  }, {
+    'start': 1,
+    'name': 's1',
+    'type': 'tensor'
+  }],
+  'attrs': []
 }];
 exports.json = json;
 },{}],"L12J":[function(require,module,exports) {
@@ -50749,6 +50928,11 @@ const executeOp = (node, tensorMap, context) => {
     case 'BroadcastTo':
       {
         return [tfOps.broadcastTo((0, _utils.getParamValue)('x', node, tensorMap, context), (0, _utils.getParamValue)('shape', node, tensorMap, context))];
+      }
+
+    case 'BroadcastArgs':
+      {
+        return [tfOps.broadcastArgs((0, _utils.getParamValue)('s0', node, tensorMap, context), (0, _utils.getParamValue)('s1', node, tensorMap, context))];
       }
 
     default:
@@ -56051,9 +56235,11 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 exports.getLogicalCoordinatesFromFlatIndex = getLogicalCoordinatesFromFlatIndex;
+exports.getOutputLogicalCoordinatesFromFlatIndexByUniform = getOutputLogicalCoordinatesFromFlatIndexByUniform;
 exports.getLogicalCoordinatesFromFlatIndexByUniform = getLogicalCoordinatesFromFlatIndexByUniform;
 exports.dotify = dotify;
 exports.getFlatIndexFrom3D = getFlatIndexFrom3D;
+exports.getFlatIndexFrom3DOutput = getFlatIndexFrom3DOutput;
 exports.ENCODE_FLOAT_SNIPPET = void 0;
 
 var _tfjsCore = require("@tensorflow/tfjs-core");
@@ -56090,12 +56276,36 @@ function getLogicalCoordinatesFromFlatIndex(coords, shape, index = 'index') {
   }).join('');
 }
 
-function getLogicalCoordinatesFromFlatIndexByUniform(coords, shape, index = 'index') {
+function getOutputLogicalCoordinatesFromFlatIndexByUniform(coords, shape, index = 'index') {
   const strides = _tfjsCore.util.computeStrides(shape);
 
   return strides.map((_, i) => {
     const line1 = `int ${coords[i]} = ${index} / outShapeStrides[${i}]`;
     const line2 = i === strides.length - 1 ? `int ${coords[i + 1]} = ${index} - ${coords[i]} * outShapeStrides[${i}]` : `index -= ${coords[i]} * outShapeStrides[${i}]`;
+    return `${line1}; ${line2};`;
+  }).join('');
+} // Produces GLSL code that computes strides.
+
+
+function symbolicallyComputeStrides(indicesArr, variableName) {
+  const numCoords = indicesArr.length;
+  const shape = indicesArr.map(d => `${variableName}[${d}]`);
+  const strides = new Array(numCoords - 1);
+  strides[numCoords - 2] = shape[numCoords - 1];
+
+  for (let i = numCoords - 3; i >= 0; --i) {
+    strides[i] = `(${strides[i + 1]} * ${shape[i + 1]})`;
+  }
+
+  return strides;
+}
+
+function getLogicalCoordinatesFromFlatIndexByUniform(coords, variableName, index = 'index') {
+  const indicesArray = coords.map((_, i) => i);
+  const strides = symbolicallyComputeStrides(indicesArray, variableName);
+  return strides.map((_, i) => {
+    const line1 = `int ${coords[i]} = ${index} / ${strides[i]}`;
+    const line2 = i === strides.length - 1 ? `int ${coords[i + 1]} = ${index} - ${coords[i]} * ${strides[i]}` : `index -= ${coords[i]} * ${strides[i]}`;
     return `${line1}; ${line2};`;
   }).join('');
 }
@@ -56157,6 +56367,14 @@ function getFlatIndexFrom3D(shape) {
 `;
 }
 
+function getFlatIndexFrom3DOutput() {
+  return `
+  int getFlatIndex(ivec3 coords) {
+    return coords.x * outShapeStrides[0] + coords.y * outShapeStrides[1] + coords.z;
+  }
+`;
+}
+
 const ENCODE_FLOAT_SNIPPET = `
   const float FLOAT_MAX = 1.70141184e38;
   const float FLOAT_MIN = 1.17549435e-38;
@@ -56198,1246 +56416,7 @@ const ENCODE_FLOAT_SNIPPET = `
   }
 `;
 exports.ENCODE_FLOAT_SNIPPET = ENCODE_FLOAT_SNIPPET;
-},{"@tensorflow/tfjs-core":"kSBl"}],"JMCa":[function(require,module,exports) {
-"use strict";
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.DecodeMatrixProgram = void 0;
-
-var _glsl_version = require("./glsl_version");
-
-var shader_util = _interopRequireWildcard(require("./shader_compiler_util"));
-
-var _tex_util = require("./tex_util");
-
-function _getRequireWildcardCache(nodeInterop) { if (typeof WeakMap !== "function") return null; var cacheBabelInterop = new WeakMap(); var cacheNodeInterop = new WeakMap(); return (_getRequireWildcardCache = function (nodeInterop) { return nodeInterop ? cacheNodeInterop : cacheBabelInterop; })(nodeInterop); }
-
-function _interopRequireWildcard(obj, nodeInterop) { if (!nodeInterop && obj && obj.__esModule) { return obj; } if (obj === null || typeof obj !== "object" && typeof obj !== "function") { return { default: obj }; } var cache = _getRequireWildcardCache(nodeInterop); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (key !== "default" && Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj.default = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
-
-/**
- * @license
- * Copyright 2019 Google LLC. All Rights Reserved.
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- * http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- * =============================================================================
- */
-class DecodeMatrixProgram {
-  constructor(outputShape) {
-    this.variableNames = ['A'];
-    this.packedInputs = false;
-    this.packedOutput = true;
-    this.outPackingScheme = _tex_util.PackingScheme.DENSE;
-    const texShape = (0, _tex_util.getDenseTexShape)(outputShape);
-    const glsl = (0, _glsl_version.getGlslDifferences)();
-    this.outputShape = outputShape;
-    this.userCode = `
-      ivec3 outCoordsFromFlatIndex(int index) {
-        ${shader_util.getLogicalCoordinatesFromFlatIndex(['r', 'c', 'd'], outputShape)}
-        return ivec3(r, c, d);
-      }
-
-      void main() {
-        ivec2 resTexRC = ivec2(resultUV.yx *
-          vec2(${texShape[0]}, ${texShape[1]}));
-        int index = 4 * (resTexRC.x * ${texShape[1]} + resTexRC.y);
-
-        vec4 result = vec4(0.);
-
-        for (int i=0; i<4; i++) {
-          int flatIndex = index + i;
-          ivec3 rc = outCoordsFromFlatIndex(flatIndex);
-          result[i] = getA(rc.x, rc.y, rc.z);
-        }
-
-        ${glsl.output} = result;
-      }
-    `;
-  }
-
-}
-
-exports.DecodeMatrixProgram = DecodeMatrixProgram;
-},{"./glsl_version":"fXvw","./shader_compiler_util":"tjqy","./tex_util":"jAWT"}],"RChy":[function(require,module,exports) {
-"use strict";
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.DecodeMatrixPackedProgram = void 0;
-
-var _glsl_version = require("./glsl_version");
-
-var shader_util = _interopRequireWildcard(require("./shader_compiler_util"));
-
-var _tex_util = require("./tex_util");
-
-function _getRequireWildcardCache(nodeInterop) { if (typeof WeakMap !== "function") return null; var cacheBabelInterop = new WeakMap(); var cacheNodeInterop = new WeakMap(); return (_getRequireWildcardCache = function (nodeInterop) { return nodeInterop ? cacheNodeInterop : cacheBabelInterop; })(nodeInterop); }
-
-function _interopRequireWildcard(obj, nodeInterop) { if (!nodeInterop && obj && obj.__esModule) { return obj; } if (obj === null || typeof obj !== "object" && typeof obj !== "function") { return { default: obj }; } var cache = _getRequireWildcardCache(nodeInterop); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (key !== "default" && Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj.default = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
-
-/**
- * @license
- * Copyright 2019 Google LLC. All Rights Reserved.
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- * http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- * =============================================================================
- */
-class DecodeMatrixPackedProgram {
-  constructor(outputShape) {
-    this.variableNames = ['A'];
-    this.packedInputs = true;
-    this.packedOutput = true;
-    this.outPackingScheme = _tex_util.PackingScheme.DENSE;
-    const texShape = (0, _tex_util.getDenseTexShape)(outputShape);
-    const glsl = (0, _glsl_version.getGlslDifferences)();
-    this.outputShape = outputShape;
-    this.userCode = `
-      ivec3 outCoordsFromFlatIndex(int index) {
-        ${shader_util.getLogicalCoordinatesFromFlatIndex(['r', 'c', 'd'], outputShape)}
-        return ivec3(r, c, d);
-      }
-
-      void main() {
-        ivec2 resTexRC = ivec2(resultUV.yx *
-          vec2(${texShape[0]}, ${texShape[1]}));
-        int index = 4 * (resTexRC.x * ${texShape[1]} + resTexRC.y);
-
-        vec4 result = vec4(0.);
-
-        for (int i=0; i<4; i++) {
-          int flatIndex = index + i;
-          ivec3 rc = outCoordsFromFlatIndex(flatIndex);
-          result[i] = getChannel(getA(rc.x, rc.y, rc.z), vec2(rc.y, rc.z));
-        }
-
-        ${glsl.output} = result;
-      }
-    `;
-  }
-
-}
-
-exports.DecodeMatrixPackedProgram = DecodeMatrixPackedProgram;
-},{"./glsl_version":"fXvw","./shader_compiler_util":"tjqy","./tex_util":"jAWT"}],"oHaq":[function(require,module,exports) {
-"use strict";
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.EncodeFloatProgram = void 0;
-
-var _glsl_version = require("./glsl_version");
-
-var _shader_compiler_util = require("./shader_compiler_util");
-
-var _tex_util = require("./tex_util");
-
-/**
- * @license
- * Copyright 2018 Google LLC. All Rights Reserved.
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- * http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- * =============================================================================
- */
-class EncodeFloatProgram {
-  constructor(outputShape) {
-    this.variableNames = ['A'];
-    this.outTexUsage = _tex_util.TextureUsage.DOWNLOAD;
-    const glsl = (0, _glsl_version.getGlslDifferences)();
-    this.outputShape = outputShape;
-    this.userCode = `
-      ${_shader_compiler_util.ENCODE_FLOAT_SNIPPET}
-
-      void main() {
-        float x = getAAtOutCoords();
-        ${glsl.output} = encode_float(x);
-      }
-    `;
-  }
-
-}
-
-exports.EncodeFloatProgram = EncodeFloatProgram;
-},{"./glsl_version":"fXvw","./shader_compiler_util":"tjqy","./tex_util":"jAWT"}],"r0NW":[function(require,module,exports) {
-"use strict";
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.EncodeFloatPackedProgram = void 0;
-
-var _glsl_version = require("./glsl_version");
-
-var _shader_compiler_util = require("./shader_compiler_util");
-
-var _tex_util = require("./tex_util");
-
-/**
- * @license
- * Copyright 2018 Google LLC. All Rights Reserved.
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- * http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- * =============================================================================
- */
-class EncodeFloatPackedProgram {
-  constructor(outputShape) {
-    this.variableNames = ['A'];
-    this.packedInputs = true;
-    this.packedOutput = false;
-    this.outTexUsage = _tex_util.TextureUsage.DOWNLOAD;
-    const glsl = (0, _glsl_version.getGlslDifferences)();
-    this.outputShape = outputShape;
-    this.userCode = `
-      ${_shader_compiler_util.ENCODE_FLOAT_SNIPPET}
-
-      void main() {
-        ivec3 coords = getOutputCoords();
-        float x = getChannel(getAAtOutCoords(), vec2(coords.y, coords.z));
-        ${glsl.output} = encode_float(x);
-      }
-    `;
-  }
-
-}
-
-exports.EncodeFloatPackedProgram = EncodeFloatPackedProgram;
-},{"./glsl_version":"fXvw","./shader_compiler_util":"tjqy","./tex_util":"jAWT"}],"o0jj":[function(require,module,exports) {
-"use strict";
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.EncodeMatrixProgram = void 0;
-
-var _glsl_version = require("./glsl_version");
-
-var shader_util = _interopRequireWildcard(require("./shader_compiler_util"));
-
-function _getRequireWildcardCache(nodeInterop) { if (typeof WeakMap !== "function") return null; var cacheBabelInterop = new WeakMap(); var cacheNodeInterop = new WeakMap(); return (_getRequireWildcardCache = function (nodeInterop) { return nodeInterop ? cacheNodeInterop : cacheBabelInterop; })(nodeInterop); }
-
-function _interopRequireWildcard(obj, nodeInterop) { if (!nodeInterop && obj && obj.__esModule) { return obj; } if (obj === null || typeof obj !== "object" && typeof obj !== "function") { return { default: obj }; } var cache = _getRequireWildcardCache(nodeInterop); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (key !== "default" && Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj.default = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
-
-/**
- * @license
- * Copyright 2018 Google LLC. All Rights Reserved.
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- * http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- * =============================================================================
- */
-class EncodeMatrixProgram {
-  constructor(outputShape, texShape, inputIsUnsignedByte = false) {
-    this.variableNames = ['A'];
-    const glsl = (0, _glsl_version.getGlslDifferences)();
-    const [height, width] = texShape;
-    this.outputShape = outputShape;
-    let output = `result`;
-
-    if (inputIsUnsignedByte) {
-      output = `floor(result * 255. + 0.5)`;
-    }
-
-    this.userCode = `
-      ${shader_util.getFlatIndexFrom3D(outputShape)}
-
-      void main() {
-        ivec3 coords = getOutputCoords();
-
-        int flatIndex = getFlatIndex(coords);
-        int offset = imod(flatIndex, 4);
-
-        flatIndex = idiv(flatIndex, 4, 1.);
-
-        int r = flatIndex / ${width};
-        int c = imod(flatIndex, ${width});
-        vec2 uv = (vec2(c, r) + halfCR) / vec2(${width}.0, ${height}.0);
-        vec4 values = ${glsl.texture2D}(A, uv);
-
-        float result;
-
-        if(offset == 0) {
-          result = values[0];
-        } else if(offset == 1) {
-          result = values[1];
-        } else if(offset == 2) {
-          result = values[2];
-        } else {
-          result = values[3];
-        }
-
-        ${glsl.output} = vec4(${output}, 0., 0., 0.);
-      }
-    `;
-  }
-
-}
-
-exports.EncodeMatrixProgram = EncodeMatrixProgram;
-},{"./glsl_version":"fXvw","./shader_compiler_util":"tjqy"}],"UZCK":[function(require,module,exports) {
-"use strict";
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.EncodeMatrixPackedProgram = void 0;
-
-var _glsl_version = require("./glsl_version");
-
-var shader_util = _interopRequireWildcard(require("./shader_compiler_util"));
-
-function _getRequireWildcardCache(nodeInterop) { if (typeof WeakMap !== "function") return null; var cacheBabelInterop = new WeakMap(); var cacheNodeInterop = new WeakMap(); return (_getRequireWildcardCache = function (nodeInterop) { return nodeInterop ? cacheNodeInterop : cacheBabelInterop; })(nodeInterop); }
-
-function _interopRequireWildcard(obj, nodeInterop) { if (!nodeInterop && obj && obj.__esModule) { return obj; } if (obj === null || typeof obj !== "object" && typeof obj !== "function") { return { default: obj }; } var cache = _getRequireWildcardCache(nodeInterop); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (key !== "default" && Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj.default = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
-
-/**
- * @license
- * Copyright 2018 Google LLC. All Rights Reserved.
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- * http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- * =============================================================================
- */
-
-/*
-This is how the shader encodes a tensor with shape = [2, 3, 5]
-(indices are [batch, row, col]).
-
-000|001   002|003   004|xxx   020|021   022|023   024|xxx
--------   -------   -------   -------   -------   -------
-010|011   012|013   014|xxx   xxx|xxx   xxx|xxx   xxx|xxx
-
-100|101   102|103   104|xxx   120|121   122|123   124|xxx
--------   -------   -------   -------   -------   -------
-110|111   112|113   114|xxx   xxx|xxx   xxx|xxx   xxx|xxx
-
-Single texels contain only values from the same batch, and from adjacent rows
-and columns.
- */
-class EncodeMatrixPackedProgram {
-  constructor(outputShape, texShape, inputIsUnsignedByte = false) {
-    this.variableNames = ['A'];
-    this.packedInputs = false;
-    this.packedOutput = true;
-    const glsl = (0, _glsl_version.getGlslDifferences)();
-    const [height, width] = texShape;
-    this.outputShape = outputShape;
-    let mainLoop = '';
-    let output = 'result';
-
-    if (inputIsUnsignedByte) {
-      output = 'floor(result * 255. + 0.5)';
-    }
-
-    for (let row = 0; row <= 1; row++) {
-      for (let col = 0; col <= 1; col++) {
-        const channel = row * 2 + col;
-        mainLoop += `
-          localCoords = coords;
-          if(localCoords[2] + ${col} < ${outputShape[2]}) {
-            localCoords[2] += ${col};
-            if(localCoords[1] + ${row} < ${outputShape[1]}) {
-              localCoords[1] += ${row};
-
-              flatIndex = getFlatIndex(localCoords);
-              offset = imod(flatIndex, 4);
-
-              flatIndex = idiv(flatIndex, 4, 1.);
-
-              r = flatIndex / ${width};
-              c = imod(flatIndex, ${width});
-              uv = (vec2(c, r) + halfCR) / vec2(${width}.0, ${height}.0);
-              values = ${glsl.texture2D}(A, uv);
-
-              if(offset == 0) {
-                result[${channel}] = values[0];
-              } else if(offset == 1) {
-                result[${channel}] = values[1];
-              } else if(offset == 2) {
-                result[${channel}] = values[2];
-              } else {
-                result[${channel}] = values[3];
-              }
-            }
-          }
-        `;
-      }
-    }
-
-    this.userCode = `
-      ${shader_util.getFlatIndexFrom3D(outputShape)}
-
-      void main() {
-        ivec3 coords = getOutputCoords();
-
-        vec4 result = vec4(0.);
-        int flatIndex, r, c, offset;
-        ivec3 localCoords;
-        vec2 uv;
-        vec4 values;
-
-        ${mainLoop}
-
-        ${glsl.output} = ${output};
-      }
-    `;
-  }
-
-}
-
-exports.EncodeMatrixPackedProgram = EncodeMatrixPackedProgram;
-},{"./glsl_version":"fXvw","./shader_compiler_util":"tjqy"}],"jgbg":[function(require,module,exports) {
-"use strict";
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.createVertexShader = createVertexShader;
-exports.createVertexBuffer = createVertexBuffer;
-exports.createIndexBuffer = createIndexBuffer;
-exports.getInternalFormatForFloat32MatrixTexture = getInternalFormatForFloat32MatrixTexture;
-exports.createFloat32MatrixTexture = createFloat32MatrixTexture;
-exports.getInternalFormatForFloat16MatrixTexture = getInternalFormatForFloat16MatrixTexture;
-exports.createFloat16MatrixTexture = createFloat16MatrixTexture;
-exports.getInternalFormatForUnsignedBytesMatrixTexture = getInternalFormatForUnsignedBytesMatrixTexture;
-exports.createUnsignedBytesMatrixTexture = createUnsignedBytesMatrixTexture;
-exports.getInternalFormatForPackedMatrixTexture = getInternalFormatForPackedMatrixTexture;
-exports.createPackedMatrixTexture = createPackedMatrixTexture;
-exports.getInternalFormatForFloat16PackedMatrixTexture = getInternalFormatForFloat16PackedMatrixTexture;
-exports.createFloat16PackedMatrixTexture = createFloat16PackedMatrixTexture;
-exports.bindVertexProgramAttributeStreams = bindVertexProgramAttributeStreams;
-exports.uploadDenseMatrixToTexture = uploadDenseMatrixToTexture;
-exports.uploadPixelDataToTexture = uploadPixelDataToTexture;
-exports.createBufferFromOutputTexture = createBufferFromOutputTexture;
-exports.downloadFloat32MatrixFromBuffer = downloadFloat32MatrixFromBuffer;
-exports.downloadByteEncodedFloatMatrixFromOutputTexture = downloadByteEncodedFloatMatrixFromOutputTexture;
-exports.downloadPackedMatrixFromBuffer = downloadPackedMatrixFromBuffer;
-exports.downloadMatrixFromPackedOutputTexture = downloadMatrixFromPackedOutputTexture;
-
-var _glsl_version = require("./glsl_version");
-
-var tex_util = _interopRequireWildcard(require("./tex_util"));
-
-var webgl_util = _interopRequireWildcard(require("./webgl_util"));
-
-function _getRequireWildcardCache(nodeInterop) { if (typeof WeakMap !== "function") return null; var cacheBabelInterop = new WeakMap(); var cacheNodeInterop = new WeakMap(); return (_getRequireWildcardCache = function (nodeInterop) { return nodeInterop ? cacheNodeInterop : cacheBabelInterop; })(nodeInterop); }
-
-function _interopRequireWildcard(obj, nodeInterop) { if (!nodeInterop && obj && obj.__esModule) { return obj; } if (obj === null || typeof obj !== "object" && typeof obj !== "function") { return { default: obj }; } var cache = _getRequireWildcardCache(nodeInterop); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (key !== "default" && Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj.default = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
-
-/**
- * @license
- * Copyright 2017 Google LLC. All Rights Reserved.
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- * http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- * =============================================================================
- */
-function createVertexShader(gl) {
-  const glsl = (0, _glsl_version.getGlslDifferences)();
-  const vertexShaderSource = `${glsl.version}
-    precision highp float;
-    ${glsl.attribute} vec3 clipSpacePos;
-    ${glsl.attribute} vec2 uv;
-    ${glsl.varyingVs} vec2 resultUV;
-
-    void main() {
-      gl_Position = vec4(clipSpacePos, 1);
-      resultUV = uv;
-    }`;
-  return webgl_util.createVertexShader(gl, vertexShaderSource);
-}
-
-function createVertexBuffer(gl) {
-  // [x y z u v] * [upper-left, lower-left, upper-right, lower-right]
-  const vertexArray = new Float32Array([-1, 1, 0, 0, 1, -1, -1, 0, 0, 0, 1, 1, 0, 1, 1, 1, -1, 0, 1, 0]);
-  return webgl_util.createStaticVertexBuffer(gl, vertexArray);
-}
-
-function createIndexBuffer(gl) {
-  // OpenGL (and WebGL) have "CCW == front" winding
-  const triangleVertexIndices = new Uint16Array([0, 1, 2, 2, 1, 3]);
-  return webgl_util.createStaticIndexBuffer(gl, triangleVertexIndices);
-}
-
-function createAndConfigureTexture(gl, width, height, internalFormat, textureFormat, textureType) {
-  webgl_util.validateTextureSize(width, height);
-  const texture = webgl_util.createTexture(gl);
-  const tex2d = gl.TEXTURE_2D;
-  webgl_util.callAndCheck(gl, () => gl.bindTexture(tex2d, texture));
-  webgl_util.callAndCheck(gl, () => gl.texParameteri(tex2d, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE));
-  webgl_util.callAndCheck(gl, () => gl.texParameteri(tex2d, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE));
-  webgl_util.callAndCheck(gl, () => gl.texParameteri(tex2d, gl.TEXTURE_MIN_FILTER, gl.NEAREST));
-  webgl_util.callAndCheck(gl, () => gl.texParameteri(tex2d, gl.TEXTURE_MAG_FILTER, gl.NEAREST));
-  webgl_util.callAndCheck(gl, () => gl.texImage2D(tex2d, 0, internalFormat, width, height, 0, textureFormat, textureType, null));
-  webgl_util.callAndCheck(gl, () => gl.bindTexture(gl.TEXTURE_2D, null));
-  return texture;
-}
-
-function getInternalFormatForFloat32MatrixTexture(textureConfig) {
-  return textureConfig.internalFormatFloat;
-}
-
-function createFloat32MatrixTexture(gl, rows, columns, textureConfig) {
-  const [width, height] = tex_util.getUnpackedMatrixTextureShapeWidthHeight(rows, columns);
-  return createAndConfigureTexture(gl, width, height, getInternalFormatForFloat32MatrixTexture(textureConfig), textureConfig.textureFormatFloat, gl.FLOAT);
-}
-
-function getInternalFormatForFloat16MatrixTexture(textureConfig) {
-  return textureConfig.internalFormatHalfFloat;
-}
-
-function createFloat16MatrixTexture(gl, rows, columns, textureConfig) {
-  const [width, height] = tex_util.getUnpackedMatrixTextureShapeWidthHeight(rows, columns);
-  return createAndConfigureTexture(gl, width, height, getInternalFormatForFloat16MatrixTexture(textureConfig), textureConfig.textureFormatFloat, textureConfig.textureTypeHalfFloat);
-}
-
-function getInternalFormatForUnsignedBytesMatrixTexture(textureConfig) {
-  return textureConfig.downloadTextureFormat;
-}
-
-function createUnsignedBytesMatrixTexture(gl, rows, columns, textureConfig) {
-  const [width, height] = tex_util.getUnpackedMatrixTextureShapeWidthHeight(rows, columns);
-  return createAndConfigureTexture(gl, width, height, getInternalFormatForUnsignedBytesMatrixTexture(textureConfig), gl.RGBA, gl.UNSIGNED_BYTE);
-}
-
-function getInternalFormatForPackedMatrixTexture(textureConfig) {
-  return textureConfig.internalFormatPackedFloat;
-}
-
-function createPackedMatrixTexture(gl, rows, columns, textureConfig) {
-  const [width, height] = tex_util.getPackedMatrixTextureShapeWidthHeight(rows, columns);
-  return createAndConfigureTexture(gl, width, height, getInternalFormatForPackedMatrixTexture(textureConfig), gl.RGBA, gl.FLOAT);
-}
-
-function getInternalFormatForFloat16PackedMatrixTexture(textureConfig) {
-  return textureConfig.internalFormatPackedHalfFloat;
-}
-
-function createFloat16PackedMatrixTexture(gl, rows, columns, textureConfig) {
-  const [width, height] = tex_util.getPackedMatrixTextureShapeWidthHeight(rows, columns);
-  return createAndConfigureTexture(gl, width, height, getInternalFormatForFloat16PackedMatrixTexture(textureConfig), gl.RGBA, textureConfig.textureTypeHalfFloat);
-}
-
-function bindVertexProgramAttributeStreams(gl, program, vertexBuffer) {
-  const posOffset = 0; // x is the first buffer element
-
-  const uvOffset = 3 * 4; // uv comes after [x y z]
-
-  const stride = 3 * 4 + 2 * 4; // xyz + uv, each entry is 4-byte float.
-
-  webgl_util.callAndCheck(gl, () => gl.bindBuffer(gl.ARRAY_BUFFER, vertexBuffer));
-  const success = webgl_util.bindVertexBufferToProgramAttribute(gl, program, 'clipSpacePos', vertexBuffer, 3, stride, posOffset);
-  return success && webgl_util.bindVertexBufferToProgramAttribute(gl, program, 'uv', vertexBuffer, 2, stride, uvOffset);
-}
-
-function uploadDenseMatrixToTexture(gl, texture, width, height, data, textureConfig) {
-  webgl_util.callAndCheck(gl, () => gl.bindTexture(gl.TEXTURE_2D, texture));
-  let dataForUpload, texelDataType, internalFormat;
-
-  if (data instanceof Uint8Array) {
-    dataForUpload = new Uint8Array(width * height * 4);
-    texelDataType = gl.UNSIGNED_BYTE;
-    internalFormat = gl.RGBA;
-  } else {
-    dataForUpload = new Float32Array(width * height * 4);
-    texelDataType = gl.FLOAT;
-    internalFormat = textureConfig.internalFormatPackedFloat;
-  }
-
-  dataForUpload.set(data);
-  webgl_util.callAndCheck(gl, () => gl.texImage2D(gl.TEXTURE_2D, 0, internalFormat, width, height, 0, gl.RGBA, texelDataType, dataForUpload));
-  webgl_util.callAndCheck(gl, () => gl.bindTexture(gl.TEXTURE_2D, null));
-}
-
-function uploadPixelDataToTexture(gl, texture, pixels) {
-  webgl_util.callAndCheck(gl, () => gl.bindTexture(gl.TEXTURE_2D, texture));
-
-  if (pixels.data instanceof Uint8Array) {
-    webgl_util.callAndCheck(gl, () => gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, pixels.width, pixels.height, 0, gl.RGBA, gl.UNSIGNED_BYTE, pixels.data));
-  } else {
-    webgl_util.callAndCheck(gl, () => gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, pixels));
-  }
-
-  webgl_util.callAndCheck(gl, () => gl.bindTexture(gl.TEXTURE_2D, null));
-}
-
-function createBufferFromOutputTexture(gl2, rows, columns, textureConfig) {
-  // Create and bind the buffer.
-  const buffer = gl2.createBuffer();
-  webgl_util.callAndCheck(gl2, () => gl2.bindBuffer(gl2.PIXEL_PACK_BUFFER, buffer)); // Initialize the buffer to the size of the texture in bytes.
-
-  const bytesPerFloat = 4;
-  const valuesPerTexel = 4;
-  const bufferSizeBytes = bytesPerFloat * valuesPerTexel * rows * columns;
-  webgl_util.callAndCheck(gl2, () => gl2.bufferData(gl2.PIXEL_PACK_BUFFER, bufferSizeBytes, gl2.STREAM_READ)); // Enqueue a command on the GPU command queue to copy of texture into the
-  // buffer.
-
-  webgl_util.callAndCheck(gl2, () => gl2.readPixels(0, 0, columns, rows, gl2.RGBA, gl2.FLOAT, 0));
-  webgl_util.callAndCheck(gl2, () => gl2.bindBuffer(gl2.PIXEL_PACK_BUFFER, null));
-  return buffer;
-}
-
-function downloadFloat32MatrixFromBuffer(gl, buffer, size) {
-  const gl2 = gl;
-  const downloadTarget = new Float32Array(size);
-  gl2.bindBuffer(gl2.PIXEL_PACK_BUFFER, buffer);
-  gl2.getBufferSubData(gl2.PIXEL_PACK_BUFFER, 0, downloadTarget);
-  gl2.bindBuffer(gl2.PIXEL_PACK_BUFFER, null);
-  return downloadTarget;
-}
-
-function downloadByteEncodedFloatMatrixFromOutputTexture(gl, rows, columns, textureConfig) {
-  const [w, h] = tex_util.getUnpackedMatrixTextureShapeWidthHeight(rows, columns);
-  const numChannels = 4;
-  const downloadTarget = new Uint8Array(tex_util.getUnpackedArraySizeFromMatrixSize(rows * columns, numChannels));
-  webgl_util.callAndCheck(gl, () => gl.readPixels(0, 0, w, h, textureConfig.downloadTextureFormat, gl.UNSIGNED_BYTE, downloadTarget)); // By wrapping the buffer in a Float32Array, we use native browser IEEE 754
-  // decoding of the 4 bytes that back each 32 bit float.
-
-  return new Float32Array(downloadTarget.buffer);
-}
-
-function downloadPackedMatrixFromBuffer(gl, buffer, batch, rows, cols, physicalRows, physicalCols, textureConfig) {
-  const gl2 = gl;
-  const downloadTarget = new Float32Array(tex_util.getPackedRGBAArraySizeFromMatrixShape(physicalRows, physicalCols));
-  gl2.bindBuffer(gl2.PIXEL_PACK_BUFFER, buffer);
-  gl2.getBufferSubData(gl2.PIXEL_PACK_BUFFER, 0, downloadTarget);
-  gl2.bindBuffer(gl2.PIXEL_PACK_BUFFER, null);
-  return downloadTarget;
-}
-
-function downloadMatrixFromPackedOutputTexture(gl, physicalRows, physicalCols) {
-  const packedRGBA = new Float32Array(physicalRows * physicalCols * 4);
-  webgl_util.callAndCheck(gl, () => gl.readPixels(0, 0, physicalCols, physicalRows, gl.RGBA, gl.FLOAT, packedRGBA));
-  return packedRGBA;
-}
-},{"./glsl_version":"fXvw","./tex_util":"jAWT","./webgl_util":"u1ML"}],"GZkx":[function(require,module,exports) {
-"use strict";
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.linearSearchLastTrue = linearSearchLastTrue;
-exports.GPGPUContext = void 0;
-
-var _tfjsCore = require("@tensorflow/tfjs-core");
-
-var _canvas_util = require("./canvas_util");
-
-var gpgpu_util = _interopRequireWildcard(require("./gpgpu_util"));
-
-var tex_util = _interopRequireWildcard(require("./tex_util"));
-
-var webgl_util = _interopRequireWildcard(require("./webgl_util"));
-
-function _getRequireWildcardCache(nodeInterop) { if (typeof WeakMap !== "function") return null; var cacheBabelInterop = new WeakMap(); var cacheNodeInterop = new WeakMap(); return (_getRequireWildcardCache = function (nodeInterop) { return nodeInterop ? cacheNodeInterop : cacheBabelInterop; })(nodeInterop); }
-
-function _interopRequireWildcard(obj, nodeInterop) { if (!nodeInterop && obj && obj.__esModule) { return obj; } if (obj === null || typeof obj !== "object" && typeof obj !== "function") { return { default: obj }; } var cache = _getRequireWildcardCache(nodeInterop); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (key !== "default" && Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj.default = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
-
-/**
- * @license
- * Copyright 2017 Google LLC. All Rights Reserved.
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- * http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- * =============================================================================
- */
-class GPGPUContext {
-  constructor(gl) {
-    this.outputTexture = null;
-    this.program = null;
-    this.disposed = false;
-    this.vertexAttrsAreBound = false;
-    this.itemsToPoll = [];
-    const glVersion = (0, _tfjsCore.env)().getNumber('WEBGL_VERSION');
-
-    if (gl != null) {
-      this.gl = gl;
-      (0, _canvas_util.setWebGLContext)(glVersion, gl);
-    } else {
-      this.gl = (0, _canvas_util.getWebGLContext)(glVersion);
-    } // WebGL 2.0 enables texture floats without an extension.
-
-
-    let COLOR_BUFFER_FLOAT = 'WEBGL_color_buffer_float';
-    const COLOR_BUFFER_HALF_FLOAT = 'EXT_color_buffer_half_float';
-
-    if ((0, _tfjsCore.env)().getNumber('WEBGL_VERSION') === 1) {
-      const TEXTURE_FLOAT = 'OES_texture_float';
-      const TEXTURE_HALF_FLOAT = 'OES_texture_half_float';
-      this.textureFloatExtension = webgl_util.getExtensionOrThrow(this.gl, TEXTURE_FLOAT);
-
-      if (webgl_util.hasExtension(this.gl, TEXTURE_HALF_FLOAT)) {
-        this.textureHalfFloatExtension = webgl_util.getExtensionOrThrow(this.gl, TEXTURE_HALF_FLOAT);
-      } else if ((0, _tfjsCore.env)().get('WEBGL_FORCE_F16_TEXTURES')) {
-        throw new Error('GL context does not support half float textures, yet the ' + 'environment flag WEBGL_FORCE_F16_TEXTURES is set to true.');
-      }
-
-      this.colorBufferFloatExtension = this.gl.getExtension(COLOR_BUFFER_FLOAT);
-
-      if (webgl_util.hasExtension(this.gl, COLOR_BUFFER_HALF_FLOAT)) {
-        this.colorBufferHalfFloatExtension = webgl_util.getExtensionOrThrow(this.gl, COLOR_BUFFER_HALF_FLOAT);
-      } else if ((0, _tfjsCore.env)().get('WEBGL_FORCE_F16_TEXTURES')) {
-        throw new Error('GL context does not support color renderable half floats, yet ' + 'the environment flag WEBGL_FORCE_F16_TEXTURES is set to true.');
-      }
-    } else {
-      COLOR_BUFFER_FLOAT = 'EXT_color_buffer_float';
-
-      if (webgl_util.hasExtension(this.gl, COLOR_BUFFER_FLOAT)) {
-        this.colorBufferFloatExtension = this.gl.getExtension(COLOR_BUFFER_FLOAT);
-      } else if (webgl_util.hasExtension(this.gl, COLOR_BUFFER_HALF_FLOAT)) {
-        this.colorBufferHalfFloatExtension = this.gl.getExtension(COLOR_BUFFER_HALF_FLOAT);
-      } else {
-        throw new Error('GL context does not support color renderable floats');
-      }
-    }
-
-    this.vertexBuffer = gpgpu_util.createVertexBuffer(this.gl);
-    this.indexBuffer = gpgpu_util.createIndexBuffer(this.gl);
-    this.framebuffer = webgl_util.createFramebuffer(this.gl);
-    this.textureConfig = tex_util.getTextureConfig(this.gl, this.textureHalfFloatExtension);
-  }
-
-  get debug() {
-    return (0, _tfjsCore.env)().getBool('DEBUG');
-  }
-
-  dispose() {
-    if (this.disposed) {
-      return;
-    }
-
-    if (this.program != null) {
-      console.warn('Disposing a GPGPUContext that still has a bound WebGLProgram.' + ' This is probably a resource leak, delete the program with ' + 'GPGPUContext.deleteProgram before disposing.');
-    }
-
-    if (this.outputTexture != null) {
-      console.warn('Disposing a GPGPUContext that still has a bound output matrix ' + 'texture.  This is probably a resource leak, delete the output ' + 'matrix texture with GPGPUContext.deleteMatrixTexture before ' + 'disposing.');
-    }
-
-    const gl = this.gl;
-    webgl_util.callAndCheck(gl, () => gl.finish());
-    webgl_util.callAndCheck(gl, () => gl.bindFramebuffer(gl.FRAMEBUFFER, null));
-    webgl_util.callAndCheck(gl, () => gl.deleteFramebuffer(this.framebuffer));
-    webgl_util.callAndCheck(gl, () => gl.bindBuffer(gl.ARRAY_BUFFER, null));
-    webgl_util.callAndCheck(gl, () => gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, null));
-    webgl_util.callAndCheck(gl, () => gl.deleteBuffer(this.indexBuffer));
-    this.disposed = true;
-  }
-
-  createFloat32MatrixTexture(rows, columns) {
-    this.throwIfDisposed();
-    return gpgpu_util.createFloat32MatrixTexture(this.gl, rows, columns, this.textureConfig);
-  }
-
-  createFloat16MatrixTexture(rows, columns) {
-    this.throwIfDisposed();
-    return gpgpu_util.createFloat16MatrixTexture(this.gl, rows, columns, this.textureConfig);
-  }
-
-  createUnsignedBytesMatrixTexture(rows, columns) {
-    this.throwIfDisposed();
-    return gpgpu_util.createUnsignedBytesMatrixTexture(this.gl, rows, columns, this.textureConfig);
-  }
-
-  uploadPixelDataToTexture(texture, pixels) {
-    this.throwIfDisposed();
-    gpgpu_util.uploadPixelDataToTexture(this.gl, texture, pixels);
-  }
-
-  uploadDenseMatrixToTexture(texture, width, height, data) {
-    this.throwIfDisposed();
-    gpgpu_util.uploadDenseMatrixToTexture(this.gl, texture, width, height, data, this.textureConfig);
-  }
-
-  createFloat16PackedMatrixTexture(rows, columns) {
-    this.throwIfDisposed();
-    return gpgpu_util.createFloat16PackedMatrixTexture(this.gl, rows, columns, this.textureConfig);
-  }
-
-  createPackedMatrixTexture(rows, columns) {
-    this.throwIfDisposed();
-    return gpgpu_util.createPackedMatrixTexture(this.gl, rows, columns, this.textureConfig);
-  }
-
-  deleteMatrixTexture(texture) {
-    this.throwIfDisposed();
-
-    if (this.outputTexture === texture) {
-      webgl_util.unbindColorTextureFromFramebuffer(this.gl, this.framebuffer);
-      this.outputTexture = null;
-    }
-
-    webgl_util.callAndCheck(this.gl, () => this.gl.deleteTexture(texture));
-  }
-
-  downloadByteEncodedFloatMatrixFromOutputTexture(texture, rows, columns) {
-    return this.downloadMatrixDriver(texture, () => gpgpu_util.downloadByteEncodedFloatMatrixFromOutputTexture(this.gl, rows, columns, this.textureConfig));
-  }
-
-  downloadPackedMatrixFromBuffer(buffer, batch, rows, columns, physicalRows, physicalCols) {
-    return gpgpu_util.downloadPackedMatrixFromBuffer(this.gl, buffer, batch, rows, columns, physicalRows, physicalCols, this.textureConfig);
-  }
-
-  downloadFloat32MatrixFromBuffer(buffer, size) {
-    return gpgpu_util.downloadFloat32MatrixFromBuffer(this.gl, buffer, size);
-  }
-
-  createBufferFromTexture(texture, rows, columns) {
-    this.bindTextureToFrameBuffer(texture);
-    const result = gpgpu_util.createBufferFromOutputTexture(this.gl, rows, columns, this.textureConfig);
-    this.unbindTextureToFrameBuffer();
-    return result;
-  }
-
-  createAndWaitForFence() {
-    const fenceContext = this.createFence(this.gl);
-    return this.pollFence(fenceContext);
-  }
-
-  createFence(gl) {
-    let query;
-    let isFencePassed;
-
-    if ((0, _tfjsCore.env)().getBool('WEBGL_FENCE_API_ENABLED')) {
-      const gl2 = gl;
-      const sync = gl2.fenceSync(gl2.SYNC_GPU_COMMANDS_COMPLETE, 0);
-      gl.flush();
-
-      isFencePassed = () => {
-        const status = gl2.clientWaitSync(sync, 0, 0);
-        return status === gl2.ALREADY_SIGNALED || status === gl2.CONDITION_SATISFIED;
-      };
-
-      query = sync;
-    } else if ((0, _tfjsCore.env)().getNumber('WEBGL_DISJOINT_QUERY_TIMER_EXTENSION_VERSION') > 0) {
-      query = this.beginQuery();
-      this.endQuery();
-
-      isFencePassed = () => this.isQueryAvailable(query, (0, _tfjsCore.env)().getNumber('WEBGL_DISJOINT_QUERY_TIMER_EXTENSION_VERSION'));
-    } else {
-      // If we have no way to fence, return true immediately. This will fire in
-      // WebGL 1.0 when there is no disjoint query timer. In this case, because
-      // the fence passes immediately, we'll immediately ask for a download of
-      // the texture, which will cause the UI thread to hang.
-      isFencePassed = () => true;
-    }
-
-    return {
-      query,
-      isFencePassed
-    };
-  }
-
-  downloadMatrixFromPackedTexture(texture, physicalRows, physicalCols) {
-    return this.downloadMatrixDriver(texture, () => gpgpu_util.downloadMatrixFromPackedOutputTexture(this.gl, physicalRows, physicalCols));
-  }
-
-  createProgram(fragmentShaderSource) {
-    this.throwIfDisposed();
-    const gl = this.gl;
-    const fragmentShader = webgl_util.createFragmentShader(gl, fragmentShaderSource);
-
-    if (this.vertexShader == null) {
-      this.vertexShader = gpgpu_util.createVertexShader(gl);
-    }
-
-    const program = webgl_util.createProgram(gl);
-    webgl_util.callAndCheck(gl, () => gl.attachShader(program, this.vertexShader));
-    webgl_util.callAndCheck(gl, () => gl.attachShader(program, fragmentShader));
-    webgl_util.linkProgram(gl, program);
-
-    if (this.debug) {
-      webgl_util.validateProgram(gl, program);
-    }
-
-    if (!this.vertexAttrsAreBound) {
-      this.setProgram(program);
-      this.vertexAttrsAreBound = gpgpu_util.bindVertexProgramAttributeStreams(gl, this.program, this.vertexBuffer);
-    }
-
-    return program;
-  }
-
-  deleteProgram(program) {
-    this.throwIfDisposed();
-
-    if (program === this.program) {
-      this.program = null;
-    }
-
-    if (program != null) {
-      webgl_util.callAndCheck(this.gl, () => this.gl.deleteProgram(program));
-    }
-  }
-
-  setProgram(program) {
-    this.throwIfDisposed();
-    this.program = program;
-
-    if (this.program != null && this.debug) {
-      webgl_util.validateProgram(this.gl, this.program);
-    }
-
-    webgl_util.callAndCheck(this.gl, () => this.gl.useProgram(program));
-  }
-
-  getUniformLocation(program, uniformName, shouldThrow = true) {
-    this.throwIfDisposed();
-
-    if (shouldThrow) {
-      return webgl_util.getProgramUniformLocationOrThrow(this.gl, program, uniformName);
-    } else {
-      return webgl_util.getProgramUniformLocation(this.gl, program, uniformName);
-    }
-  }
-
-  getAttributeLocation(program, attribute) {
-    this.throwIfDisposed();
-    return webgl_util.callAndCheck(this.gl, () => this.gl.getAttribLocation(program, attribute));
-  }
-
-  getUniformLocationNoThrow(program, uniformName) {
-    this.throwIfDisposed();
-    return this.gl.getUniformLocation(program, uniformName);
-  }
-
-  setInputMatrixTexture(inputMatrixTexture, uniformLocation, textureUnit) {
-    this.throwIfDisposed();
-    this.throwIfNoProgram();
-    webgl_util.bindTextureToProgramUniformSampler(this.gl, inputMatrixTexture, uniformLocation, textureUnit);
-  }
-
-  setOutputMatrixTexture(outputMatrixTexture, rows, columns) {
-    this.setOutputMatrixTextureDriver(outputMatrixTexture, columns, rows);
-  }
-
-  setOutputPackedMatrixTexture(outputPackedMatrixTexture, rows, columns) {
-    this.throwIfDisposed();
-    const [width, height] = tex_util.getPackedMatrixTextureShapeWidthHeight(rows, columns);
-    this.setOutputMatrixTextureDriver(outputPackedMatrixTexture, width, height);
-  }
-
-  setOutputMatrixWriteRegion(startRow, numRows, startColumn, numColumns) {
-    this.setOutputMatrixWriteRegionDriver(startColumn, startRow, numColumns, numRows);
-  }
-
-  setOutputPackedMatrixWriteRegion(startRow, numRows, startColumn, numColumns) {
-    throw new Error('setOutputPackedMatrixWriteRegion not implemented.');
-  }
-
-  debugValidate() {
-    if (this.program != null) {
-      webgl_util.validateProgram(this.gl, this.program);
-    }
-
-    webgl_util.validateFramebuffer(this.gl);
-  }
-
-  executeProgram() {
-    this.throwIfDisposed();
-    this.throwIfNoProgram();
-    const gl = this.gl;
-
-    if (this.debug) {
-      this.debugValidate();
-    }
-
-    webgl_util.callAndCheck(gl, () => gl.drawElements(gl.TRIANGLES, 6, gl.UNSIGNED_SHORT, 0));
-  }
-
-  blockUntilAllProgramsCompleted() {
-    this.throwIfDisposed();
-    webgl_util.callAndCheck(this.gl, () => this.gl.finish());
-  }
-
-  getQueryTimerExtension() {
-    if (this.disjointQueryTimerExtension == null) {
-      this.disjointQueryTimerExtension = webgl_util.getExtensionOrThrow(this.gl, (0, _tfjsCore.env)().getNumber('WEBGL_DISJOINT_QUERY_TIMER_EXTENSION_VERSION') === 2 ? 'EXT_disjoint_timer_query_webgl2' : 'EXT_disjoint_timer_query');
-    }
-
-    return this.disjointQueryTimerExtension;
-  }
-
-  getQueryTimerExtensionWebGL2() {
-    return this.getQueryTimerExtension();
-  }
-
-  getQueryTimerExtensionWebGL1() {
-    return this.getQueryTimerExtension();
-  }
-
-  beginQuery() {
-    if ((0, _tfjsCore.env)().getNumber('WEBGL_DISJOINT_QUERY_TIMER_EXTENSION_VERSION') === 2) {
-      const gl2 = this.gl;
-      const ext = this.getQueryTimerExtensionWebGL2();
-      const query = gl2.createQuery();
-      gl2.beginQuery(ext.TIME_ELAPSED_EXT, query);
-      return query;
-    }
-
-    const ext = this.getQueryTimerExtensionWebGL1();
-    const query = ext.createQueryEXT();
-    ext.beginQueryEXT(ext.TIME_ELAPSED_EXT, query);
-    return query;
-  }
-
-  endQuery() {
-    if ((0, _tfjsCore.env)().getNumber('WEBGL_DISJOINT_QUERY_TIMER_EXTENSION_VERSION') === 2) {
-      const gl2 = this.gl;
-      const ext = this.getQueryTimerExtensionWebGL2();
-      gl2.endQuery(ext.TIME_ELAPSED_EXT);
-      return;
-    }
-
-    const ext = this.getQueryTimerExtensionWebGL1();
-    ext.endQueryEXT(ext.TIME_ELAPSED_EXT);
-  }
-
-  async waitForQueryAndGetTime(query) {
-    await _tfjsCore.util.repeatedTry(() => this.disposed || // while testing contexts are created / disposed
-    // in rapid succession, so without this check we
-    // may poll for the query timer indefinitely
-    this.isQueryAvailable(query, (0, _tfjsCore.env)().getNumber('WEBGL_DISJOINT_QUERY_TIMER_EXTENSION_VERSION')));
-    return this.getQueryTime(query, (0, _tfjsCore.env)().getNumber('WEBGL_DISJOINT_QUERY_TIMER_EXTENSION_VERSION'));
-  }
-
-  getQueryTime(query, queryTimerVersion) {
-    if (queryTimerVersion === 0) {
-      return null;
-    }
-
-    if (queryTimerVersion === 2) {
-      const gl2 = this.gl;
-      const timeElapsedNanos = gl2.getQueryParameter(query, gl2.QUERY_RESULT); // Return milliseconds.
-
-      return timeElapsedNanos / 1000000;
-    } else {
-      const ext = this.getQueryTimerExtensionWebGL1();
-      const timeElapsedNanos = ext.getQueryObjectEXT(query, ext.QUERY_RESULT_EXT); // Return milliseconds.
-
-      return timeElapsedNanos / 1000000;
-    }
-  }
-
-  isQueryAvailable(query, queryTimerVersion) {
-    if (queryTimerVersion === 0) {
-      return true;
-    }
-
-    if (queryTimerVersion === 2) {
-      const gl2 = this.gl;
-      const ext = this.getQueryTimerExtensionWebGL2();
-      const available = gl2.getQueryParameter(query, gl2.QUERY_RESULT_AVAILABLE);
-
-      if (this.disjoint == null) {
-        this.disjoint = this.gl.getParameter(ext.GPU_DISJOINT_EXT);
-      }
-
-      return available && !this.disjoint;
-    } else {
-      const ext = this.getQueryTimerExtensionWebGL1();
-      const available = ext.getQueryObjectEXT(query, ext.QUERY_RESULT_AVAILABLE_EXT);
-
-      if (this.disjoint == null) {
-        this.disjoint = this.gl.getParameter(ext.GPU_DISJOINT_EXT);
-      }
-
-      return available && !this.disjoint;
-    }
-  }
-
-  pollFence(fenceContext) {
-    return new Promise(resolve => {
-      this.addItemToPoll(() => fenceContext.isFencePassed(), () => resolve());
-    });
-  }
-
-  pollItems() {
-    // Find the last query that has finished.
-    const index = linearSearchLastTrue(this.itemsToPoll.map(x => x.isDoneFn));
-
-    for (let i = 0; i <= index; ++i) {
-      const {
-        resolveFn
-      } = this.itemsToPoll[i];
-      resolveFn();
-    }
-
-    this.itemsToPoll = this.itemsToPoll.slice(index + 1);
-  }
-
-  addItemToPoll(isDoneFn, resolveFn) {
-    this.itemsToPoll.push({
-      isDoneFn,
-      resolveFn
-    });
-
-    if (this.itemsToPoll.length > 1) {
-      // We already have a running loop that polls.
-      return;
-    } // Start a new loop that polls.
-
-
-    _tfjsCore.util.repeatedTry(() => {
-      this.pollItems(); // End the loop if no more items to poll.
-
-      return this.itemsToPoll.length === 0;
-    });
-  }
-
-  bindTextureToFrameBuffer(texture) {
-    this.throwIfDisposed();
-    webgl_util.bindColorTextureToFramebuffer(this.gl, texture, this.framebuffer);
-
-    if (this.debug) {
-      webgl_util.validateFramebuffer(this.gl);
-    }
-  }
-
-  unbindTextureToFrameBuffer() {
-    if (this.outputTexture != null) {
-      webgl_util.bindColorTextureToFramebuffer(this.gl, this.outputTexture, this.framebuffer);
-
-      if (this.debug) {
-        webgl_util.validateFramebuffer(this.gl);
-      }
-    } else {
-      webgl_util.unbindColorTextureFromFramebuffer(this.gl, this.framebuffer);
-    }
-  }
-
-  downloadMatrixDriver(texture, downloadAndDecode) {
-    this.bindTextureToFrameBuffer(texture);
-    const result = downloadAndDecode();
-    this.unbindTextureToFrameBuffer();
-    return result;
-  }
-
-  setOutputMatrixTextureDriver(outputMatrixTextureMaybePacked, width, height) {
-    this.throwIfDisposed();
-    const gl = this.gl;
-    webgl_util.bindColorTextureToFramebuffer(gl, outputMatrixTextureMaybePacked, this.framebuffer);
-
-    if (this.debug) {
-      webgl_util.validateFramebuffer(gl);
-    }
-
-    this.outputTexture = outputMatrixTextureMaybePacked;
-    webgl_util.callAndCheck(gl, () => gl.viewport(0, 0, width, height));
-    webgl_util.callAndCheck(gl, () => gl.scissor(0, 0, width, height));
-  }
-
-  setOutputMatrixWriteRegionDriver(x, y, width, height) {
-    this.throwIfDisposed();
-    webgl_util.callAndCheck(this.gl, () => this.gl.scissor(x, y, width, height));
-  }
-
-  throwIfDisposed() {
-    if (this.disposed) {
-      throw new Error('Attempted to use disposed GPGPUContext.');
-    }
-  }
-
-  throwIfNoProgram() {
-    if (this.program == null) {
-      throw new Error('No GPU program is currently set.');
-    }
-  }
-
-}
-/**
- * Finds the index of the last true element using linear search.
- * Note: We can't do binary search because Chrome expects us to explicitly
- * test all fences before download:
- * https://github.com/tensorflow/tfjs/issues/1145
- */
-
-
-exports.GPGPUContext = GPGPUContext;
-
-function linearSearchLastTrue(arr) {
-  let i = 0;
-
-  for (; i < arr.length; ++i) {
-    const isDone = arr[i]();
-
-    if (!isDone) {
-      break;
-    }
-  }
-
-  return i - 1;
-}
-},{"@tensorflow/tfjs-core":"kSBl","./canvas_util":"xuCv","./gpgpu_util":"jgbg","./tex_util":"jAWT","./webgl_util":"u1ML"}],"xhhc":[function(require,module,exports) {
+},{"@tensorflow/tfjs-core":"kSBl"}],"xhhc":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -57994,7 +56973,7 @@ function getOutputPacked3DCoords(shape, texShape, enableShapeUniforms) {
 
 function getOutput3DCoords(shape, texShape, enableShapeUniforms) {
   if (enableShapeUniforms) {
-    const coordsFromIndexSnippet = shader_util.getLogicalCoordinatesFromFlatIndexByUniform(['r', 'c', 'd'], shape);
+    const coordsFromIndexSnippet = shader_util.getOutputLogicalCoordinatesFromFlatIndexByUniform(['r', 'c', 'd'], shape);
     return `
   ivec3 getOutputCoords() {
     ivec2 resTexRC = ivec2(resultUV.yx *
@@ -58083,7 +57062,7 @@ function getOutputPackedNDCoords(shape, texShape, enableShapeUniforms) {
 
 function getOutput4DCoords(shape, texShape, enableShapeUniforms) {
   if (enableShapeUniforms) {
-    const coordsFromIndexSnippet = shader_util.getLogicalCoordinatesFromFlatIndexByUniform(['r', 'c', 'd', 'd2'], shape);
+    const coordsFromIndexSnippet = shader_util.getOutputLogicalCoordinatesFromFlatIndexByUniform(['r', 'c', 'd', 'd2'], shape);
     return `
     ivec4 getOutputCoords() {
       ivec2 resTexRC = ivec2(resultUV.yx *
@@ -59304,7 +58283,8 @@ function getCoordsDataType(rank) {
 
 function getUniformInfoFromShape(isPacked, shape, texShape) {
   const {
-    newShape
+    newShape,
+    keptDims
   } = _tfjsCore.util.squeezeShape(shape);
 
   const rank = shape.length;
@@ -59314,7 +58294,8 @@ function getUniformInfoFromShape(isPacked, shape, texShape) {
   const uniformShape = useSqueezeShape ? squeezeShape : shape;
   return {
     useSqueezeShape,
-    uniformShape
+    uniformShape,
+    keptDims
   };
 }
 /** Returns a new input info (a copy) that has a squeezed logical shape. */
@@ -59667,7 +58648,8 @@ function makeShaderKey(program, inputs, output) {
       const xTexShape = x.texData.texShape;
       const {
         useSqueezeShape,
-        uniformShape
+        uniformShape,
+        keptDims
       } = shader_compiler.getUniformInfoFromShape(program.packedInputs, x.shape, xTexShape);
       let rank1 = '',
           rank2 = '',
@@ -59686,7 +58668,7 @@ function makeShaderKey(program, inputs, output) {
 
       const xRank = x.shape.length;
 
-      const isLogicalShapTexShapeEqual = xRank === 2 && _tfjsCore.util.arraysEqual(x.shape, xTexShape);
+      const isLogicalShapTexShapeEqual = uniformShape.length === 2 && _tfjsCore.util.arraysEqual(x.shape, xTexShape);
 
       const isScalar = _tfjsCore.util.sizeFromShape(x.shape) === 1;
 
@@ -59694,7 +58676,7 @@ function makeShaderKey(program, inputs, output) {
 
       const isInOutTexShapeEqual = !program.packedInputs && xRank === output.shape.length && _tfjsCore.util.arraysEqual(xTexShape, output.texData.texShape);
 
-      const isTexShapeGreaterThanOne = program.packedInputs || xRank > 2 ? '' : `${xTexShape[0] > 1}_${xTexShape[1] > 1}`; // These key components are needed due to shader_compiler is embedding
+      const isTexShapeGreaterThanOne = program.packedInputs || uniformShape.length > 2 ? '' : `${xTexShape[0] > 1}_${xTexShape[1] > 1}`; // These key components are needed due to shader_compiler is embedding
       // them in the shader.
       // |xRank| is used to determine the coords length. See
       // get[Packed]SamplerAtOutputCoords.
@@ -59713,7 +58695,7 @@ function makeShaderKey(program, inputs, output) {
       // |isTexShapeGreaterThanOne| are used in
       // getSampler[Scalar|1D|2D]/getOutput1DCoords.
 
-      keyInputs += `${xRank}_${isInOutTexShapeEqual}_${useSqueezeShape}_${uniformShape.length}_${isScalar}_${broadcastDims}_${isLogicalShapTexShapeEqual}_${rank1}_${rank2}_${rank34}_${isTexShapeGreaterThanOne}_${hasOffset}`;
+      keyInputs += `${xRank}_${isInOutTexShapeEqual}_${useSqueezeShape ? keptDims : ''}_${uniformShape.length}_${isScalar}_${broadcastDims}_${isLogicalShapTexShapeEqual}_${rank1}_${rank2}_${rank34}_${isTexShapeGreaterThanOne}_${hasOffset}`;
     } else {
       const texShape = x.isUniform ? 'uniform' : x.texData.texShape;
       keyInputs += `${x.shape}_${texShape}_${hasOffset}`;
@@ -59730,7 +58712,1268 @@ function useShapeUniforms(rank) {
   // TODO: Remove the limitaion of rank <= 4.
   return (0, _tfjsCore.env)().getBool('WEBGL_USE_SHAPES_UNIFORMS') && rank <= 4;
 }
-},{"@tensorflow/tfjs-core":"kSBl","./shader_compiler":"xhhc"}],"nVKy":[function(require,module,exports) {
+},{"@tensorflow/tfjs-core":"kSBl","./shader_compiler":"xhhc"}],"JMCa":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.DecodeMatrixProgram = void 0;
+
+var _glsl_version = require("./glsl_version");
+
+var _gpgpu_math = require("./gpgpu_math");
+
+var shader_util = _interopRequireWildcard(require("./shader_compiler_util"));
+
+var _tex_util = require("./tex_util");
+
+function _getRequireWildcardCache(nodeInterop) { if (typeof WeakMap !== "function") return null; var cacheBabelInterop = new WeakMap(); var cacheNodeInterop = new WeakMap(); return (_getRequireWildcardCache = function (nodeInterop) { return nodeInterop ? cacheNodeInterop : cacheBabelInterop; })(nodeInterop); }
+
+function _interopRequireWildcard(obj, nodeInterop) { if (!nodeInterop && obj && obj.__esModule) { return obj; } if (obj === null || typeof obj !== "object" && typeof obj !== "function") { return { default: obj }; } var cache = _getRequireWildcardCache(nodeInterop); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (key !== "default" && Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj.default = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
+
+/**
+ * @license
+ * Copyright 2019 Google LLC. All Rights Reserved.
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ * =============================================================================
+ */
+class DecodeMatrixProgram {
+  constructor(outputShape) {
+    this.variableNames = ['A'];
+    this.packedInputs = false;
+    this.packedOutput = true;
+    this.outPackingScheme = _tex_util.PackingScheme.DENSE;
+    this.customUniforms = [{
+      name: 'texShape',
+      type: 'ivec2'
+    }];
+    const glsl = (0, _glsl_version.getGlslDifferences)();
+    this.outputShape = outputShape;
+    this.enableShapeUniforms = (0, _gpgpu_math.useShapeUniforms)(this.outputShape.length);
+    this.userCode = `
+      ivec3 outCoordsFromFlatIndex(int index) {
+        ${this.enableShapeUniforms ? shader_util.getOutputLogicalCoordinatesFromFlatIndexByUniform(['r', 'c', 'd'], outputShape) : shader_util.getLogicalCoordinatesFromFlatIndex(['r', 'c', 'd'], outputShape)}
+        return ivec3(r, c, d);
+      }
+
+      void main() {
+        ivec2 resTexRC = ivec2(resultUV.yx * vec2(texShape[0], texShape[1]));
+        int index = 4 * (resTexRC.x * texShape[1] + resTexRC.y);
+
+        vec4 result = vec4(0.);
+
+        for (int i=0; i<4; i++) {
+          int flatIndex = index + i;
+          ivec3 rc = outCoordsFromFlatIndex(flatIndex);
+          result[i] = getA(rc.x, rc.y, rc.z);
+        }
+
+        ${glsl.output} = result;
+      }
+    `;
+  }
+
+}
+
+exports.DecodeMatrixProgram = DecodeMatrixProgram;
+},{"./glsl_version":"fXvw","./gpgpu_math":"eeKH","./shader_compiler_util":"tjqy","./tex_util":"jAWT"}],"RChy":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.DecodeMatrixPackedProgram = void 0;
+
+var _glsl_version = require("./glsl_version");
+
+var _gpgpu_math = require("./gpgpu_math");
+
+var shader_util = _interopRequireWildcard(require("./shader_compiler_util"));
+
+var _tex_util = require("./tex_util");
+
+function _getRequireWildcardCache(nodeInterop) { if (typeof WeakMap !== "function") return null; var cacheBabelInterop = new WeakMap(); var cacheNodeInterop = new WeakMap(); return (_getRequireWildcardCache = function (nodeInterop) { return nodeInterop ? cacheNodeInterop : cacheBabelInterop; })(nodeInterop); }
+
+function _interopRequireWildcard(obj, nodeInterop) { if (!nodeInterop && obj && obj.__esModule) { return obj; } if (obj === null || typeof obj !== "object" && typeof obj !== "function") { return { default: obj }; } var cache = _getRequireWildcardCache(nodeInterop); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (key !== "default" && Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj.default = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
+
+/**
+ * @license
+ * Copyright 2019 Google LLC. All Rights Reserved.
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ * =============================================================================
+ */
+class DecodeMatrixPackedProgram {
+  constructor(outputShape) {
+    this.variableNames = ['A'];
+    this.packedInputs = true;
+    this.packedOutput = true;
+    this.outPackingScheme = _tex_util.PackingScheme.DENSE;
+    this.customUniforms = [{
+      name: 'texShape',
+      type: 'ivec2'
+    }];
+    const glsl = (0, _glsl_version.getGlslDifferences)();
+    this.outputShape = outputShape;
+    this.enableShapeUniforms = (0, _gpgpu_math.useShapeUniforms)(this.outputShape.length);
+    this.userCode = `
+      ivec3 outCoordsFromFlatIndex(int index) {
+        ${this.enableShapeUniforms ? shader_util.getOutputLogicalCoordinatesFromFlatIndexByUniform(['r', 'c', 'd'], outputShape) : shader_util.getLogicalCoordinatesFromFlatIndex(['r', 'c', 'd'], outputShape)}
+        return ivec3(r, c, d);
+      }
+
+      void main() {
+        ivec2 resTexRC = ivec2(resultUV.yx * vec2(texShape[0], texShape[1]));
+        int index = 4 * (resTexRC.x * texShape[1] + resTexRC.y);
+
+        vec4 result = vec4(0.);
+
+        for (int i=0; i<4; i++) {
+          int flatIndex = index + i;
+          ivec3 rc = outCoordsFromFlatIndex(flatIndex);
+          result[i] = getChannel(getA(rc.x, rc.y, rc.z), vec2(rc.y, rc.z));
+        }
+
+        ${glsl.output} = result;
+      }
+    `;
+  }
+
+}
+
+exports.DecodeMatrixPackedProgram = DecodeMatrixPackedProgram;
+},{"./glsl_version":"fXvw","./gpgpu_math":"eeKH","./shader_compiler_util":"tjqy","./tex_util":"jAWT"}],"oHaq":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.EncodeFloatProgram = void 0;
+
+var _glsl_version = require("./glsl_version");
+
+var _shader_compiler_util = require("./shader_compiler_util");
+
+var _tex_util = require("./tex_util");
+
+/**
+ * @license
+ * Copyright 2018 Google LLC. All Rights Reserved.
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ * =============================================================================
+ */
+class EncodeFloatProgram {
+  constructor(outputShape) {
+    this.variableNames = ['A'];
+    this.outTexUsage = _tex_util.TextureUsage.DOWNLOAD;
+    const glsl = (0, _glsl_version.getGlslDifferences)();
+    this.outputShape = outputShape;
+    this.userCode = `
+      ${_shader_compiler_util.ENCODE_FLOAT_SNIPPET}
+
+      void main() {
+        float x = getAAtOutCoords();
+        ${glsl.output} = encode_float(x);
+      }
+    `;
+  }
+
+}
+
+exports.EncodeFloatProgram = EncodeFloatProgram;
+},{"./glsl_version":"fXvw","./shader_compiler_util":"tjqy","./tex_util":"jAWT"}],"r0NW":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.EncodeFloatPackedProgram = void 0;
+
+var _glsl_version = require("./glsl_version");
+
+var _shader_compiler_util = require("./shader_compiler_util");
+
+var _tex_util = require("./tex_util");
+
+/**
+ * @license
+ * Copyright 2018 Google LLC. All Rights Reserved.
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ * =============================================================================
+ */
+class EncodeFloatPackedProgram {
+  constructor(outputShape) {
+    this.variableNames = ['A'];
+    this.packedInputs = true;
+    this.packedOutput = false;
+    this.outTexUsage = _tex_util.TextureUsage.DOWNLOAD;
+    const glsl = (0, _glsl_version.getGlslDifferences)();
+    this.outputShape = outputShape;
+    this.userCode = `
+      ${_shader_compiler_util.ENCODE_FLOAT_SNIPPET}
+
+      void main() {
+        ivec3 coords = getOutputCoords();
+        float x = getChannel(getAAtOutCoords(), vec2(coords.y, coords.z));
+        ${glsl.output} = encode_float(x);
+      }
+    `;
+  }
+
+}
+
+exports.EncodeFloatPackedProgram = EncodeFloatPackedProgram;
+},{"./glsl_version":"fXvw","./shader_compiler_util":"tjqy","./tex_util":"jAWT"}],"o0jj":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.EncodeMatrixProgram = void 0;
+
+var _glsl_version = require("./glsl_version");
+
+var _gpgpu_math = require("./gpgpu_math");
+
+var shader_util = _interopRequireWildcard(require("./shader_compiler_util"));
+
+function _getRequireWildcardCache(nodeInterop) { if (typeof WeakMap !== "function") return null; var cacheBabelInterop = new WeakMap(); var cacheNodeInterop = new WeakMap(); return (_getRequireWildcardCache = function (nodeInterop) { return nodeInterop ? cacheNodeInterop : cacheBabelInterop; })(nodeInterop); }
+
+function _interopRequireWildcard(obj, nodeInterop) { if (!nodeInterop && obj && obj.__esModule) { return obj; } if (obj === null || typeof obj !== "object" && typeof obj !== "function") { return { default: obj }; } var cache = _getRequireWildcardCache(nodeInterop); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (key !== "default" && Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj.default = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
+
+/**
+ * @license
+ * Copyright 2018 Google LLC. All Rights Reserved.
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ * =============================================================================
+ */
+class EncodeMatrixProgram {
+  constructor(outputShape, inputIsUnsignedByte = false) {
+    this.variableNames = ['A'];
+    this.customUniforms = [{
+      name: 'texShape',
+      type: 'ivec2'
+    }];
+    const glsl = (0, _glsl_version.getGlslDifferences)();
+    this.outputShape = outputShape;
+    this.enableShapeUniforms = (0, _gpgpu_math.useShapeUniforms)(this.outputShape.length);
+    let output = `result`;
+
+    if (inputIsUnsignedByte) {
+      output = `floor(result * 255. + 0.5)`;
+    }
+
+    this.userCode = `
+      ${this.enableShapeUniforms ? shader_util.getFlatIndexFrom3DOutput() : shader_util.getFlatIndexFrom3D(outputShape)}
+
+      void main() {
+        ivec3 coords = getOutputCoords();
+
+        int flatIndex = getFlatIndex(coords);
+        int offset = imod(flatIndex, 4);
+
+        flatIndex = idiv(flatIndex, 4, 1.);
+
+        int r = flatIndex / texShape[1];
+        int c = imod(flatIndex, texShape[1]);
+        vec2 uv = (vec2(c, r) + halfCR) / vec2(texShape[1], texShape[0]);
+        vec4 values = ${glsl.texture2D}(A, uv);
+
+        float result;
+
+        if(offset == 0) {
+          result = values[0];
+        } else if(offset == 1) {
+          result = values[1];
+        } else if(offset == 2) {
+          result = values[2];
+        } else {
+          result = values[3];
+        }
+
+        ${glsl.output} = vec4(${output}, 0., 0., 0.);
+      }
+    `;
+  }
+
+}
+
+exports.EncodeMatrixProgram = EncodeMatrixProgram;
+},{"./glsl_version":"fXvw","./gpgpu_math":"eeKH","./shader_compiler_util":"tjqy"}],"UZCK":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.EncodeMatrixPackedProgram = void 0;
+
+var _glsl_version = require("./glsl_version");
+
+var _gpgpu_math = require("./gpgpu_math");
+
+var shader_util = _interopRequireWildcard(require("./shader_compiler_util"));
+
+function _getRequireWildcardCache(nodeInterop) { if (typeof WeakMap !== "function") return null; var cacheBabelInterop = new WeakMap(); var cacheNodeInterop = new WeakMap(); return (_getRequireWildcardCache = function (nodeInterop) { return nodeInterop ? cacheNodeInterop : cacheBabelInterop; })(nodeInterop); }
+
+function _interopRequireWildcard(obj, nodeInterop) { if (!nodeInterop && obj && obj.__esModule) { return obj; } if (obj === null || typeof obj !== "object" && typeof obj !== "function") { return { default: obj }; } var cache = _getRequireWildcardCache(nodeInterop); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (key !== "default" && Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj.default = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
+
+/**
+ * @license
+ * Copyright 2018 Google LLC. All Rights Reserved.
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ * =============================================================================
+ */
+
+/*
+This is how the shader encodes a tensor with shape = [2, 3, 5]
+(indices are [batch, row, col]).
+
+000|001   002|003   004|xxx   020|021   022|023   024|xxx
+-------   -------   -------   -------   -------   -------
+010|011   012|013   014|xxx   xxx|xxx   xxx|xxx   xxx|xxx
+
+100|101   102|103   104|xxx   120|121   122|123   124|xxx
+-------   -------   -------   -------   -------   -------
+110|111   112|113   114|xxx   xxx|xxx   xxx|xxx   xxx|xxx
+
+Single texels contain only values from the same batch, and from adjacent rows
+and columns.
+ */
+class EncodeMatrixPackedProgram {
+  constructor(outputShape, inputIsUnsignedByte = false) {
+    this.variableNames = ['A'];
+    this.packedInputs = false;
+    this.packedOutput = true;
+    this.customUniforms = [{
+      name: 'texShape',
+      type: 'ivec2'
+    }];
+    const glsl = (0, _glsl_version.getGlslDifferences)();
+    this.outputShape = outputShape;
+    this.enableShapeUniforms = (0, _gpgpu_math.useShapeUniforms)(this.outputShape.length);
+    let mainLoop = '';
+    let output = 'result';
+
+    if (inputIsUnsignedByte) {
+      output = 'floor(result * 255. + 0.5)';
+    }
+
+    for (let row = 0; row <= 1; row++) {
+      for (let col = 0; col <= 1; col++) {
+        const channel = row * 2 + col;
+        mainLoop += `
+          localCoords = coords;
+          if(localCoords[2] + ${col} < ${this.enableShapeUniforms ? 'outShape[2]' : `${outputShape[2]}`}) {
+          localCoords[2] += ${col};
+          if (localCoords[1] + ${row} < ${this.enableShapeUniforms ? 'outShape[1]' : `${outputShape[1]}`}) {
+            localCoords[1] += ${row};
+
+            flatIndex = getFlatIndex(localCoords);
+            offset = imod(flatIndex, 4);
+
+            flatIndex = idiv(flatIndex, 4, 1.);
+
+            int r = flatIndex / texShape[1];
+            int c = imod(flatIndex, texShape[1]);
+            vec2 uv = (vec2(c, r) + halfCR) / vec2(texShape[1], texShape[0]);
+            values = ${glsl.texture2D}(A, uv);
+
+            if (offset == 0) {
+              result[${channel}] = values[0];
+            } else if (offset == 1) {
+              result[${channel}] = values[1];
+            } else if (offset == 2) {
+              result[${channel}] = values[2];
+            } else {
+              result[${channel}] = values[3];
+            }
+          }
+        }
+        `;
+      }
+    }
+
+    this.userCode = `
+        ${this.enableShapeUniforms ? shader_util.getFlatIndexFrom3DOutput() : shader_util.getFlatIndexFrom3D(outputShape)}
+
+        void main() {
+          ivec3 coords = getOutputCoords();
+
+          vec4 result = vec4(0.);
+          int flatIndex, r, c, offset;
+          ivec3 localCoords;
+          vec2 uv;
+          vec4 values;
+
+          ${mainLoop}
+
+          ${glsl.output} = ${output};
+        }
+    `;
+  }
+
+}
+
+exports.EncodeMatrixPackedProgram = EncodeMatrixPackedProgram;
+},{"./glsl_version":"fXvw","./gpgpu_math":"eeKH","./shader_compiler_util":"tjqy"}],"jgbg":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.createVertexShader = createVertexShader;
+exports.createVertexBuffer = createVertexBuffer;
+exports.createIndexBuffer = createIndexBuffer;
+exports.getInternalFormatForFloat32MatrixTexture = getInternalFormatForFloat32MatrixTexture;
+exports.createFloat32MatrixTexture = createFloat32MatrixTexture;
+exports.getInternalFormatForFloat16MatrixTexture = getInternalFormatForFloat16MatrixTexture;
+exports.createFloat16MatrixTexture = createFloat16MatrixTexture;
+exports.getInternalFormatForUnsignedBytesMatrixTexture = getInternalFormatForUnsignedBytesMatrixTexture;
+exports.createUnsignedBytesMatrixTexture = createUnsignedBytesMatrixTexture;
+exports.getInternalFormatForPackedMatrixTexture = getInternalFormatForPackedMatrixTexture;
+exports.createPackedMatrixTexture = createPackedMatrixTexture;
+exports.getInternalFormatForFloat16PackedMatrixTexture = getInternalFormatForFloat16PackedMatrixTexture;
+exports.createFloat16PackedMatrixTexture = createFloat16PackedMatrixTexture;
+exports.bindVertexProgramAttributeStreams = bindVertexProgramAttributeStreams;
+exports.uploadDenseMatrixToTexture = uploadDenseMatrixToTexture;
+exports.uploadPixelDataToTexture = uploadPixelDataToTexture;
+exports.createBufferFromOutputTexture = createBufferFromOutputTexture;
+exports.downloadFloat32MatrixFromBuffer = downloadFloat32MatrixFromBuffer;
+exports.downloadByteEncodedFloatMatrixFromOutputTexture = downloadByteEncodedFloatMatrixFromOutputTexture;
+exports.downloadPackedMatrixFromBuffer = downloadPackedMatrixFromBuffer;
+exports.downloadMatrixFromPackedOutputTexture = downloadMatrixFromPackedOutputTexture;
+
+var _glsl_version = require("./glsl_version");
+
+var tex_util = _interopRequireWildcard(require("./tex_util"));
+
+var webgl_util = _interopRequireWildcard(require("./webgl_util"));
+
+function _getRequireWildcardCache(nodeInterop) { if (typeof WeakMap !== "function") return null; var cacheBabelInterop = new WeakMap(); var cacheNodeInterop = new WeakMap(); return (_getRequireWildcardCache = function (nodeInterop) { return nodeInterop ? cacheNodeInterop : cacheBabelInterop; })(nodeInterop); }
+
+function _interopRequireWildcard(obj, nodeInterop) { if (!nodeInterop && obj && obj.__esModule) { return obj; } if (obj === null || typeof obj !== "object" && typeof obj !== "function") { return { default: obj }; } var cache = _getRequireWildcardCache(nodeInterop); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (key !== "default" && Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj.default = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
+
+/**
+ * @license
+ * Copyright 2017 Google LLC. All Rights Reserved.
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ * =============================================================================
+ */
+function createVertexShader(gl) {
+  const glsl = (0, _glsl_version.getGlslDifferences)();
+  const vertexShaderSource = `${glsl.version}
+    precision highp float;
+    ${glsl.attribute} vec3 clipSpacePos;
+    ${glsl.attribute} vec2 uv;
+    ${glsl.varyingVs} vec2 resultUV;
+
+    void main() {
+      gl_Position = vec4(clipSpacePos, 1);
+      resultUV = uv;
+    }`;
+  return webgl_util.createVertexShader(gl, vertexShaderSource);
+}
+
+function createVertexBuffer(gl) {
+  // [x y z u v] * [upper-left, lower-left, upper-right, lower-right]
+  const vertexArray = new Float32Array([-1, 1, 0, 0, 1, -1, -1, 0, 0, 0, 1, 1, 0, 1, 1, 1, -1, 0, 1, 0]);
+  return webgl_util.createStaticVertexBuffer(gl, vertexArray);
+}
+
+function createIndexBuffer(gl) {
+  // OpenGL (and WebGL) have "CCW == front" winding
+  const triangleVertexIndices = new Uint16Array([0, 1, 2, 2, 1, 3]);
+  return webgl_util.createStaticIndexBuffer(gl, triangleVertexIndices);
+}
+
+function createAndConfigureTexture(gl, width, height, internalFormat, textureFormat, textureType) {
+  webgl_util.validateTextureSize(width, height);
+  const texture = webgl_util.createTexture(gl);
+  const tex2d = gl.TEXTURE_2D;
+  webgl_util.callAndCheck(gl, () => gl.bindTexture(tex2d, texture));
+  webgl_util.callAndCheck(gl, () => gl.texParameteri(tex2d, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE));
+  webgl_util.callAndCheck(gl, () => gl.texParameteri(tex2d, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE));
+  webgl_util.callAndCheck(gl, () => gl.texParameteri(tex2d, gl.TEXTURE_MIN_FILTER, gl.NEAREST));
+  webgl_util.callAndCheck(gl, () => gl.texParameteri(tex2d, gl.TEXTURE_MAG_FILTER, gl.NEAREST));
+  webgl_util.callAndCheck(gl, () => gl.texImage2D(tex2d, 0, internalFormat, width, height, 0, textureFormat, textureType, null));
+  webgl_util.callAndCheck(gl, () => gl.bindTexture(gl.TEXTURE_2D, null));
+  return texture;
+}
+
+function getInternalFormatForFloat32MatrixTexture(textureConfig) {
+  return textureConfig.internalFormatFloat;
+}
+
+function createFloat32MatrixTexture(gl, rows, columns, textureConfig) {
+  const [width, height] = tex_util.getUnpackedMatrixTextureShapeWidthHeight(rows, columns);
+  return createAndConfigureTexture(gl, width, height, getInternalFormatForFloat32MatrixTexture(textureConfig), textureConfig.textureFormatFloat, gl.FLOAT);
+}
+
+function getInternalFormatForFloat16MatrixTexture(textureConfig) {
+  return textureConfig.internalFormatHalfFloat;
+}
+
+function createFloat16MatrixTexture(gl, rows, columns, textureConfig) {
+  const [width, height] = tex_util.getUnpackedMatrixTextureShapeWidthHeight(rows, columns);
+  return createAndConfigureTexture(gl, width, height, getInternalFormatForFloat16MatrixTexture(textureConfig), textureConfig.textureFormatFloat, textureConfig.textureTypeHalfFloat);
+}
+
+function getInternalFormatForUnsignedBytesMatrixTexture(textureConfig) {
+  return textureConfig.downloadTextureFormat;
+}
+
+function createUnsignedBytesMatrixTexture(gl, rows, columns, textureConfig) {
+  const [width, height] = tex_util.getUnpackedMatrixTextureShapeWidthHeight(rows, columns);
+  return createAndConfigureTexture(gl, width, height, getInternalFormatForUnsignedBytesMatrixTexture(textureConfig), gl.RGBA, gl.UNSIGNED_BYTE);
+}
+
+function getInternalFormatForPackedMatrixTexture(textureConfig) {
+  return textureConfig.internalFormatPackedFloat;
+}
+
+function createPackedMatrixTexture(gl, rows, columns, textureConfig) {
+  const [width, height] = tex_util.getPackedMatrixTextureShapeWidthHeight(rows, columns);
+  return createAndConfigureTexture(gl, width, height, getInternalFormatForPackedMatrixTexture(textureConfig), gl.RGBA, gl.FLOAT);
+}
+
+function getInternalFormatForFloat16PackedMatrixTexture(textureConfig) {
+  return textureConfig.internalFormatPackedHalfFloat;
+}
+
+function createFloat16PackedMatrixTexture(gl, rows, columns, textureConfig) {
+  const [width, height] = tex_util.getPackedMatrixTextureShapeWidthHeight(rows, columns);
+  return createAndConfigureTexture(gl, width, height, getInternalFormatForFloat16PackedMatrixTexture(textureConfig), gl.RGBA, textureConfig.textureTypeHalfFloat);
+}
+
+function bindVertexProgramAttributeStreams(gl, program, vertexBuffer) {
+  const posOffset = 0; // x is the first buffer element
+
+  const uvOffset = 3 * 4; // uv comes after [x y z]
+
+  const stride = 3 * 4 + 2 * 4; // xyz + uv, each entry is 4-byte float.
+
+  webgl_util.callAndCheck(gl, () => gl.bindBuffer(gl.ARRAY_BUFFER, vertexBuffer));
+  const success = webgl_util.bindVertexBufferToProgramAttribute(gl, program, 'clipSpacePos', vertexBuffer, 3, stride, posOffset);
+  return success && webgl_util.bindVertexBufferToProgramAttribute(gl, program, 'uv', vertexBuffer, 2, stride, uvOffset);
+}
+
+function uploadDenseMatrixToTexture(gl, texture, width, height, data, textureConfig) {
+  webgl_util.callAndCheck(gl, () => gl.bindTexture(gl.TEXTURE_2D, texture));
+  let dataForUpload, texelDataType, internalFormat;
+
+  if (data instanceof Uint8Array) {
+    dataForUpload = new Uint8Array(width * height * 4);
+    texelDataType = gl.UNSIGNED_BYTE;
+    internalFormat = gl.RGBA;
+  } else {
+    dataForUpload = new Float32Array(width * height * 4);
+    texelDataType = gl.FLOAT;
+    internalFormat = textureConfig.internalFormatPackedFloat;
+  }
+
+  dataForUpload.set(data);
+  webgl_util.callAndCheck(gl, () => gl.texImage2D(gl.TEXTURE_2D, 0, internalFormat, width, height, 0, gl.RGBA, texelDataType, dataForUpload));
+  webgl_util.callAndCheck(gl, () => gl.bindTexture(gl.TEXTURE_2D, null));
+}
+
+function uploadPixelDataToTexture(gl, texture, pixels) {
+  webgl_util.callAndCheck(gl, () => gl.bindTexture(gl.TEXTURE_2D, texture));
+
+  if (pixels.data instanceof Uint8Array) {
+    webgl_util.callAndCheck(gl, () => gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, pixels.width, pixels.height, 0, gl.RGBA, gl.UNSIGNED_BYTE, pixels.data));
+  } else {
+    webgl_util.callAndCheck(gl, () => gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, pixels));
+  }
+
+  webgl_util.callAndCheck(gl, () => gl.bindTexture(gl.TEXTURE_2D, null));
+}
+
+function createBufferFromOutputTexture(gl2, rows, columns, textureConfig) {
+  // Create and bind the buffer.
+  const buffer = gl2.createBuffer();
+  webgl_util.callAndCheck(gl2, () => gl2.bindBuffer(gl2.PIXEL_PACK_BUFFER, buffer)); // Initialize the buffer to the size of the texture in bytes.
+
+  const bytesPerFloat = 4;
+  const valuesPerTexel = 4;
+  const bufferSizeBytes = bytesPerFloat * valuesPerTexel * rows * columns;
+  webgl_util.callAndCheck(gl2, () => gl2.bufferData(gl2.PIXEL_PACK_BUFFER, bufferSizeBytes, gl2.STREAM_READ)); // Enqueue a command on the GPU command queue to copy of texture into the
+  // buffer.
+
+  webgl_util.callAndCheck(gl2, () => gl2.readPixels(0, 0, columns, rows, gl2.RGBA, gl2.FLOAT, 0));
+  webgl_util.callAndCheck(gl2, () => gl2.bindBuffer(gl2.PIXEL_PACK_BUFFER, null));
+  return buffer;
+}
+
+function downloadFloat32MatrixFromBuffer(gl, buffer, size) {
+  const gl2 = gl;
+  const downloadTarget = new Float32Array(size);
+  gl2.bindBuffer(gl2.PIXEL_PACK_BUFFER, buffer);
+  gl2.getBufferSubData(gl2.PIXEL_PACK_BUFFER, 0, downloadTarget);
+  gl2.bindBuffer(gl2.PIXEL_PACK_BUFFER, null);
+  return downloadTarget;
+}
+
+function downloadByteEncodedFloatMatrixFromOutputTexture(gl, rows, columns, textureConfig) {
+  const [w, h] = tex_util.getUnpackedMatrixTextureShapeWidthHeight(rows, columns);
+  const numChannels = 4;
+  const downloadTarget = new Uint8Array(tex_util.getUnpackedArraySizeFromMatrixSize(rows * columns, numChannels));
+  webgl_util.callAndCheck(gl, () => gl.readPixels(0, 0, w, h, textureConfig.downloadTextureFormat, gl.UNSIGNED_BYTE, downloadTarget)); // By wrapping the buffer in a Float32Array, we use native browser IEEE 754
+  // decoding of the 4 bytes that back each 32 bit float.
+
+  return new Float32Array(downloadTarget.buffer);
+}
+
+function downloadPackedMatrixFromBuffer(gl, buffer, batch, rows, cols, physicalRows, physicalCols, textureConfig) {
+  const gl2 = gl;
+  const downloadTarget = new Float32Array(tex_util.getPackedRGBAArraySizeFromMatrixShape(physicalRows, physicalCols));
+  gl2.bindBuffer(gl2.PIXEL_PACK_BUFFER, buffer);
+  gl2.getBufferSubData(gl2.PIXEL_PACK_BUFFER, 0, downloadTarget);
+  gl2.bindBuffer(gl2.PIXEL_PACK_BUFFER, null);
+  return downloadTarget;
+}
+
+function downloadMatrixFromPackedOutputTexture(gl, physicalRows, physicalCols) {
+  const packedRGBA = new Float32Array(physicalRows * physicalCols * 4);
+  webgl_util.callAndCheck(gl, () => gl.readPixels(0, 0, physicalCols, physicalRows, gl.RGBA, gl.FLOAT, packedRGBA));
+  return packedRGBA;
+}
+},{"./glsl_version":"fXvw","./tex_util":"jAWT","./webgl_util":"u1ML"}],"GZkx":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.linearSearchLastTrue = linearSearchLastTrue;
+exports.GPGPUContext = void 0;
+
+var _tfjsCore = require("@tensorflow/tfjs-core");
+
+var _canvas_util = require("./canvas_util");
+
+var gpgpu_util = _interopRequireWildcard(require("./gpgpu_util"));
+
+var tex_util = _interopRequireWildcard(require("./tex_util"));
+
+var webgl_util = _interopRequireWildcard(require("./webgl_util"));
+
+function _getRequireWildcardCache(nodeInterop) { if (typeof WeakMap !== "function") return null; var cacheBabelInterop = new WeakMap(); var cacheNodeInterop = new WeakMap(); return (_getRequireWildcardCache = function (nodeInterop) { return nodeInterop ? cacheNodeInterop : cacheBabelInterop; })(nodeInterop); }
+
+function _interopRequireWildcard(obj, nodeInterop) { if (!nodeInterop && obj && obj.__esModule) { return obj; } if (obj === null || typeof obj !== "object" && typeof obj !== "function") { return { default: obj }; } var cache = _getRequireWildcardCache(nodeInterop); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (key !== "default" && Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj.default = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
+
+/**
+ * @license
+ * Copyright 2017 Google LLC. All Rights Reserved.
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ * =============================================================================
+ */
+class GPGPUContext {
+  constructor(gl) {
+    this.outputTexture = null;
+    this.program = null;
+    this.disposed = false;
+    this.vertexAttrsAreBound = false;
+    this.itemsToPoll = [];
+    const glVersion = (0, _tfjsCore.env)().getNumber('WEBGL_VERSION');
+
+    if (gl != null) {
+      this.gl = gl;
+      (0, _canvas_util.setWebGLContext)(glVersion, gl);
+    } else {
+      this.gl = (0, _canvas_util.getWebGLContext)(glVersion);
+    } // WebGL 2.0 enables texture floats without an extension.
+
+
+    let COLOR_BUFFER_FLOAT = 'WEBGL_color_buffer_float';
+    const COLOR_BUFFER_HALF_FLOAT = 'EXT_color_buffer_half_float';
+
+    if ((0, _tfjsCore.env)().getNumber('WEBGL_VERSION') === 1) {
+      const TEXTURE_FLOAT = 'OES_texture_float';
+      const TEXTURE_HALF_FLOAT = 'OES_texture_half_float';
+      this.textureFloatExtension = webgl_util.getExtensionOrThrow(this.gl, TEXTURE_FLOAT);
+
+      if (webgl_util.hasExtension(this.gl, TEXTURE_HALF_FLOAT)) {
+        this.textureHalfFloatExtension = webgl_util.getExtensionOrThrow(this.gl, TEXTURE_HALF_FLOAT);
+      } else if ((0, _tfjsCore.env)().get('WEBGL_FORCE_F16_TEXTURES')) {
+        throw new Error('GL context does not support half float textures, yet the ' + 'environment flag WEBGL_FORCE_F16_TEXTURES is set to true.');
+      }
+
+      this.colorBufferFloatExtension = this.gl.getExtension(COLOR_BUFFER_FLOAT);
+
+      if (webgl_util.hasExtension(this.gl, COLOR_BUFFER_HALF_FLOAT)) {
+        this.colorBufferHalfFloatExtension = webgl_util.getExtensionOrThrow(this.gl, COLOR_BUFFER_HALF_FLOAT);
+      } else if ((0, _tfjsCore.env)().get('WEBGL_FORCE_F16_TEXTURES')) {
+        throw new Error('GL context does not support color renderable half floats, yet ' + 'the environment flag WEBGL_FORCE_F16_TEXTURES is set to true.');
+      }
+    } else {
+      COLOR_BUFFER_FLOAT = 'EXT_color_buffer_float';
+
+      if (webgl_util.hasExtension(this.gl, COLOR_BUFFER_FLOAT)) {
+        this.colorBufferFloatExtension = this.gl.getExtension(COLOR_BUFFER_FLOAT);
+      } else if (webgl_util.hasExtension(this.gl, COLOR_BUFFER_HALF_FLOAT)) {
+        this.colorBufferHalfFloatExtension = this.gl.getExtension(COLOR_BUFFER_HALF_FLOAT);
+      } else {
+        throw new Error('GL context does not support color renderable floats');
+      }
+    }
+
+    this.vertexBuffer = gpgpu_util.createVertexBuffer(this.gl);
+    this.indexBuffer = gpgpu_util.createIndexBuffer(this.gl);
+    this.framebuffer = webgl_util.createFramebuffer(this.gl);
+    this.textureConfig = tex_util.getTextureConfig(this.gl, this.textureHalfFloatExtension);
+  }
+
+  get debug() {
+    return (0, _tfjsCore.env)().getBool('DEBUG');
+  }
+
+  dispose() {
+    if (this.disposed) {
+      return;
+    }
+
+    if (this.program != null) {
+      console.warn('Disposing a GPGPUContext that still has a bound WebGLProgram.' + ' This is probably a resource leak, delete the program with ' + 'GPGPUContext.deleteProgram before disposing.');
+    }
+
+    if (this.outputTexture != null) {
+      console.warn('Disposing a GPGPUContext that still has a bound output matrix ' + 'texture.  This is probably a resource leak, delete the output ' + 'matrix texture with GPGPUContext.deleteMatrixTexture before ' + 'disposing.');
+    }
+
+    const gl = this.gl;
+    webgl_util.callAndCheck(gl, () => gl.finish());
+    webgl_util.callAndCheck(gl, () => gl.bindFramebuffer(gl.FRAMEBUFFER, null));
+    webgl_util.callAndCheck(gl, () => gl.deleteFramebuffer(this.framebuffer));
+    webgl_util.callAndCheck(gl, () => gl.bindBuffer(gl.ARRAY_BUFFER, null));
+    webgl_util.callAndCheck(gl, () => gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, null));
+    webgl_util.callAndCheck(gl, () => gl.deleteBuffer(this.indexBuffer));
+    this.disposed = true;
+  }
+
+  createFloat32MatrixTexture(rows, columns) {
+    this.throwIfDisposed();
+    return gpgpu_util.createFloat32MatrixTexture(this.gl, rows, columns, this.textureConfig);
+  }
+
+  createFloat16MatrixTexture(rows, columns) {
+    this.throwIfDisposed();
+    return gpgpu_util.createFloat16MatrixTexture(this.gl, rows, columns, this.textureConfig);
+  }
+
+  createUnsignedBytesMatrixTexture(rows, columns) {
+    this.throwIfDisposed();
+    return gpgpu_util.createUnsignedBytesMatrixTexture(this.gl, rows, columns, this.textureConfig);
+  }
+
+  uploadPixelDataToTexture(texture, pixels) {
+    this.throwIfDisposed();
+    gpgpu_util.uploadPixelDataToTexture(this.gl, texture, pixels);
+  }
+
+  uploadDenseMatrixToTexture(texture, width, height, data) {
+    this.throwIfDisposed();
+    gpgpu_util.uploadDenseMatrixToTexture(this.gl, texture, width, height, data, this.textureConfig);
+  }
+
+  createFloat16PackedMatrixTexture(rows, columns) {
+    this.throwIfDisposed();
+    return gpgpu_util.createFloat16PackedMatrixTexture(this.gl, rows, columns, this.textureConfig);
+  }
+
+  createPackedMatrixTexture(rows, columns) {
+    this.throwIfDisposed();
+    return gpgpu_util.createPackedMatrixTexture(this.gl, rows, columns, this.textureConfig);
+  }
+
+  deleteMatrixTexture(texture) {
+    this.throwIfDisposed();
+
+    if (this.outputTexture === texture) {
+      webgl_util.unbindColorTextureFromFramebuffer(this.gl, this.framebuffer);
+      this.outputTexture = null;
+    }
+
+    webgl_util.callAndCheck(this.gl, () => this.gl.deleteTexture(texture));
+  }
+
+  downloadByteEncodedFloatMatrixFromOutputTexture(texture, rows, columns) {
+    return this.downloadMatrixDriver(texture, () => gpgpu_util.downloadByteEncodedFloatMatrixFromOutputTexture(this.gl, rows, columns, this.textureConfig));
+  }
+
+  downloadPackedMatrixFromBuffer(buffer, batch, rows, columns, physicalRows, physicalCols) {
+    return gpgpu_util.downloadPackedMatrixFromBuffer(this.gl, buffer, batch, rows, columns, physicalRows, physicalCols, this.textureConfig);
+  }
+
+  downloadFloat32MatrixFromBuffer(buffer, size) {
+    return gpgpu_util.downloadFloat32MatrixFromBuffer(this.gl, buffer, size);
+  }
+
+  createBufferFromTexture(texture, rows, columns) {
+    this.bindTextureToFrameBuffer(texture);
+    const result = gpgpu_util.createBufferFromOutputTexture(this.gl, rows, columns, this.textureConfig);
+    this.unbindTextureToFrameBuffer();
+    return result;
+  }
+
+  createAndWaitForFence() {
+    const fenceContext = this.createFence(this.gl);
+    return this.pollFence(fenceContext);
+  }
+
+  createFence(gl) {
+    let query;
+    let isFencePassed;
+
+    if ((0, _tfjsCore.env)().getBool('WEBGL_FENCE_API_ENABLED')) {
+      const gl2 = gl;
+      const sync = gl2.fenceSync(gl2.SYNC_GPU_COMMANDS_COMPLETE, 0);
+      gl.flush();
+
+      isFencePassed = () => {
+        const status = gl2.clientWaitSync(sync, 0, 0);
+        return status === gl2.ALREADY_SIGNALED || status === gl2.CONDITION_SATISFIED;
+      };
+
+      query = sync;
+    } else if ((0, _tfjsCore.env)().getNumber('WEBGL_DISJOINT_QUERY_TIMER_EXTENSION_VERSION') > 0) {
+      query = this.beginQuery();
+      this.endQuery();
+
+      isFencePassed = () => this.isQueryAvailable(query, (0, _tfjsCore.env)().getNumber('WEBGL_DISJOINT_QUERY_TIMER_EXTENSION_VERSION'));
+    } else {
+      // If we have no way to fence, return true immediately. This will fire in
+      // WebGL 1.0 when there is no disjoint query timer. In this case, because
+      // the fence passes immediately, we'll immediately ask for a download of
+      // the texture, which will cause the UI thread to hang.
+      isFencePassed = () => true;
+    }
+
+    return {
+      query,
+      isFencePassed
+    };
+  }
+
+  downloadMatrixFromPackedTexture(texture, physicalRows, physicalCols) {
+    return this.downloadMatrixDriver(texture, () => gpgpu_util.downloadMatrixFromPackedOutputTexture(this.gl, physicalRows, physicalCols));
+  }
+
+  createProgram(fragmentShaderSource) {
+    this.throwIfDisposed();
+    const gl = this.gl;
+    const fragmentShader = webgl_util.createFragmentShader(gl, fragmentShaderSource);
+
+    if (this.vertexShader == null) {
+      this.vertexShader = gpgpu_util.createVertexShader(gl);
+    }
+
+    const program = webgl_util.createProgram(gl);
+    webgl_util.callAndCheck(gl, () => gl.attachShader(program, this.vertexShader));
+    webgl_util.callAndCheck(gl, () => gl.attachShader(program, fragmentShader));
+    webgl_util.linkProgram(gl, program);
+
+    if (this.debug) {
+      webgl_util.validateProgram(gl, program);
+    }
+
+    if (!this.vertexAttrsAreBound) {
+      this.setProgram(program);
+      this.vertexAttrsAreBound = gpgpu_util.bindVertexProgramAttributeStreams(gl, this.program, this.vertexBuffer);
+    }
+
+    return program;
+  }
+
+  deleteProgram(program) {
+    this.throwIfDisposed();
+
+    if (program === this.program) {
+      this.program = null;
+    }
+
+    if (program != null) {
+      webgl_util.callAndCheck(this.gl, () => this.gl.deleteProgram(program));
+    }
+  }
+
+  setProgram(program) {
+    this.throwIfDisposed();
+    this.program = program;
+
+    if (this.program != null && this.debug) {
+      webgl_util.validateProgram(this.gl, this.program);
+    }
+
+    webgl_util.callAndCheck(this.gl, () => this.gl.useProgram(program));
+  }
+
+  getUniformLocation(program, uniformName, shouldThrow = true) {
+    this.throwIfDisposed();
+
+    if (shouldThrow) {
+      return webgl_util.getProgramUniformLocationOrThrow(this.gl, program, uniformName);
+    } else {
+      return webgl_util.getProgramUniformLocation(this.gl, program, uniformName);
+    }
+  }
+
+  getAttributeLocation(program, attribute) {
+    this.throwIfDisposed();
+    return webgl_util.callAndCheck(this.gl, () => this.gl.getAttribLocation(program, attribute));
+  }
+
+  getUniformLocationNoThrow(program, uniformName) {
+    this.throwIfDisposed();
+    return this.gl.getUniformLocation(program, uniformName);
+  }
+
+  setInputMatrixTexture(inputMatrixTexture, uniformLocation, textureUnit) {
+    this.throwIfDisposed();
+    this.throwIfNoProgram();
+    webgl_util.bindTextureToProgramUniformSampler(this.gl, inputMatrixTexture, uniformLocation, textureUnit);
+  }
+
+  setOutputMatrixTexture(outputMatrixTexture, rows, columns) {
+    this.setOutputMatrixTextureDriver(outputMatrixTexture, columns, rows);
+  }
+
+  setOutputPackedMatrixTexture(outputPackedMatrixTexture, rows, columns) {
+    this.throwIfDisposed();
+    const [width, height] = tex_util.getPackedMatrixTextureShapeWidthHeight(rows, columns);
+    this.setOutputMatrixTextureDriver(outputPackedMatrixTexture, width, height);
+  }
+
+  setOutputMatrixWriteRegion(startRow, numRows, startColumn, numColumns) {
+    this.setOutputMatrixWriteRegionDriver(startColumn, startRow, numColumns, numRows);
+  }
+
+  setOutputPackedMatrixWriteRegion(startRow, numRows, startColumn, numColumns) {
+    throw new Error('setOutputPackedMatrixWriteRegion not implemented.');
+  }
+
+  debugValidate() {
+    if (this.program != null) {
+      webgl_util.validateProgram(this.gl, this.program);
+    }
+
+    webgl_util.validateFramebuffer(this.gl);
+  }
+
+  executeProgram() {
+    this.throwIfDisposed();
+    this.throwIfNoProgram();
+    const gl = this.gl;
+
+    if (this.debug) {
+      this.debugValidate();
+    }
+
+    webgl_util.callAndCheck(gl, () => gl.drawElements(gl.TRIANGLES, 6, gl.UNSIGNED_SHORT, 0));
+  }
+
+  blockUntilAllProgramsCompleted() {
+    this.throwIfDisposed();
+    webgl_util.callAndCheck(this.gl, () => this.gl.finish());
+  }
+
+  getQueryTimerExtension() {
+    if (this.disjointQueryTimerExtension == null) {
+      this.disjointQueryTimerExtension = webgl_util.getExtensionOrThrow(this.gl, (0, _tfjsCore.env)().getNumber('WEBGL_DISJOINT_QUERY_TIMER_EXTENSION_VERSION') === 2 ? 'EXT_disjoint_timer_query_webgl2' : 'EXT_disjoint_timer_query');
+    }
+
+    return this.disjointQueryTimerExtension;
+  }
+
+  getQueryTimerExtensionWebGL2() {
+    return this.getQueryTimerExtension();
+  }
+
+  getQueryTimerExtensionWebGL1() {
+    return this.getQueryTimerExtension();
+  }
+
+  beginQuery() {
+    if ((0, _tfjsCore.env)().getNumber('WEBGL_DISJOINT_QUERY_TIMER_EXTENSION_VERSION') === 2) {
+      const gl2 = this.gl;
+      const ext = this.getQueryTimerExtensionWebGL2();
+      const query = gl2.createQuery();
+      gl2.beginQuery(ext.TIME_ELAPSED_EXT, query);
+      return query;
+    }
+
+    const ext = this.getQueryTimerExtensionWebGL1();
+    const query = ext.createQueryEXT();
+    ext.beginQueryEXT(ext.TIME_ELAPSED_EXT, query);
+    return query;
+  }
+
+  endQuery() {
+    if ((0, _tfjsCore.env)().getNumber('WEBGL_DISJOINT_QUERY_TIMER_EXTENSION_VERSION') === 2) {
+      const gl2 = this.gl;
+      const ext = this.getQueryTimerExtensionWebGL2();
+      gl2.endQuery(ext.TIME_ELAPSED_EXT);
+      return;
+    }
+
+    const ext = this.getQueryTimerExtensionWebGL1();
+    ext.endQueryEXT(ext.TIME_ELAPSED_EXT);
+  }
+
+  async waitForQueryAndGetTime(query) {
+    await _tfjsCore.util.repeatedTry(() => this.disposed || // while testing contexts are created / disposed
+    // in rapid succession, so without this check we
+    // may poll for the query timer indefinitely
+    this.isQueryAvailable(query, (0, _tfjsCore.env)().getNumber('WEBGL_DISJOINT_QUERY_TIMER_EXTENSION_VERSION')));
+    return this.getQueryTime(query, (0, _tfjsCore.env)().getNumber('WEBGL_DISJOINT_QUERY_TIMER_EXTENSION_VERSION'));
+  }
+
+  getQueryTime(query, queryTimerVersion) {
+    if (queryTimerVersion === 0) {
+      return null;
+    }
+
+    if (queryTimerVersion === 2) {
+      const gl2 = this.gl;
+      const timeElapsedNanos = gl2.getQueryParameter(query, gl2.QUERY_RESULT); // Return milliseconds.
+
+      return timeElapsedNanos / 1000000;
+    } else {
+      const ext = this.getQueryTimerExtensionWebGL1();
+      const timeElapsedNanos = ext.getQueryObjectEXT(query, ext.QUERY_RESULT_EXT); // Return milliseconds.
+
+      return timeElapsedNanos / 1000000;
+    }
+  }
+
+  isQueryAvailable(query, queryTimerVersion) {
+    if (queryTimerVersion === 0) {
+      return true;
+    }
+
+    if (queryTimerVersion === 2) {
+      const gl2 = this.gl;
+      const ext = this.getQueryTimerExtensionWebGL2();
+      const available = gl2.getQueryParameter(query, gl2.QUERY_RESULT_AVAILABLE);
+
+      if (this.disjoint == null) {
+        this.disjoint = this.gl.getParameter(ext.GPU_DISJOINT_EXT);
+      }
+
+      return available && !this.disjoint;
+    } else {
+      const ext = this.getQueryTimerExtensionWebGL1();
+      const available = ext.getQueryObjectEXT(query, ext.QUERY_RESULT_AVAILABLE_EXT);
+
+      if (this.disjoint == null) {
+        this.disjoint = this.gl.getParameter(ext.GPU_DISJOINT_EXT);
+      }
+
+      return available && !this.disjoint;
+    }
+  }
+
+  pollFence(fenceContext) {
+    return new Promise(resolve => {
+      this.addItemToPoll(() => fenceContext.isFencePassed(), () => resolve());
+    });
+  }
+
+  pollItems() {
+    // Find the last query that has finished.
+    const index = linearSearchLastTrue(this.itemsToPoll.map(x => x.isDoneFn));
+
+    for (let i = 0; i <= index; ++i) {
+      const {
+        resolveFn
+      } = this.itemsToPoll[i];
+      resolveFn();
+    }
+
+    this.itemsToPoll = this.itemsToPoll.slice(index + 1);
+  }
+
+  addItemToPoll(isDoneFn, resolveFn) {
+    this.itemsToPoll.push({
+      isDoneFn,
+      resolveFn
+    });
+
+    if (this.itemsToPoll.length > 1) {
+      // We already have a running loop that polls.
+      return;
+    } // Start a new loop that polls.
+
+
+    _tfjsCore.util.repeatedTry(() => {
+      this.pollItems(); // End the loop if no more items to poll.
+
+      return this.itemsToPoll.length === 0;
+    });
+  }
+
+  bindTextureToFrameBuffer(texture) {
+    this.throwIfDisposed();
+    webgl_util.bindColorTextureToFramebuffer(this.gl, texture, this.framebuffer);
+
+    if (this.debug) {
+      webgl_util.validateFramebuffer(this.gl);
+    }
+  }
+
+  unbindTextureToFrameBuffer() {
+    if (this.outputTexture != null) {
+      webgl_util.bindColorTextureToFramebuffer(this.gl, this.outputTexture, this.framebuffer);
+
+      if (this.debug) {
+        webgl_util.validateFramebuffer(this.gl);
+      }
+    } else {
+      webgl_util.unbindColorTextureFromFramebuffer(this.gl, this.framebuffer);
+    }
+  }
+
+  downloadMatrixDriver(texture, downloadAndDecode) {
+    this.bindTextureToFrameBuffer(texture);
+    const result = downloadAndDecode();
+    this.unbindTextureToFrameBuffer();
+    return result;
+  }
+
+  setOutputMatrixTextureDriver(outputMatrixTextureMaybePacked, width, height) {
+    this.throwIfDisposed();
+    const gl = this.gl;
+    webgl_util.bindColorTextureToFramebuffer(gl, outputMatrixTextureMaybePacked, this.framebuffer);
+
+    if (this.debug) {
+      webgl_util.validateFramebuffer(gl);
+    }
+
+    this.outputTexture = outputMatrixTextureMaybePacked;
+    webgl_util.callAndCheck(gl, () => gl.viewport(0, 0, width, height));
+    webgl_util.callAndCheck(gl, () => gl.scissor(0, 0, width, height));
+  }
+
+  setOutputMatrixWriteRegionDriver(x, y, width, height) {
+    this.throwIfDisposed();
+    webgl_util.callAndCheck(this.gl, () => this.gl.scissor(x, y, width, height));
+  }
+
+  throwIfDisposed() {
+    if (this.disposed) {
+      throw new Error('Attempted to use disposed GPGPUContext.');
+    }
+  }
+
+  throwIfNoProgram() {
+    if (this.program == null) {
+      throw new Error('No GPU program is currently set.');
+    }
+  }
+
+}
+/**
+ * Finds the index of the last true element using linear search.
+ * Note: We can't do binary search because Chrome expects us to explicitly
+ * test all fences before download:
+ * https://github.com/tensorflow/tfjs/issues/1145
+ */
+
+
+exports.GPGPUContext = GPGPUContext;
+
+function linearSearchLastTrue(arr) {
+  let i = 0;
+
+  for (; i < arr.length; ++i) {
+    const isDone = arr[i]();
+
+    if (!isDone) {
+      break;
+    }
+  }
+
+  return i - 1;
+}
+},{"@tensorflow/tfjs-core":"kSBl","./canvas_util":"xuCv","./gpgpu_util":"jgbg","./tex_util":"jAWT","./webgl_util":"u1ML"}],"nVKy":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -61934,6 +62177,46 @@ const rsqrtConfig = {
   kernelFunc: rsqrt
 };
 exports.rsqrtConfig = rsqrtConfig;
+},{"@tensorflow/tfjs-core":"kSBl","../utils/unary_impl":"FlCa","../utils/unary_utils":"kZAs"}],"QVgs":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.sigmoidConfig = exports.sigmoid = exports.sigmoidImpl = void 0;
+
+var _tfjsCore = require("@tensorflow/tfjs-core");
+
+var _unary_impl = require("../utils/unary_impl");
+
+var _unary_utils = require("../utils/unary_utils");
+
+/**
+ * @license
+ * Copyright 2020 Google LLC. All Rights Reserved.
+ * Licensed under the Apache License, Version 2.0 (the License);
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an AS IS BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ * =============================================================================
+ */
+const sigmoidImpl = (0, _unary_impl.createSimpleUnaryImpl)(xi => 1 / (1 + Math.exp(-xi)));
+exports.sigmoidImpl = sigmoidImpl;
+const sigmoid = (0, _unary_utils.unaryKernelFunc)(_tfjsCore.Sigmoid, xi => 1 / (1 + Math.exp(-xi)));
+exports.sigmoid = sigmoid;
+const sigmoidConfig = {
+  kernelName: _tfjsCore.Sigmoid,
+  backendName: 'cpu',
+  kernelFunc: sigmoid
+};
+exports.sigmoidConfig = sigmoidConfig;
 },{"@tensorflow/tfjs-core":"kSBl","../utils/unary_impl":"FlCa","../utils/unary_utils":"kZAs"}],"i6mc":[function(require,module,exports) {
 "use strict";
 
@@ -62425,7 +62708,47 @@ function sparseSegmentReductionImpl(input, inputShape, inputDType, indices, segm
 
   return [output, outputShape];
 }
-},{"@tensorflow/tfjs-core":"kSBl"}],"p6Qg":[function(require,module,exports) {
+},{"@tensorflow/tfjs-core":"kSBl"}],"YdSx":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.sqrtConfig = exports.sqrt = exports.sqrtImpl = void 0;
+
+var _tfjsCore = require("@tensorflow/tfjs-core");
+
+var _unary_impl = require("../utils/unary_impl");
+
+var _unary_utils = require("../utils/unary_utils");
+
+/**
+ * @license
+ * Copyright 2020 Google LLC. All Rights Reserved.
+ * Licensed under the Apache License, Version 2.0 (the License);
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an AS IS BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ * =============================================================================
+ */
+const sqrtImpl = (0, _unary_impl.createSimpleUnaryImpl)(xi => Math.sqrt(xi));
+exports.sqrtImpl = sqrtImpl;
+const sqrt = (0, _unary_utils.unaryKernelFunc)(_tfjsCore.Sqrt, xi => Math.sqrt(xi));
+exports.sqrt = sqrt;
+const sqrtConfig = {
+  kernelName: _tfjsCore.Sqrt,
+  backendName: 'cpu',
+  kernelFunc: sqrt
+};
+exports.sqrtConfig = sqrtConfig;
+},{"@tensorflow/tfjs-core":"kSBl","../utils/unary_impl":"FlCa","../utils/unary_utils":"kZAs"}],"p6Qg":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -62762,26 +63085,23 @@ var _tfjsCore = require("@tensorflow/tfjs-core");
  * limitations under the License.
  * =============================================================================
  */
-function split(str, delimiters, skipEmpty) {
+function split(str, delimiters, skipEmpty, result) {
   if (!str.length) {
-    return [];
+    return;
   } // When the delimiter is empty, the input is split into individual characters.
 
 
   if (delimiters.length === 0) {
-    const result = new Array(str.length);
-
     for (let i = 0; i < str.length; ++i) {
-      result[i] = str.subarray(i, i + 1);
+      result.push(str.subarray(i, i + 1));
     }
 
-    return result;
+    return;
   } // When there is one delimiter, the input is split only at that delimiter.
 
 
   if (delimiters.length === 1) {
     const delimiter = delimiters[0];
-    const result = [];
     let f = str.indexOf(delimiter);
 
     while (f !== -1) {
@@ -62799,12 +63119,11 @@ function split(str, delimiters, skipEmpty) {
       result.push(str);
     }
 
-    return result;
+    return;
   } // When there are multiple delimiters, the input is split at every instance
   // one of the delimiters appears.
 
 
-  const result = [];
   let tokenStart = 0;
 
   for (let i = 0; i < str.length + 1; i++) {
@@ -62818,8 +63137,6 @@ function split(str, delimiters, skipEmpty) {
       tokenStart = i + 1;
     }
   }
-
-  return result;
 }
 
 function stringSplitImpl(input, delimiter, skipEmpty) {
@@ -62831,12 +63148,12 @@ function stringSplitImpl(input, delimiter, skipEmpty) {
   const numIndices = new Array(batchSize);
 
   for (let i = 0; i < batchSize; ++i) {
-    const parts = split(input[i], delimiter, skipEmpty);
-    const nEntries = parts.length;
+    const prevTokensLength = tokens.length;
+    split(input[i], delimiter, skipEmpty, tokens);
+    const nEntries = tokens.length - prevTokensLength;
     numIndices[i] = nEntries;
     outputSize += nEntries;
     maxNumEntries = Math.max(maxNumEntries, nEntries);
-    tokens.push(...parts);
   }
 
   const indices = _tfjsCore.util.getArrayFromDType('int32', outputSize * 2);
@@ -63474,6 +63791,12 @@ Object.defineProperty(exports, "rsqrtImpl", {
     return _Rsqrt.rsqrtImpl;
   }
 });
+Object.defineProperty(exports, "sigmoidImpl", {
+  enumerable: true,
+  get: function () {
+    return _Sigmoid.sigmoidImpl;
+  }
+});
 Object.defineProperty(exports, "sliceImpl", {
   enumerable: true,
   get: function () {
@@ -63496,6 +63819,12 @@ Object.defineProperty(exports, "sparseSegmentReductionImpl", {
   enumerable: true,
   get: function () {
     return _SparseSegmentReduction_impl.sparseSegmentReductionImpl;
+  }
+});
+Object.defineProperty(exports, "sqrtImpl", {
+  enumerable: true,
+  get: function () {
+    return _Sqrt.sqrtImpl;
   }
 });
 Object.defineProperty(exports, "squaredDifferenceImpl", {
@@ -63611,6 +63940,8 @@ var _Range_impl = require("./kernels/Range_impl");
 
 var _Rsqrt = require("./kernels/Rsqrt");
 
+var _Sigmoid = require("./kernels/Sigmoid");
+
 var _Slice = require("./kernels/Slice");
 
 var _SparseFillEmptyRows_impl = require("./kernels/SparseFillEmptyRows_impl");
@@ -63618,6 +63949,8 @@ var _SparseFillEmptyRows_impl = require("./kernels/SparseFillEmptyRows_impl");
 var _SparseReshape_impl = require("./kernels/SparseReshape_impl");
 
 var _SparseSegmentReduction_impl = require("./kernels/SparseSegmentReduction_impl");
+
+var _Sqrt = require("./kernels/Sqrt");
 
 var _SquaredDifference = require("./kernels/SquaredDifference");
 
@@ -63638,13 +63971,13 @@ var _TopK_impl = require("./kernels/TopK_impl");
 var _Transpose_impl = require("./kernels/Transpose_impl");
 
 var _Unique_impl = require("./kernels/Unique_impl");
-},{"./kernels/Abs":"WHC3","./kernels/Add":"ZBkJ","./kernels/Bincount_impl":"cUUF","./kernels/Ceil":"PT9Z","./kernels/Concat_impl":"axei","./kernels/Equal":"Qy3m","./kernels/Exp":"Q92g","./kernels/Expm1":"wiHC","./kernels/Floor":"KFD4","./kernels/GatherNd_Impl":"kXTU","./kernels/GatherV2_impl":"Ea37","./kernels/Greater":"QWdt","./kernels/GreaterEqual":"gfwn","./kernels/Less":"x95l","./kernels/LessEqual":"N5Qh","./kernels/LinSpace_impl":"BmUg","./kernels/Log":"ipxn","./kernels/Max_impl":"Db4x","./kernels/Maximum":"DbCK","./kernels/Minimum":"pZXl","./kernels/Multiply":"N9Eb","./kernels/Neg":"NnAL","./kernels/NotEqual":"VkjO","./kernels/Prod":"us0k","./kernels/Range_impl":"m7wV","./kernels/Rsqrt":"eSbP","./kernels/Slice":"i6mc","./kernels/SparseFillEmptyRows_impl":"vXdm","./kernels/SparseReshape_impl":"LDTS","./kernels/SparseSegmentReduction_impl":"XhXa","./kernels/SquaredDifference":"p6Qg","./kernels/StridedSlice_impl":"Jc0Z","./kernels/StringNGrams_impl":"CMu9","./kernels/StringSplit_impl":"opA2","./kernels/StringToHashBucketFast_impl":"KvpR","./kernels/Sub":"fBFg","./kernels/Tile_impl":"W9Ei","./kernels/TopK_impl":"iXMz","./kernels/Transpose_impl":"fDvd","./kernels/Unique_impl":"hHdG"}],"cNPH":[function(require,module,exports) {
+},{"./kernels/Abs":"WHC3","./kernels/Add":"ZBkJ","./kernels/Bincount_impl":"cUUF","./kernels/Ceil":"PT9Z","./kernels/Concat_impl":"axei","./kernels/Equal":"Qy3m","./kernels/Exp":"Q92g","./kernels/Expm1":"wiHC","./kernels/Floor":"KFD4","./kernels/GatherNd_Impl":"kXTU","./kernels/GatherV2_impl":"Ea37","./kernels/Greater":"QWdt","./kernels/GreaterEqual":"gfwn","./kernels/Less":"x95l","./kernels/LessEqual":"N5Qh","./kernels/LinSpace_impl":"BmUg","./kernels/Log":"ipxn","./kernels/Max_impl":"Db4x","./kernels/Maximum":"DbCK","./kernels/Minimum":"pZXl","./kernels/Multiply":"N9Eb","./kernels/Neg":"NnAL","./kernels/NotEqual":"VkjO","./kernels/Prod":"us0k","./kernels/Range_impl":"m7wV","./kernels/Rsqrt":"eSbP","./kernels/Sigmoid":"QVgs","./kernels/Slice":"i6mc","./kernels/SparseFillEmptyRows_impl":"vXdm","./kernels/SparseReshape_impl":"LDTS","./kernels/SparseSegmentReduction_impl":"XhXa","./kernels/Sqrt":"YdSx","./kernels/SquaredDifference":"p6Qg","./kernels/StridedSlice_impl":"Jc0Z","./kernels/StringNGrams_impl":"CMu9","./kernels/StringSplit_impl":"opA2","./kernels/StringToHashBucketFast_impl":"KvpR","./kernels/Sub":"fBFg","./kernels/Tile_impl":"W9Ei","./kernels/TopK_impl":"iXMz","./kernels/Transpose_impl":"fDvd","./kernels/Unique_impl":"hHdG"}],"cNPH":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.uniqueImplCPU = exports.transposeImplCPU = exports.topKImplCPU = exports.tileImplCPU = exports.rsqrtImplCPU = exports.rangeImplCPU = exports.subImplCPU = exports.stringToHashBucketFastImplCPU = exports.stringSplitImplCPU = exports.stringNGramsImplCPU = exports.stridedSliceImplCPU = exports.sparseSegmentReductionImplCPU = exports.sparseReshapeImplCPU = exports.sparseFillEmptyRowsImplCPU = exports.sliceImplCPU = exports.simpleAbsImplCPU = exports.prodImplCPU = exports.notEqualImplCPU = exports.negImplCPU = exports.multiplyImplCPU = exports.minimumImplCPU = exports.maximumImplCPU = exports.maxImplCPU = exports.logImplCPU = exports.linSpaceImplCPU = exports.lessImplCPU = exports.lessEqualImplCPU = exports.greaterImplCPU = exports.greaterEqualImplCPU = exports.gatherV2ImplCPU = exports.gatherNdImplCPU = exports.floorImplCPU = exports.expm1ImplCPU = exports.expImplCPU = exports.equalImplCPU = exports.concatImplCPU = exports.ceilImplCPU = exports.bincountReduceImplCPU = exports.bincountImplCPU = exports.addImplCPU = void 0;
+exports.uniqueImplCPU = exports.transposeImplCPU = exports.topKImplCPU = exports.tileImplCPU = exports.rsqrtImplCPU = exports.rangeImplCPU = exports.subImplCPU = exports.stringToHashBucketFastImplCPU = exports.stringSplitImplCPU = exports.stringNGramsImplCPU = exports.stridedSliceImplCPU = exports.sqrtImplCPU = exports.sparseSegmentReductionImplCPU = exports.sparseReshapeImplCPU = exports.sparseFillEmptyRowsImplCPU = exports.sliceImplCPU = exports.simpleAbsImplCPU = exports.sigmoidImplCPU = exports.prodImplCPU = exports.notEqualImplCPU = exports.negImplCPU = exports.multiplyImplCPU = exports.minimumImplCPU = exports.maximumImplCPU = exports.maxImplCPU = exports.logImplCPU = exports.linSpaceImplCPU = exports.lessImplCPU = exports.lessEqualImplCPU = exports.greaterImplCPU = exports.greaterEqualImplCPU = exports.gatherV2ImplCPU = exports.gatherNdImplCPU = exports.floorImplCPU = exports.expm1ImplCPU = exports.expImplCPU = exports.equalImplCPU = exports.concatImplCPU = exports.ceilImplCPU = exports.bincountReduceImplCPU = exports.bincountImplCPU = exports.addImplCPU = void 0;
 
 var shared = _interopRequireWildcard(require("@tensorflow/tfjs-backend-cpu/dist/shared"));
 
@@ -63698,11 +64031,13 @@ const {
   prodImpl: prodImplCPU,
   rangeImpl: rangeImplCPU,
   rsqrtImpl: rsqrtImplCPU,
+  sigmoidImpl: sigmoidImplCPU,
   simpleAbsImpl: simpleAbsImplCPU,
   sliceImpl: sliceImplCPU,
   sparseFillEmptyRowsImpl: sparseFillEmptyRowsImplCPU,
   sparseReshapeImpl: sparseReshapeImplCPU,
   sparseSegmentReductionImpl: sparseSegmentReductionImplCPU,
+  sqrtImpl: sqrtImplCPU,
   stridedSliceImpl: stridedSliceImplCPU,
   stringNGramsImpl: stringNGramsImplCPU,
   stringSplitImpl: stringSplitImplCPU,
@@ -63722,11 +64057,13 @@ exports.stringToHashBucketFastImplCPU = stringToHashBucketFastImplCPU;
 exports.stringSplitImplCPU = stringSplitImplCPU;
 exports.stringNGramsImplCPU = stringNGramsImplCPU;
 exports.stridedSliceImplCPU = stridedSliceImplCPU;
+exports.sqrtImplCPU = sqrtImplCPU;
 exports.sparseSegmentReductionImplCPU = sparseSegmentReductionImplCPU;
 exports.sparseReshapeImplCPU = sparseReshapeImplCPU;
 exports.sparseFillEmptyRowsImplCPU = sparseFillEmptyRowsImplCPU;
 exports.sliceImplCPU = sliceImplCPU;
 exports.simpleAbsImplCPU = simpleAbsImplCPU;
+exports.sigmoidImplCPU = sigmoidImplCPU;
 exports.rsqrtImplCPU = rsqrtImplCPU;
 exports.rangeImplCPU = rangeImplCPU;
 exports.prodImplCPU = prodImplCPU;
@@ -63953,6 +64290,8 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.ReshapePackedProgram = void 0;
 
+var _gpgpu_math = require("./gpgpu_math");
+
 var shader_util = _interopRequireWildcard(require("./shader_compiler_util"));
 
 function _getRequireWildcardCache(nodeInterop) { if (typeof WeakMap !== "function") return null; var cacheBabelInterop = new WeakMap(); var cacheNodeInterop = new WeakMap(); return (_getRequireWildcardCache = function (nodeInterop) { return nodeInterop ? cacheNodeInterop : cacheBabelInterop; })(nodeInterop); }
@@ -63980,7 +64319,12 @@ class ReshapePackedProgram {
     this.variableNames = ['A'];
     this.packedInputs = true;
     this.packedOutput = true;
+    this.customUniforms = [{
+      name: 'inputShape',
+      type: 'ivec3'
+    }];
     this.outputShape = outputShape;
+    this.enableShapeUniforms = (0, _gpgpu_math.useShapeUniforms)(this.outputShape.length);
     let mainLoop = ``;
 
     for (let i = 0; i < 4; i++) {
@@ -64009,8 +64353,8 @@ class ReshapePackedProgram {
     }
 
     this.userCode = `
-      ${getReshapedInputCoords(inputShape)}
-      ${shader_util.getFlatIndexFrom3D(outputShape)}
+      ${getReshapedInputCoords(inputShape, this.enableShapeUniforms)}
+      ${this.enableShapeUniforms ? shader_util.getFlatIndexFrom3DOutput() : shader_util.getFlatIndexFrom3D(outputShape)}
 
       void main() {
         ivec3 rc = getOutputCoords();
@@ -64018,8 +64362,8 @@ class ReshapePackedProgram {
         vec4 result = vec4(0.);
 
         ivec3 thisRC;
-        int rows = ${outputShape[1]};
-        int cols = ${outputShape[2]};
+        int rows = ${this.enableShapeUniforms ? 'outShape[1]' : outputShape[1]};
+        int cols = ${this.enableShapeUniforms ? 'outShape[2]' : outputShape[2]};
 
         ${mainLoop}
 
@@ -64032,8 +64376,8 @@ class ReshapePackedProgram {
 
 exports.ReshapePackedProgram = ReshapePackedProgram;
 
-function getReshapedInputCoords(shape) {
-  const coordsFromIndexSnippet = shader_util.getLogicalCoordinatesFromFlatIndex(['r', 'c', 'd'], shape);
+function getReshapedInputCoords(shape, enableShapeUniforms) {
+  const coordsFromIndexSnippet = enableShapeUniforms ? shader_util.getLogicalCoordinatesFromFlatIndexByUniform(['r', 'c', 'd'], 'inputShape') : shader_util.getLogicalCoordinatesFromFlatIndex(['r', 'c', 'd'], shape);
   return `
     ivec3 inputCoordsFromReshapedOutCoords(int index) {
       ${coordsFromIndexSnippet}
@@ -64041,7 +64385,7 @@ function getReshapedInputCoords(shape) {
     }
   `;
 }
-},{"./shader_compiler_util":"tjqy"}],"yk4C":[function(require,module,exports) {
+},{"./gpgpu_math":"eeKH","./shader_compiler_util":"tjqy"}],"yk4C":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -65287,9 +65631,8 @@ class MathBackendWebGL extends _tfjsCore.KernelBackend {
     const afterShapeAs3D = [webgl_util.getBatchDim(afterShape), ...webgl_util.getRowsCols(afterShape)];
     const program = new _reshape_packed_gpu.ReshapePackedProgram(afterShapeAs3D, input3DShape);
     const preventEagerUnpackingOfOutput = true;
-    const output = this.runWebGLProgram(program, [input3D], input.dtype, null
-    /* customUniformValues */
-    , preventEagerUnpackingOfOutput);
+    const customValues = [input3DShape];
+    const output = this.runWebGLProgram(program, [input3D], input.dtype, customValues, preventEagerUnpackingOfOutput);
     return {
       dataId: output.dataId,
       shape: afterShape,
@@ -65306,6 +65649,7 @@ class MathBackendWebGL extends _tfjsCore.KernelBackend {
     } = texData;
     const shapeAs3D = webgl_util.getShapeAs3D(shape);
     let program;
+    const denseTexShape = tex_util.getDenseTexShape(shapeAs3D);
 
     if (isPacked) {
       program = new _decode_matrix_packed_gpu.DecodeMatrixPackedProgram(shapeAs3D);
@@ -65314,13 +65658,12 @@ class MathBackendWebGL extends _tfjsCore.KernelBackend {
     }
 
     const preventEagerUnpackingOfOutput = true;
+    const customValues = [denseTexShape];
     const out = this.runWebGLProgram(program, [{
       shape: shapeAs3D,
       dtype,
       dataId
-    }], dtype, null
-    /* customUniformValues */
-    , preventEagerUnpackingOfOutput);
+    }], dtype, customValues, preventEagerUnpackingOfOutput);
     return {
       dtype,
       shape,
@@ -65577,9 +65920,9 @@ class MathBackendWebGL extends _tfjsCore.KernelBackend {
 
       if (isPacked) {
         [width, height] = tex_util.getPackedMatrixTextureShapeWidthHeight(texShape[0], texShape[1]);
-        program = new _encode_matrix_packed_gpu.EncodeMatrixPackedProgram(shapeAs3D, [height, width], isByteArray);
+        program = new _encode_matrix_packed_gpu.EncodeMatrixPackedProgram(shapeAs3D, isByteArray);
       } else {
-        program = new _encode_matrix_gpu.EncodeMatrixProgram(shapeAs3D, [height, width], isByteArray);
+        program = new _encode_matrix_gpu.EncodeMatrixProgram(shapeAs3D, isByteArray);
       }
 
       const tempDenseInputHandle = this.makeTensorInfo([height, width], dtype);
@@ -65590,11 +65933,12 @@ class MathBackendWebGL extends _tfjsCore.KernelBackend {
         this.texData.get(tempDenseInputHandle.dataId).usage = tex_util.TextureUsage.UPLOAD;
       }
 
-      this.gpgpu.uploadDenseMatrixToTexture(this.getTexture(tempDenseInputHandle.dataId), width, height, values); // We want the output to remain packed regardless of the value of
+      this.gpgpu.uploadDenseMatrixToTexture(this.getTexture(tempDenseInputHandle.dataId), width, height, values);
+      const customValues = [[height, width]]; // We want the output to remain packed regardless of the value of
       // WEBGL_PACK.
 
       const preventEagerUnpacking = true;
-      const encodedOutputTarget = this.runWebGLProgram(program, [tempDenseInputHandle], dtype, null, preventEagerUnpacking); // Have the original texture assume the identity of the encoded output.
+      const encodedOutputTarget = this.runWebGLProgram(program, [tempDenseInputHandle], dtype, customValues, preventEagerUnpacking); // Have the original texture assume the identity of the encoded output.
 
       const outputTexData = this.texData.get(encodedOutputTarget.dataId);
       texData.texture = outputTexData.texture;
@@ -66492,6 +66836,8 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.MatMulPackedProgram = void 0;
 
+var _gpgpu_math = require("./gpgpu_math");
+
 /**
  * @license
  * Copyright 2018 Google LLC. All Rights Reserved.
@@ -66514,6 +66860,7 @@ class MatMulPackedProgram {
     this.packedInputs = true;
     this.packedOutput = true;
     this.outputShape = outputShape;
+    this.enableShapeUniforms = (0, _gpgpu_math.useShapeUniforms)(this.outputShape.length);
     const sharedDim = transposeA ? aShape[1] : aShape[2];
     const sharedDimensionPacked = Math.ceil(sharedDim / 2);
     const aSample = transposeA ? 'i * 2, rc.y' : 'rc.y, i * 2';
@@ -66568,7 +66915,7 @@ class MatMulPackedProgram {
 
     this.userCode = `
       ${activationSnippet}
-
+      // Don't use uniform for sharedDimensionPacked for performance.
       const float sharedDimension = ${sharedDimensionPacked}.0;
 
       vec4 dot2x2ARowBCol(ivec3 rc) {
@@ -66603,7 +66950,7 @@ class MatMulPackedProgram {
 }
 
 exports.MatMulPackedProgram = MatMulPackedProgram;
-},{}],"obKl":[function(require,module,exports) {
+},{"./gpgpu_math":"eeKH"}],"obKl":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -66819,9 +67166,8 @@ function packedReshape(input, afterShape, backend) {
   const afterShapeAs3D = [(0, _webgl_util.getBatchDim)(afterShape), ...(0, _webgl_util.getRowsCols)(afterShape)];
   const program = new _reshape_packed_gpu.ReshapePackedProgram(afterShapeAs3D, input3DShape);
   const preventEagerUnpackingOfOutput = true;
-  const output = backend.runWebGLProgram(program, [input3D], input.dtype, null
-  /* customSetup */
-  , preventEagerUnpackingOfOutput);
+  const customValues = [input3DShape];
+  const output = backend.runWebGLProgram(program, [input3D], input.dtype, customValues, preventEagerUnpackingOfOutput);
   return {
     dataId: output.dataId,
     shape: afterShape,
@@ -68930,15 +69276,25 @@ function argMinMaxReduce(backend, x, axis, reduceType) {
   _tfjsCore.backend_util.assertAxesAreInnerMostDims('arg' + reduceType.charAt(0).toUpperCase() + reduceType.slice(1), axes, x.shape.length);
 
   if (!(0, _tfjsCore.env)().getBool('WEBGL_PACK_REDUCE') || x.shape.length <= 2) {
-    const intermediateTensorInfos = [];
+    const intermediateTensorInfos = []; // Eagerly unpack x input since it is passed in to all the shaders which
+    // require unpacked inputs.
 
-    const [outShape, reduceShape] = _tfjsCore.backend_util.computeOutAndReduceShapes(x.shape, axes);
+    const xtexData = backend.texData.get(x.dataId);
+    const xIsPacked = xtexData !== null && xtexData.isPacked;
+    let xUnPacked = x;
+
+    if (xIsPacked) {
+      xUnPacked = backend.unpackTensor(x);
+      intermediateTensorInfos.push(xUnPacked);
+    }
+
+    const [outShape, reduceShape] = _tfjsCore.backend_util.computeOutAndReduceShapes(xUnPacked.shape, axes);
 
     const inSize = _tfjsCore.util.sizeFromShape(reduceShape);
 
     const a2D = (0, _Reshape.reshape)({
       inputs: {
-        x
+        x: xUnPacked
       },
       backend,
       attrs: {
@@ -72362,6 +72718,8 @@ exports.Im2ColPackedProgram = void 0;
 
 var _glsl_version = require("./glsl_version");
 
+var _gpgpu_math = require("./gpgpu_math");
+
 /**
  * @license
  * Copyright 2019 Google LLC. All Rights Reserved.
@@ -72379,31 +72737,42 @@ var _glsl_version = require("./glsl_version");
  * =============================================================================
  */
 class Im2ColPackedProgram {
-  constructor(outputShape, inputShape, convInfo) {
+  constructor(outputShape, convInfo) {
     this.variableNames = ['A'];
     this.packedInputs = true;
     this.packedOutput = true;
+    this.customUniforms = [{
+      name: 'inputShape',
+      type: 'ivec3'
+    }, {
+      name: 'pad',
+      type: 'ivec2'
+    }, {
+      name: 'stride',
+      type: 'ivec2'
+    }, {
+      name: 'dilation',
+      type: 'ivec2'
+    }, {
+      name: 'inChannels',
+      type: 'int'
+    }, {
+      name: 'itemsPerBlockRow',
+      type: 'int'
+    }, {
+      name: 'outWidth',
+      type: 'int'
+    }];
     this.outputShape = outputShape;
+    this.enableShapeUniforms = (0, _gpgpu_math.useShapeUniforms)(this.outputShape.length);
     const {
-      filterWidth,
-      inChannels,
-      strideWidth,
-      strideHeight,
-      padInfo,
-      outWidth,
-      dilationWidth,
-      dilationHeight,
       dataFormat
     } = convInfo;
-    const {
-      left,
-      top
-    } = padInfo;
-    const itemsPerBlockRow = inChannels * filterWidth;
     const glsl = (0, _glsl_version.getGlslDifferences)();
     const isChannelsLast = dataFormat === 'channelsLast';
     const rowDim = isChannelsLast ? 0 : 1;
     const colDim = isChannelsLast ? 1 : 2;
+    const boundsCheckingSnippet = this.enableShapeUniforms ? 'if(blockIndex < outShape[1] && pos < outShape[0]) {' : `if(blockIndex < ${outputShape[1]} && pos < ${outputShape[0]}) {`;
     let unrolled = ``;
 
     for (let row = 0; row <= 1; row++) {
@@ -72412,18 +72781,21 @@ class Im2ColPackedProgram {
           blockIndex = rc.y + ${col};
           pos = rc.x + ${row};
 
-          if(blockIndex < ${outputShape[1]} && pos < ${outputShape[0]}) {
-            offsetY = int(blockIndex / (${outWidth})) * ${strideHeight} - ${top};
-            d0 = offsetY + ${dilationHeight} * (pos / ${itemsPerBlockRow});
+          ${boundsCheckingSnippet}
+            offsetY = int(blockIndex / outWidth) * stride[0] - pad[0];
+            d0 = offsetY + dilation[0] * (pos / itemsPerBlockRow);
 
-            if(d0 < ${inputShape[rowDim]} && d0 >= 0) {
+            if(d0 < inputShape[${rowDim}] && d0 >= 0) {
+              // Use custom imod instead mod. On Intel GPU, mod may generate
+              // unexpected value.
+              // https://github.com/tensorflow/tfjs/issues/5447
+              offsetX = imod(blockIndex, outWidth) * stride[1] - pad[1];
+              d1 = offsetX + dilation[1] * (imod(pos, itemsPerBlockRow) /
+                  inChannels);
 
-              offsetX = int(mod(float(blockIndex), ${outWidth}.) * ${strideWidth}. - ${left}.);
-              d1 = offsetX + ${dilationWidth} * (int(mod(float(pos), ${itemsPerBlockRow}.) / ${inChannels}.));
+              if(d1 < inputShape[${colDim}] && d1 >= 0) {
 
-              if(d1 < ${inputShape[colDim]} && d1 >= 0) {
-
-                ch = int(mod(float(pos), ${inChannels}.));
+                ch = imod(pos, inChannels);
 
                 if (${isChannelsLast}) {
                   innerDims = vec2(d1, ch);
@@ -72462,7 +72834,7 @@ class Im2ColPackedProgram {
 }
 
 exports.Im2ColPackedProgram = Im2ColPackedProgram;
-},{"./glsl_version":"fXvw"}],"CtO4":[function(require,module,exports) {
+},{"./glsl_version":"fXvw","./gpgpu_math":"eeKH"}],"CtO4":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -72534,72 +72906,31 @@ function conv2dByMatMul({
   const intermediates = []; // TODO: Once reduction ops are packed, batchMatMul will always be packed
   // and we can remove this condition.
 
-  const batchMatMulWillBeUnpacked = (outerShapeX === 1 || outerShapeFilter === 1) && sharedMatMulDim > _BatchMatMul_impl.MATMUL_SHARED_DIM_THRESHOLD;
-  const reshapeWillBeExpensive = xShape[2] % 2 !== 0 && !!xTexData.isPacked;
+  const batchMatMulWillBeUnpacked = (outerShapeX === 1 || outerShapeFilter === 1) && sharedMatMulDim > _BatchMatMul_impl.MATMUL_SHARED_DIM_THRESHOLD; // The algorithm in the if condition assumes (1) the output will be packed,
+  // (2) x is packed, (3) x isChannelsLast, (4)  x's packed texture is already
+  // on GPU, (5) col is odd, (6) the width, height and inChannels are the same
+  // for xTexData.shape and xShape.
 
-  if (batchMatMulWillBeUnpacked || !(0, _tfjsCore.env)().getBool('WEBGL_LAZILY_UNPACK') || !(0, _tfjsCore.env)().getBool('WEBGL_PACK_BINARY_OPERATIONS') || !reshapeWillBeExpensive) {
-    const targetShape = isChannelsLast ? xShape[0] * xShape[1] * xShape[2] : xShape[0] * xShape[2] * xShape[3];
-    const xReshaped = (0, _Reshape.reshape)({
-      inputs: {
-        x
-      },
-      backend,
-      attrs: {
-        shape: [1, targetShape, convInfo.inChannels]
-      }
-    });
-    const filterReshaped = (0, _Reshape.reshape)({
-      inputs: {
-        x: filter
-      },
-      backend,
-      attrs: {
-        shape: [1, convInfo.inChannels, convInfo.outChannels]
-      }
-    });
-    const result = (0, _BatchMatMul_impl.batchMatMulImpl)({
-      a: xReshaped,
-      b: filterReshaped,
-      transposeA,
-      transposeB,
-      backend,
-      bias,
-      activation,
-      preluActivationWeights,
-      leakyreluAlpha
-    });
-    out = (0, _Reshape.reshape)({
-      inputs: {
-        x: result
-      },
-      backend,
-      attrs: {
-        shape: convInfo.outShape
-      }
-    });
-    intermediates.push(xReshaped);
-    intermediates.push(filterReshaped);
-    intermediates.push(result);
-  } else {
-    // Following optimization is specific to packed |x| with odd row count
-    // (For example, in channelLast mode, 'row count' refers to x.shape[2]):
-    // we avoid expensive packed 2x2 reshape by padding row count to next,
-    // even number. When x.shape[2] is odd, the result of packed batchMatMul is
+  const canOptimize = !batchMatMulWillBeUnpacked && xTexData.isPacked && isChannelsLast && xTexData.texture != null && xShape[2] % 2 !== 0 && _tfjsCore.util.arraysEqual(xTexData.shape.slice(-3), xShape.slice(-3));
+
+  if (canOptimize) {
+    // We avoid expensive packed 2x2 reshape by padding col count to next,
+    // even number. When col is odd, the result of packed batchMatMul is
     // the same (has the same texture layout and and values in the texture) as
-    // it is for even x.shape[2] + 1. We make the odd-rows tensor to look like
-    // even-rows tensor before the operation and, after the batchMatMul,
-    // fix the even-rows result to have odd number of rows.
-    const targetShape = isChannelsLast ? xShape[0] * xShape[1] * (xShape[2] + 1) : xShape[0] * xShape[2] * (xShape[3] + 1);
+    // it is for next even col. We make the odd-cols tensor to look like
+    // even-cols tensor before the operation and, after the batchMatMul,
+    // fix the even-cols result to have odd number of cols.
+    const targetShape = xShape[0] * xShape[1] * (xShape[2] + 1);
     const xReshaped = {
       dataId: x.dataId,
       shape: [1, targetShape, convInfo.inChannels],
       dtype: x.dtype
     }; // xTexData.shape gets referenced from GPGPUBinary.inShapeInfos.
-    // Decrementing row count, after batchMatMul->...->compileProgram leads to
-    // invalid row count within the reference in GPGPUBinary.inShapeInfos.
+    // Decrementing col count, after batchMatMul->...->compileProgram leads to
+    // invalid col count within the reference in GPGPUBinary.inShapeInfos.
     // Alternative fix would be to provide a copy to GPGPUBinary.inShapeInfos
     // in compileProgram method, but that would affect compilation of all
-    // programs - instead, provide a copy here, with even row count, before
+    // programs - instead, provide a copy here, with even col count, before
     // calling batchMatMul->...->compileProgram and after that, the original
     // xTexData.shape is restored.
 
@@ -72647,6 +72978,49 @@ function conv2dByMatMul({
     });
     out.shape = convInfo.outShape;
     intermediates.push(pointwiseConv);
+  } else {
+    const targetShape = isChannelsLast ? xShape[0] * xShape[1] * xShape[2] : xShape[0] * xShape[2] * xShape[3];
+    const xReshaped = (0, _Reshape.reshape)({
+      inputs: {
+        x
+      },
+      backend,
+      attrs: {
+        shape: [1, targetShape, convInfo.inChannels]
+      }
+    });
+    const filterReshaped = (0, _Reshape.reshape)({
+      inputs: {
+        x: filter
+      },
+      backend,
+      attrs: {
+        shape: [1, convInfo.inChannels, convInfo.outChannels]
+      }
+    });
+    const result = (0, _BatchMatMul_impl.batchMatMulImpl)({
+      a: xReshaped,
+      b: filterReshaped,
+      transposeA,
+      transposeB,
+      backend,
+      bias,
+      activation,
+      preluActivationWeights,
+      leakyreluAlpha
+    });
+    out = (0, _Reshape.reshape)({
+      inputs: {
+        x: result
+      },
+      backend,
+      attrs: {
+        shape: convInfo.outShape
+      }
+    });
+    intermediates.push(xReshaped);
+    intermediates.push(filterReshaped);
+    intermediates.push(result);
   }
 
   for (const i of intermediates) {
@@ -72709,8 +73083,9 @@ function conv2dWithIm2Row({
   });
   intermediates.push(xSqueezed);
   intermediates.push(w2Row);
-  const im2ColProgram = new _im2col_packed_gpu.Im2ColPackedProgram(x2ColShape, xSqueezed.shape, convInfo);
-  const im2Col = backend.runWebGLProgram(im2ColProgram, [xSqueezed], 'float32');
+  const im2ColProgram = new _im2col_packed_gpu.Im2ColPackedProgram(x2ColShape, convInfo);
+  const customValues = [xSqueezed.shape, [convInfo.padInfo.top, convInfo.padInfo.left], [convInfo.strideHeight, convInfo.strideWidth], [convInfo.dilationHeight, convInfo.dilationWidth], [convInfo.inChannels], [convInfo.filterWidth * convInfo.inChannels], [convInfo.outWidth]];
+  const im2Col = backend.runWebGLProgram(im2ColProgram, [xSqueezed], 'float32', customValues);
   const im2ColReshaped = (0, _Reshape.reshape)({
     inputs: {
       x: im2Col
@@ -74133,6 +74508,8 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.DepthwiseConv2DProgram = void 0;
 
+var _gpgpu_math = require("./gpgpu_math");
+
 /**
  * @license
  * Copyright 2017 Google LLC. All Rights Reserved.
@@ -74152,15 +74529,21 @@ exports.DepthwiseConv2DProgram = void 0;
 class DepthwiseConv2DProgram {
   constructor(convInfo, addBias = false, activation = null, hasPreluActivation = false, hasLeakyReluAlpha = false) {
     this.variableNames = ['x', 'W'];
+    this.customUniforms = [{
+      name: 'pads',
+      type: 'ivec2'
+    }, {
+      name: 'strides',
+      type: 'ivec2'
+    }, {
+      name: 'dilations',
+      type: 'ivec2'
+    }, {
+      name: 'inDims',
+      type: 'ivec2'
+    }];
     this.outputShape = convInfo.outShape;
-    const xNumRows = convInfo.inHeight;
-    const xNumCols = convInfo.inWidth;
-    const padTop = convInfo.padInfo.top;
-    const padLeft = convInfo.padInfo.left;
-    const strideHeight = convInfo.strideHeight;
-    const strideWidth = convInfo.strideWidth;
-    const dilationHeight = convInfo.dilationHeight;
-    const dilationWidth = convInfo.dilationWidth;
+    this.enableShapeUniforms = (0, _gpgpu_math.useShapeUniforms)(this.outputShape.length);
     const filterHeight = convInfo.filterHeight;
     const filterWidth = convInfo.filterWidth;
     const channelMul = convInfo.outChannels / convInfo.inChannels;
@@ -74206,9 +74589,6 @@ class DepthwiseConv2DProgram {
     this.userCode = `
       ${activationSnippet}
 
-      const ivec2 strides = ivec2(${strideHeight}, ${strideWidth});
-      const ivec2 pads = ivec2(${padTop}, ${padLeft});
-
       void main() {
         ivec4 coords = getOutputCoords();
         int batch = coords.x;
@@ -74225,16 +74605,16 @@ class DepthwiseConv2DProgram {
         float dotProd = 0.0;
         // TO DO(dsmilkov): Flatten the two for loops and vec4 the operations.
         for (int wR = 0; wR < ${filterHeight}; wR++) {
-          int xR = xRCorner + wR * ${dilationHeight};
+          int xR = xRCorner + wR * dilations[0];
 
-          if (xR < 0 || xR >= ${xNumRows}) {
+          if (xR < 0 || xR >= inDims[0]) {
             continue;
           }
 
           for (int wC = 0; wC < ${filterWidth}; wC++) {
-            int xC = xCCorner + wC * ${dilationWidth};
+            int xC = xCCorner + wC * dilations[1];
 
-            if (xC < 0 || xC >= ${xNumCols}) {
+            if (xC < 0 || xC >= inDims[1]) {
               continue;
             }
 
@@ -74255,7 +74635,7 @@ class DepthwiseConv2DProgram {
 }
 
 exports.DepthwiseConv2DProgram = DepthwiseConv2DProgram;
-},{}],"s3KE":[function(require,module,exports) {
+},{"./gpgpu_math":"eeKH"}],"s3KE":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -74264,6 +74644,8 @@ Object.defineProperty(exports, "__esModule", {
 exports.DepthwiseConvPacked2DProgram = void 0;
 
 var _tfjsCore = require("@tensorflow/tfjs-core");
+
+var _gpgpu_math = require("./gpgpu_math");
 
 /**
  * @license
@@ -74286,15 +74668,24 @@ class DepthwiseConvPacked2DProgram {
     this.variableNames = ['x', 'W'];
     this.packedInputs = true;
     this.packedOutput = true;
+    this.customUniforms = [{
+      name: 'pads',
+      type: 'ivec2'
+    }, {
+      name: 'strides',
+      type: 'ivec2'
+    }, {
+      name: 'dilations',
+      type: 'ivec2'
+    }, {
+      name: 'inDims',
+      type: 'ivec2'
+    }];
     this.outputShape = convInfo.outShape;
+    this.enableShapeUniforms = (0, _gpgpu_math.useShapeUniforms)(this.outputShape.length);
     const channelMul = convInfo.outChannels / convInfo.inChannels;
-    const xNumRows = convInfo.inHeight;
-    const xNumCols = convInfo.inWidth;
-    const padTop = convInfo.padInfo.top;
     const padLeft = convInfo.padInfo.left;
-    const strideHeight = convInfo.strideHeight;
     const strideWidth = convInfo.strideWidth;
-    const dilationHeight = convInfo.dilationHeight;
     const dilationWidth = convInfo.dilationWidth;
     const filterHeight = convInfo.filterHeight;
     const filterWidth = convInfo.filterWidth;
@@ -74332,15 +74723,14 @@ class DepthwiseConvPacked2DProgram {
       }
 
       mainLoop += `
-        xR = xRCorner + ${r * dilationHeight};
-        if (xR >=0 && xR < ${xNumRows}) {
+        xR = xRCorner + ${r} * dilations[0];
+        if (xR >=0 && xR < inDims[0]) {
       `;
 
       for (let texelC = 0; texelC < (texelsAcross + 1) / 2; texelC++) {
         const colIndex = texelC * 2;
-        const c = colIndex * dilationWidth;
         mainLoop += `
-          xC = xCCorner + ${c};
+          xC = xCCorner + ${colIndex * dilationWidth};
           `;
 
         if (strideWidth === 1) {
@@ -74356,12 +74746,12 @@ class DepthwiseConvPacked2DProgram {
               // - We subtract 2 to access the previous texel.
               mainLoop += `
                 xCOffset = xC + 1;
-                if (xCOffset >= 0 && xCOffset < ${xNumCols} && xTexelC${colIndex}Ready == 0) {
+                if (xCOffset >= 0 && xCOffset < inDims[1] && xTexelC${colIndex}Ready == 0) {
                   xTexelC${colIndex} = getX(batch, xR, xCOffset, d1);
 
                   // Need to manually clear unused channels in case
                   // we're reading from recycled texture.
-                  if (xCOffset + 1 >= ${xNumCols}) {
+                  if (xCOffset + 1 >= inDims[1]) {
                     xTexelC${colIndex}.zw = vec2(0.0);
                   }
                   xTexelC${colIndex}Ready = 1;
@@ -74369,7 +74759,7 @@ class DepthwiseConvPacked2DProgram {
               `; // This texel has been read in previous iteration if the dilation
               // is 1.
 
-              if (dilationWidth === 1 && c > 0) {
+              if (dilationWidth === 1 && colIndex > 0) {
                 mainLoop += `
                 xC${colIndex} = vec4(xTexelC${colIndex - 2}.zw, xTexelC${colIndex}.xy);
                 `;
@@ -74377,12 +74767,12 @@ class DepthwiseConvPacked2DProgram {
                 mainLoop += `
                   xCOffset = xC + 1 - 2;
 
-                  if (xCOffset >= 0 && xCOffset < ${xNumCols}) {
+                  if (xCOffset >= 0 && xCOffset < inDims[1]) {
                     previous = getX(batch, xR, xCOffset, d1);
 
                     // Need to manually clear unused channels in case
                     // we're reading from recycled texture.
-                    if (xCOffset + 1 >= ${xNumCols}) {
+                    if (xCOffset + 1 >= inDims[1]) {
                       previous.zw = vec2(0.0);
                     }
 
@@ -74395,9 +74785,9 @@ class DepthwiseConvPacked2DProgram {
             } else {
               // Padding is even, so xRC corresponds to a single texel.
               mainLoop += `
-                if (xC >= 0 && xC < ${xNumCols} && xTexelC${colIndex}Ready == 0) {
+                if (xC >= 0 && xC < inDims[1] && xTexelC${colIndex}Ready == 0) {
                   xTexelC${colIndex} = getX(batch, xR, xC, d1);
-                  if (xC + 1 >= ${xNumCols}) {
+                  if (xC + 1 >= inDims[1]) {
                     xTexelC${colIndex}.zw = vec2(0.0);
                   }
                   xTexelC${colIndex}Ready = 1;
@@ -74407,7 +74797,7 @@ class DepthwiseConvPacked2DProgram {
                 `;
             }
 
-            if (c + 1 < filterWidth) {
+            if (colIndex + 1 < filterWidth) {
               // If dilation is even, the second entry should match the first
               // (either both are composed or both are single samples). But if
               // dilation is odd, then the second entry should be the opposite
@@ -74417,14 +74807,14 @@ class DepthwiseConvPacked2DProgram {
 
               if (dilationWidth % 2 === 0 && padLeft % 2 === 1 || dilationWidth % 2 !== 0 && padLeft % 2 !== 1) {
                 mainLoop += `
-                  xCOffset = xC + ${padLeft % 2} + ${nextTexelOffset};
+                  xCOffset = xC + imod(pads[1], 2) + ${nextTexelOffset};
 
-                  if (xCOffset >= 0 && xCOffset < ${xNumCols} && xTexelC${colIndex + 1}Ready == 0) {
+                  if (xCOffset >= 0 && xCOffset < inDims[1] && xTexelC${colIndex + 1}Ready == 0) {
                     xTexelC${colIndex + 1} = getX(batch, xR, xCOffset, d1);
 
                     // Need to manually clear unused channels in case
                     // we're reading from recycled texture.
-                    if (xCOffset + 1 >= ${xNumCols}) {
+                    if (xCOffset + 1 >= inDims[1]) {
                       xTexelC${colIndex + 1}.zw = vec2(0.0);
                     }
                     xTexelC${colIndex + 1}Ready = 1;
@@ -74435,7 +74825,7 @@ class DepthwiseConvPacked2DProgram {
                 if (dilationWidth > 1) {
                   mainLoop += `
                     xCOffset -= 2;
-                    if (xCOffset >= 0 && xCOffset < ${xNumCols} && xTexelC${colIndex}Ready == 0) {
+                    if (xCOffset >= 0 && xCOffset < inDims[1] && xTexelC${colIndex}Ready == 0) {
                       xTexelC${colIndex} = getX(batch, xR, xCOffset, d1);
                       xTexelC${colIndex}Ready = 1;
                     }
@@ -74457,9 +74847,9 @@ class DepthwiseConvPacked2DProgram {
                   mainLoop += `
                     xCOffset = xC + ${nextTexelOffset};
 
-                    if (xCOffset >= 0 && xCOffset < ${xNumCols} && xTexelC${colIndex + 1}Ready == 0) {
+                    if (xCOffset >= 0 && xCOffset < inDims[1] && xTexelC${colIndex + 1}Ready == 0) {
                       xTexelC${colIndex + 1} = getX(batch, xR, xCOffset, d1);
-                      if (xCOffset + 1 >= ${xNumCols}) {
+                      if (xCOffset + 1 >= inDims[1]) {
                         xTexelC${colIndex + 1}.zw = vec2(0.0);
                       }
                       xTexelC${colIndex + 1}Ready = 1;
@@ -74473,7 +74863,7 @@ class DepthwiseConvPacked2DProgram {
           }
         } else {
           // stride === 2
-          if (c < filterWidth) {
+          if (colIndex < filterWidth) {
             // Depending on whether padLeft is even or odd, we want either the
             // xy or zw channels from X texels for xC${colIndex}. If padLeft is
             // even, xC${colIndex +1} is simply the zw channels of texels we've
@@ -74483,22 +74873,22 @@ class DepthwiseConvPacked2DProgram {
             // final` initialized below.
             if (padLeft % 2 === 1) {
               mainLoop += `
-                xCOffset = xC + 1 - ${strideWidth};
-                if(xCOffset >= 0 && xCOffset < ${xNumCols} && xTexelC${colIndex}Ready == 0) {
+                xCOffset = xC + 1 - strides[1];
+                if(xCOffset >= 0 && xCOffset < inDims[1] && xTexelC${colIndex}Ready == 0) {
                   xTexelC${colIndex} = getX(batch, xR, xCOffset, d1);
                   // Need to manually clear unused channels in case
                   // we're reading from recycled texture.
-                  if (xCOffset + 1 >= ${xNumCols}) {
+                  if (xCOffset + 1 >= inDims[1]) {
                     xTexelC${colIndex}.zw = vec2(0.0);
                   }
                   xTexelC${colIndex}Ready = 1;
                 }
 
-                if(xC + 1 >= 0 && xC + 1 < ${xNumCols} && xTexelC${colIndex + 1}Ready == 0) {
+                if(xC + 1 >= 0 && xC + 1 < inDims[1] && xTexelC${colIndex + 1}Ready == 0) {
                   xTexelC${colIndex + 1} = getX(batch, xR, xC + 1, d1);
                   // Need to manually clear unused channels in case
                   // we're reading from recycled texture.
-                  if (xC + 2 >= ${xNumCols}) {
+                  if (xC + 2 >= inDims[1]) {
                     xTexelC${colIndex + 1}.zw = vec2(0.0);
                   }
                   xTexelC${colIndex + 1}Ready = 1;
@@ -74507,11 +74897,11 @@ class DepthwiseConvPacked2DProgram {
                 xC${colIndex} = vec4(xTexelC${colIndex}.zw, xTexelC${colIndex + 1}.zw);
               `;
 
-              if (c + 1 < filterWidth) {
+              if (colIndex + 1 < filterWidth) {
                 mainLoop += `
                   final = vec4(0.0);
-                  xCOffset = xC + 1 + ${strideWidth};
-                  if(xCOffset >= 0 && xCOffset < ${xNumCols}) {
+                  xCOffset = xC + 1 + strides[1];
+                  if(xCOffset >= 0 && xCOffset < inDims[1]) {
                     final = getX(batch, xR, xCOffset, d1);
                   }
                   xC${colIndex + 1} = vec4(xTexelC${colIndex + 1}.xy, final.xy);
@@ -74519,18 +74909,18 @@ class DepthwiseConvPacked2DProgram {
               }
             } else {
               mainLoop += `
-                if(xC >= 0 && xC < ${xNumCols} && xTexelC${colIndex}Ready == 0) {
+                if(xC >= 0 && xC < inDims[1] && xTexelC${colIndex}Ready == 0) {
                   xTexelC${colIndex} = getX(batch, xR, xC, d1);
-                  if (xC + 1 >= ${xNumCols}) {
+                  if (xC + 1 >= inDims[1]) {
                     xTexelC${colIndex}.zw = vec2(0.0);
                   }
                   xTexelC${colIndex}Ready = 1;
                 }
 
-                xCOffset = xC + ${strideWidth};
-                if(xCOffset >= 0 && xCOffset < ${xNumCols} && xTexelC${colIndex + 1}Ready == 0) {
+                xCOffset = xC + strides[1];
+                if(xCOffset >= 0 && xCOffset < inDims[1] && xTexelC${colIndex + 1}Ready == 0) {
                   xTexelC${colIndex + 1} = getX(batch, xR, xCOffset, d1);
-                  if (xCOffset + 1 >= ${xNumCols}) {
+                  if (xCOffset + 1 >= inDims[1]) {
                     xTexelC${colIndex + 1}.zw = vec2(0.);
                   }
                   xTexelC${colIndex + 1}Ready = 1;
@@ -74540,7 +74930,7 @@ class DepthwiseConvPacked2DProgram {
                   xTexelC${colIndex}.xy, xTexelC${colIndex + 1}.xy);
               `;
 
-              if (c + 1 < filterWidth) {
+              if (colIndex + 1 < filterWidth) {
                 mainLoop += `
                   xC${colIndex + 1} = vec4(xTexelC${colIndex}.zw, xTexelC${colIndex + 1}.zw);
                 `;
@@ -74555,13 +74945,13 @@ class DepthwiseConvPacked2DProgram {
 
         if (colIndex < filterWidth) {
           mainLoop += `
-            wTexel = getW(${r}, ${c}, d1, q);
+            wTexel = getW(${r}, ${colIndex}, d1, q);
             dotProd += xC${colIndex} * vec4(wTexel.xz, wTexel.xz);
           `;
 
-          if (c + 1 < filterWidth) {
+          if (colIndex + 1 < filterWidth) {
             mainLoop += `
-              wTexel = getW(${r}, ${c + 1}, d1, q);
+              wTexel = getW(${r}, ${colIndex + 1}, d1, q);
               dotProd += xC${colIndex + 1} * vec4(wTexel.xz, wTexel.xz);
             `;
           }
@@ -74613,11 +75003,7 @@ class DepthwiseConvPacked2DProgram {
     this.userCode = `
       ${activationSnippet}
 
-      const ivec2 strides = ivec2(${strideHeight}, ${strideWidth});
-      const ivec2 pads = ivec2(${padTop}, ${padLeft});
-
       void main() {
-
         ivec4 coords = getOutputCoords();
         int batch = coords.x;
         ivec2 xRCCorner = coords.yz * strides - pads;
@@ -74643,7 +75029,7 @@ class DepthwiseConvPacked2DProgram {
 }
 
 exports.DepthwiseConvPacked2DProgram = DepthwiseConvPacked2DProgram;
-},{"@tensorflow/tfjs-core":"kSBl"}],"hBFT":[function(require,module,exports) {
+},{"@tensorflow/tfjs-core":"kSBl","./gpgpu_math":"eeKH"}],"hBFT":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -74710,7 +75096,8 @@ function depthwiseConv2dNative(args) {
     program = new _conv_gpu_depthwise.DepthwiseConv2DProgram(convInfo);
   }
 
-  return backend.runWebGLProgram(program, [x, filter], 'float32');
+  const customValues = [[convInfo.padInfo.top, convInfo.padInfo.left], [convInfo.strideHeight, convInfo.strideWidth], [convInfo.dilationHeight, convInfo.dilationWidth], [convInfo.inHeight, convInfo.inWidth]];
+  return backend.runWebGLProgram(program, [x, filter], 'float32', customValues);
 }
 
 const depthwiseConv2dNativeConfig = {
@@ -76748,7 +77135,8 @@ function fusedDepthwiseConv2D(args) {
     program = new _conv_gpu_depthwise.DepthwiseConv2DProgram(convInfo, hasBias, fusedActivation, hasPreluActivationWeights, hasLeakyreluAlpha);
   }
 
-  const result = backend.runWebGLProgram(program, programInputs, 'float32');
+  const customValues = [[convInfo.padInfo.top, convInfo.padInfo.left], [convInfo.strideHeight, convInfo.strideWidth], [convInfo.dilationHeight, convInfo.dilationWidth], [convInfo.inHeight, convInfo.inWidth]];
+  const result = backend.runWebGLProgram(program, programInputs, 'float32', customValues);
   intermediates.forEach(t => backend.disposeIntermediateTensorInfo(t));
   return result;
 }
@@ -80775,6 +81163,8 @@ var _pad_gpu = require("../pad_gpu");
 
 var _pad_packed_gpu = require("../pad_packed_gpu");
 
+var _Fill = require("./Fill");
+
 /**
  * @license
  * Copyright 2020 Google LLC. All Rights Reserved.
@@ -80804,6 +81194,25 @@ const padV2 = args => {
     paddings,
     constantValue
   } = attrs;
+
+  if (_tfjsCore.util.sizeFromShape(x.shape) === 0) {
+    // Short-circuit the computation, since x doesn't have value, only
+    // the shape is used to compute output shape to pad.
+    const outputShape = paddings.map((p, i) => p[0]
+    /* beforePad */
+    + x.shape[i] + p[1]
+    /* afterPad */
+    );
+    return (0, _Fill.fill)({
+      backend,
+      attrs: {
+        shape: outputShape,
+        value: constantValue,
+        dtype: x.dtype
+      }
+    });
+  }
+
   const program = (0, _tfjsCore.env)().getBool('WEBGL_PACK_ARRAY_OPERATIONS') ? new _pad_packed_gpu.PadPackedProgram(x.shape, paddings, constantValue) : new _pad_gpu.PadProgram(x.shape, paddings, constantValue);
   const customValues = [[constantValue]];
   return backend.runWebGLProgram(program, [x], x.dtype, customValues);
@@ -80816,7 +81225,7 @@ const padV2Config = {
   kernelFunc: padV2
 };
 exports.padV2Config = padV2Config;
-},{"@tensorflow/tfjs-core":"kSBl","../pad_gpu":"RJlw","../pad_packed_gpu":"Q15v"}],"i8M0":[function(require,module,exports) {
+},{"@tensorflow/tfjs-core":"kSBl","../pad_gpu":"RJlw","../pad_packed_gpu":"Q15v","./Fill":"LGba"}],"i8M0":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -82888,6 +83297,8 @@ var _tfjsCore = require("@tensorflow/tfjs-core");
 
 var _kernel_funcs_utils = require("../kernel_utils/kernel_funcs_utils");
 
+var _shared = require("../kernel_utils/shared");
+
 /**
  * @license
  * Copyright 2020 Google LLC. All Rights Reserved.
@@ -82906,7 +83317,9 @@ var _kernel_funcs_utils = require("../kernel_utils/kernel_funcs_utils");
  */
 const SIGMOID = `return 1.0 / (1.0 + exp(-1.0 * x));`;
 const sigmoid = (0, _kernel_funcs_utils.unaryKernelFunc)({
-  opSnippet: SIGMOID
+  opSnippet: SIGMOID,
+  packedOpSnippet: SIGMOID,
+  cpuKernelImpl: _shared.sigmoidImplCPU
 });
 exports.sigmoid = sigmoid;
 const sigmoidConfig = {
@@ -82915,7 +83328,7 @@ const sigmoidConfig = {
   kernelFunc: sigmoid
 };
 exports.sigmoidConfig = sigmoidConfig;
-},{"@tensorflow/tfjs-core":"kSBl","../kernel_utils/kernel_funcs_utils":"ciwP"}],"eg93":[function(require,module,exports) {
+},{"@tensorflow/tfjs-core":"kSBl","../kernel_utils/kernel_funcs_utils":"ciwP","../kernel_utils/shared":"cNPH"}],"eg93":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -83650,6 +84063,8 @@ var _tfjsCore = require("@tensorflow/tfjs-core");
 
 var _kernel_funcs_utils = require("../kernel_utils/kernel_funcs_utils");
 
+var _shared = require("../kernel_utils/shared");
+
 /**
  * @license
  * Copyright 2020 Google LLC. All Rights Reserved.
@@ -83668,7 +84083,9 @@ var _kernel_funcs_utils = require("../kernel_utils/kernel_funcs_utils");
  */
 const SQRT = `return sqrt(x);`;
 const sqrt = (0, _kernel_funcs_utils.unaryKernelFunc)({
-  opSnippet: SQRT
+  opSnippet: SQRT,
+  packedOpSnippet: SQRT,
+  cpuKernelImpl: _shared.sqrtImplCPU
 });
 exports.sqrt = sqrt;
 const sqrtConfig = {
@@ -83677,7 +84094,7 @@ const sqrtConfig = {
   kernelFunc: sqrt
 };
 exports.sqrtConfig = sqrtConfig;
-},{"@tensorflow/tfjs-core":"kSBl","../kernel_utils/kernel_funcs_utils":"ciwP"}],"ELIZ":[function(require,module,exports) {
+},{"@tensorflow/tfjs-core":"kSBl","../kernel_utils/kernel_funcs_utils":"ciwP","../kernel_utils/shared":"cNPH"}],"ELIZ":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -85920,13 +86337,15 @@ function _slicedToArray(arr, i) { return _arrayWithHoles(arr) || _iterableToArra
 
 function _nonIterableRest() { throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
 
-function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
-
-function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
-
 function _iterableToArrayLimit(arr, i) { var _i = arr == null ? null : typeof Symbol !== "undefined" && arr[Symbol.iterator] || arr["@@iterator"]; if (_i == null) return; var _arr = []; var _n = true; var _d = false; var _s, _e; try { for (_i = _i.call(arr); !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"] != null) _i["return"](); } finally { if (_d) throw _e; } } return _arr; }
 
 function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
+
+function _createForOfIteratorHelper(o, allowArrayLike) { var it = typeof Symbol !== "undefined" && o[Symbol.iterator] || o["@@iterator"]; if (!it) { if (Array.isArray(o) || (it = _unsupportedIterableToArray(o)) || allowArrayLike && o && typeof o.length === "number") { if (it) o = it; var i = 0; var F = function F() {}; return { s: F, n: function n() { if (i >= o.length) return { done: true }; return { done: false, value: o[i++] }; }, e: function e(_e2) { throw _e2; }, f: F }; } throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); } var normalCompletion = true, didErr = false, err; return { s: function s() { it = it.call(o); }, n: function n() { var step = it.next(); normalCompletion = step.done; return step; }, e: function e(_e3) { didErr = true; err = _e3; }, f: function f() { try { if (!normalCompletion && it.return != null) it.return(); } finally { if (didErr) throw err; } } }; }
+
+function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
+
+function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
 
 var mainVideo = document.getElementsByClassName("html5-main-video")[0];
 var intervalVideoPlayId;
@@ -86000,6 +86419,13 @@ var imgArray = [{
   "rightEyeToLeft": 37,
   "rightEyeToTop": 33,
   "pixelsBetweenEyes": 35
+}, {
+  "imgWidth": 100,
+  "imgHeight": 45,
+  "url": "/images/anonymous.png",
+  "rightEyeToLeft": 33,
+  "rightEyeToTop": 20,
+  "pixelsBetweenEyes": 25
 }];
 /**
  * Check if URL Change and clear detector interval if we do not watch a video
@@ -86044,6 +86470,10 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
 
   if (request.animation === "skeleton") {
     currentAnimation = "skeleton";
+  } else if (request.animation === "puppetsPlayer") {
+    currentAnimation = "puppetsPlayer";
+  } else if (request.animation === "spiderWeb") {
+    currentAnimation = "spiderWeb";
   } else if (request.animation === "imgCat") {
     usedImageArrayIndex = 0;
     loadImage();
@@ -86058,6 +86488,10 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
     currentAnimation = "img";
   } else if (request.animation === "imgMonkey") {
     usedImageArrayIndex = 3;
+    loadImage();
+    currentAnimation = "img";
+  } else if (request.animation === "imgAnonymous") {
+    usedImageArrayIndex = 4;
     loadImage();
     currentAnimation = "img";
   } else if (request.animation === "particleHandsBall") {
@@ -86099,6 +86533,18 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
   } else if (request.animation === "particlePaintRandomDrift") {
     currentAnimation = "particle";
     particlesEffectType = 9;
+    initParticles();
+  } else if (request.animation === "particleCometThrower") {
+    currentAnimation = "particle";
+    particlesEffectType = 10;
+    initParticles();
+  } else if (request.animation === "particleBodyGlow") {
+    currentAnimation = "particle";
+    particlesEffectType = 11;
+    initParticles();
+  } else if (request.animation === "particleBurningMan") {
+    currentAnimation = "particle";
+    particlesEffectType = 12;
     initParticles();
   }
 });
@@ -86204,20 +86650,13 @@ function initParticles() {
       x: canvas.width / 2,
       y: canvas.height / 2
     };
-    attractionBehaviour = new _protonEngine.default.Attraction(nosePosition, 10, 100); // repulsionBehaviour = new Proton.Repulsion(nosePosition, 30, 350);
-    // crossZoneBehaviour = new Proton.CrossZone(new Proton.RectZone(0, 0, canvas.width, canvas.height), 'cross');
-    // emitter.addBehaviour(attractionBehaviour, repulsionBehaviour, new Proton.Color('random'));
-
+    attractionBehaviour = new _protonEngine.default.Attraction(nosePosition, 10, 100);
     protonEmitterArray[0].addBehaviour(attractionBehaviour, new _protonEngine.default.Color('random'));
-    protonEmitterArray[0].addBehaviour(new _protonEngine.default.Scale(_protonEngine.default.getSpan(.1, .7))); // emitter.addBehaviour(new Proton.Rotate(Proton.getSpan(0, 180), Proton.getSpan(-5, 5), 'add'));
-
+    protonEmitterArray[0].addBehaviour(new _protonEngine.default.Scale(_protonEngine.default.getSpan(.1, .7)));
     protonEmitterArray[0].p.x = canvas.width / 2;
     protonEmitterArray[0].p.y = canvas.height / 2;
     protonEmitterArray[0].emit('once');
-    proton.addEmitter(protonEmitterArray[0]); // var renderer = new Proton.WebGLRenderer(canvas);
-    // renderer.blendFunc("SRC_ALPHA", "ONE")
-    // proton.addRenderer(renderer);
-    // tryWebGLRendererInit();
+    proton.addEmitter(protonEmitterArray[0]);
 
     var _renderer = new _protonEngine.default.CanvasRenderer(canvas);
 
@@ -86262,7 +86701,7 @@ function initParticles() {
 
     proton.addRenderer(_renderer3);
   } else if (particlesEffectType === 6) {
-    // ### points glow
+    // ### upper body glow
     proton = new _protonEngine.default();
 
     var _particleImage3 = new Image();
@@ -86280,7 +86719,7 @@ function initParticles() {
 
     tryWebGLRendererInit();
   } else if (particlesEffectType === 7) {
-    // ### points glow
+    // ### glow painting
     proton = new _protonEngine.default();
 
     var _particleImage4 = new Image();
@@ -86294,7 +86733,7 @@ function initParticles() {
 
     tryWebGLRendererInit();
   } else if (particlesEffectType === 8) {
-    // ### points glow
+    // ### particle painting
     proton = new _protonEngine.default();
 
     var _particleImage5 = new Image();
@@ -86308,7 +86747,7 @@ function initParticles() {
 
     tryWebGLRendererInit();
   } else if (particlesEffectType === 9) {
-    // ### points glow
+    // ### particle painting with random drift
     proton = new _protonEngine.default();
 
     var _particleImage6 = new Image();
@@ -86321,13 +86760,108 @@ function initParticles() {
     };
 
     tryWebGLRendererInit();
+  } else if (particlesEffectType === 10) {
+    // ### particleCometThrower
+    proton = new _protonEngine.default();
+    var imageComet1 = new Image();
+    imageComet1.src = chrome.runtime.getURL("/images/Comet_1.png");
+
+    imageComet1.onload = function () {
+      createEmitterCometThrower(0, imageComet1);
+    };
+
+    var imageComet2 = new Image();
+    imageComet2.src = chrome.runtime.getURL("/images/Comet_2.png");
+
+    imageComet2.onload = function () {
+      createEmitterCometThrower(1, imageComet2);
+    };
+
+    var _renderer4 = new _protonEngine.default.CanvasRenderer(canvas);
+
+    _renderer4.onProtonUpdate = function () {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+    };
+
+    proton.addRenderer(_renderer4);
+  } else if (particlesEffectType === 11) {
+    // ### body glow
+    proton = new _protonEngine.default();
+
+    var _particleImage7 = new Image();
+
+    _particleImage7.src = chrome.runtime.getURL("/images/particle.png");
+
+    _particleImage7.onload = function () {
+      createEmitterPointGlow(0, "#4F1500", "#e7af22", 90, _particleImage7);
+      createEmitterPointGlow(1, "#4F1500", "#0029FF", 65, _particleImage7);
+      createEmitterPointGlow(2, "#4F1500", "#6974f8", 0, _particleImage7);
+      createEmitterPointGlow(3, "#4F1500", "#59b9e3", 0, _particleImage7);
+      createEmitterPointGlow(4, "#4F1500", "#aa40e0", -65, _particleImage7);
+      createEmitterPointGlow(5, "#4F1500", "#32fd16", -90, _particleImage7);
+      createEmitterPointGlow(6, "#031a17", "#e7af22", 90, _particleImage7);
+      createEmitterPointGlow(7, "#44011b", "#0029FF", 65, _particleImage7);
+      createEmitterPointGlow(8, "#493b01", "#6974f8", 0, _particleImage7);
+      createEmitterPointGlow(9, "#0e0601", "#5cff24", -90, _particleImage7);
+      createEmitterPointGlow(10, "#054b01", "#aa40e0", -65, _particleImage7);
+      createEmitterPointGlow(11, "#1e012c", "#32fd16", 0, _particleImage7);
+    };
+
+    tryWebGLRendererInit();
+  } else if (particlesEffectType === 12) {
+    // ### burning man
+    proton = new _protonEngine.default();
+
+    var _particleImage8 = new Image();
+
+    _particleImage8.src = chrome.runtime.getURL("/images/particle.png");
+
+    _particleImage8.onload = function () {
+      createEmitterPointGlow(0, "#C97024", "#290000", 90, _particleImage8);
+      createEmitterPointGlow(1, "#C97024", "#290000", 65, _particleImage8);
+      createEmitterPointGlow(2, "#C97024", "#290000", 0, _particleImage8);
+      createEmitterPointGlow(3, "#C97024", "#290000", 0, _particleImage8);
+      createEmitterPointGlow(4, "#C97024", "#290000", -65, _particleImage8);
+      createEmitterPointGlow(5, "#C97024", "#290000", -90, _particleImage8);
+      createEmitterPointGlow(6, "#C97024", "#290000", 90, _particleImage8);
+      createEmitterPointGlow(7, "#C97024", "#290000", 65, _particleImage8);
+      createEmitterPointGlow(8, "#C97024", "#290000", 0, _particleImage8);
+      createEmitterPointGlow(9, "#C97024", "#290000", -90, _particleImage8);
+      createEmitterPointGlow(10, "#C97024", "#290000", -65, _particleImage8);
+      createEmitterPointGlow(11, "#C97024", "#290000", 0, _particleImage8);
+      createEmitterPointGlow(12, "#C97024", "#290000", 225, _particleImage8);
+      createEmitterPointGlow(13, "#C97024", "#290000", -225, _particleImage8);
+      createEmitterPointGlow(14, "#C97024", "#290000", -65, _particleImage8);
+      createEmitterPointGlow(15, "#C97024", "#290000", 65, _particleImage8);
+      createEmitterPointGlow(16, "#C97024", "#290000", 0, _particleImage8);
+      createEmitterPointGlow(17, "#C97024", "#290000", 65, _particleImage8);
+      createEmitterPointGlow(18, "#C97024", "#290000", -65, _particleImage8);
+    };
+
+    tryWebGLRendererInit();
   }
+}
+
+function createEmitterCometThrower(emitterIndex, image) {
+  protonEmitterArray[emitterIndex] = new _protonEngine.default.Emitter();
+  protonEmitterArray[emitterIndex].rate = new _protonEngine.default.Rate(new _protonEngine.default.Span(2, 5), .05);
+  protonEmitterArray[emitterIndex].addInitialize(new _protonEngine.default.Body(image, 20, 40));
+  protonEmitterArray[emitterIndex].addInitialize(new _protonEngine.default.Mass(1));
+  protonEmitterArray[emitterIndex].addInitialize(new _protonEngine.default.Life(1.5, 2.2));
+  protonEmitterArray[emitterIndex].addInitialize(new _protonEngine.default.Velocity(2, _protonEngine.default.getSpan(0, 360), 'polar'));
+  protonEmitterArray[emitterIndex].addBehaviour(new _protonEngine.default.Rotate());
+  protonEmitterArray[emitterIndex].addBehaviour(new _protonEngine.default.Gravity(3));
+  protonEmitterArray[emitterIndex].addBehaviour(new _protonEngine.default.Alpha(0.6, 1)); // protonEmitterArray[emitterIndex].addBehaviour(new Proton.CrossZone(new Proton.RectZone(0, 0, canvas.width, canvas.height), 'bound'));
+
+  protonEmitterArray[emitterIndex].p.x = canvas.width / 2;
+  protonEmitterArray[emitterIndex].p.y = canvas.height / 2;
+  proton.addEmitter(protonEmitterArray[emitterIndex]);
+  protonEmitterArray[emitterIndex].emit();
 }
 
 function createEmitterPointDrawRandomDrift(emitterIndex, colorT, colorE, angle, image) {
   protonEmitterArray[emitterIndex] = new _protonEngine.default.Emitter();
-  protonEmitterArray[emitterIndex].rate = new _protonEngine.default.Rate(new _protonEngine.default.Span(.1, .2), new _protonEngine.default.Span(.01, .015)); // protonEmitterArray[emitterIndex].rate = new Proton.Rate(new Proton.Span(3, 6), new Proton.Span(.15, .3));
-
+  protonEmitterArray[emitterIndex].rate = new _protonEngine.default.Rate(new _protonEngine.default.Span(.1, .2), new _protonEngine.default.Span(.01, .015));
   protonEmitterArray[emitterIndex].addInitialize(new _protonEngine.default.Mass(10));
   protonEmitterArray[emitterIndex].addInitialize(new _protonEngine.default.Life(1, 2));
   protonEmitterArray[emitterIndex].addInitialize(new _protonEngine.default.Body(image, 4));
@@ -86440,8 +86974,7 @@ function createImageEmitter(x, y, color1, color2) {
 
   particleImage.onload = function () {
     emitter.addInitialize(new _protonEngine.default.Body(particleImage, 32));
-  }; // emitter.addInitialize(new Proton.Body(['image/particle.png'], 32));
-
+  };
 
   emitter.addInitialize(new _protonEngine.default.Radius(40));
   emitter.addBehaviour(new _protonEngine.default.Alpha(1, 0));
@@ -86547,29 +87080,103 @@ function updateParticles(keypoints) {
       break;
 
     case 7:
-      protonEmitterArray[0].p.x = keypoints[9].x;
-      protonEmitterArray[0].p.y = keypoints[9].y;
-      protonEmitterArray[1].p.x = keypoints[10].x;
-      protonEmitterArray[1].p.y = keypoints[10].y;
+      leftRightWristUpdate(keypoints);
       break;
 
     case 8:
-      protonEmitterArray[0].p.x = keypoints[9].x;
-      protonEmitterArray[0].p.y = keypoints[9].y;
-      protonEmitterArray[1].p.x = keypoints[10].x;
-      protonEmitterArray[1].p.y = keypoints[10].y;
+      leftRightWristUpdate(keypoints);
       break;
 
     case 9:
+      leftRightWristUpdate(keypoints);
+      break;
+
+    case 10:
+      leftRightWristUpdate(keypoints);
+      break;
+
+    case 11:
       protonEmitterArray[0].p.x = keypoints[9].x;
       protonEmitterArray[0].p.y = keypoints[9].y;
-      protonEmitterArray[1].p.x = keypoints[10].x;
-      protonEmitterArray[1].p.y = keypoints[10].y;
+      protonEmitterArray[1].p.x = keypoints[7].x;
+      protonEmitterArray[1].p.y = keypoints[7].y;
+      protonEmitterArray[2].p.x = keypoints[5].x;
+      protonEmitterArray[2].p.y = keypoints[5].y;
+      protonEmitterArray[3].p.x = keypoints[6].x;
+      protonEmitterArray[3].p.y = keypoints[6].y;
+      protonEmitterArray[4].p.x = keypoints[8].x;
+      protonEmitterArray[4].p.y = keypoints[8].y;
+      protonEmitterArray[5].p.x = keypoints[10].x;
+      protonEmitterArray[5].p.y = keypoints[10].y;
+      protonEmitterArray[6].p.x = keypoints[11].x;
+      protonEmitterArray[6].p.y = keypoints[11].y;
+      protonEmitterArray[7].p.x = keypoints[13].x;
+      protonEmitterArray[7].p.y = keypoints[13].y;
+      protonEmitterArray[8].p.x = keypoints[15].x;
+      protonEmitterArray[8].p.y = keypoints[15].y;
+      protonEmitterArray[9].p.x = keypoints[12].x;
+      protonEmitterArray[9].p.y = keypoints[12].y;
+      protonEmitterArray[10].p.x = keypoints[14].x;
+      protonEmitterArray[10].p.y = keypoints[14].y;
+      protonEmitterArray[11].p.x = keypoints[16].x;
+      protonEmitterArray[11].p.y = keypoints[16].y;
+      break;
+
+    case 12:
+      protonEmitterArray[0].p.x = keypoints[9].x;
+      protonEmitterArray[0].p.y = keypoints[9].y;
+      protonEmitterArray[1].p.x = keypoints[7].x;
+      protonEmitterArray[1].p.y = keypoints[7].y;
+      protonEmitterArray[2].p.x = keypoints[5].x;
+      protonEmitterArray[2].p.y = keypoints[5].y;
+      protonEmitterArray[3].p.x = keypoints[6].x;
+      protonEmitterArray[3].p.y = keypoints[6].y;
+      protonEmitterArray[4].p.x = keypoints[8].x;
+      protonEmitterArray[4].p.y = keypoints[8].y;
+      protonEmitterArray[5].p.x = keypoints[10].x;
+      protonEmitterArray[5].p.y = keypoints[10].y;
+      protonEmitterArray[6].p.x = keypoints[11].x;
+      protonEmitterArray[6].p.y = keypoints[11].y;
+      protonEmitterArray[7].p.x = keypoints[13].x;
+      protonEmitterArray[7].p.y = keypoints[13].y;
+      protonEmitterArray[8].p.x = keypoints[15].x;
+      protonEmitterArray[8].p.y = keypoints[15].y;
+      protonEmitterArray[9].p.x = keypoints[12].x;
+      protonEmitterArray[9].p.y = keypoints[12].y;
+      protonEmitterArray[10].p.x = keypoints[14].x;
+      protonEmitterArray[10].p.y = keypoints[14].y;
+      protonEmitterArray[11].p.x = keypoints[16].x;
+      protonEmitterArray[11].p.y = keypoints[16].y;
+      protonEmitterArray[12].p.x = keypoints[5].x;
+      protonEmitterArray[12].p.y = keypoints[5].y;
+      protonEmitterArray[13].p.x = keypoints[6].x;
+      protonEmitterArray[13].p.y = keypoints[6].y;
+      protonEmitterArray[14].p.x = keypoints[15].x;
+      protonEmitterArray[14].p.y = keypoints[15].y;
+      protonEmitterArray[15].p.x = keypoints[16].x;
+      protonEmitterArray[15].p.y = keypoints[16].y;
+      protonEmitterArray[16].p.x = keypoints[0].x;
+      protonEmitterArray[16].p.y = keypoints[0].y;
+      protonEmitterArray[17].p.x = keypoints[3].x;
+      protonEmitterArray[17].p.y = keypoints[3].y;
+      protonEmitterArray[18].p.x = keypoints[4].x;
+      protonEmitterArray[18].p.y = keypoints[4].y;
       break;
 
     default:
       break;
   }
+}
+/**
+ * Update proton emitter position for left/right wrist from keypoint detection
+ */
+
+
+function leftRightWristUpdate(keypoints) {
+  protonEmitterArray[0].p.x = keypoints[9].x;
+  protonEmitterArray[0].p.y = keypoints[9].y;
+  protonEmitterArray[1].p.x = keypoints[10].x;
+  protonEmitterArray[1].p.y = keypoints[10].y;
 }
 /**
  * Particle animation frame
@@ -86604,7 +87211,8 @@ function clearWebGL() {
 function loadImage() {
   img.src = chrome.runtime.getURL(imgArray[usedImageArrayIndex].url);
 
-  img.onload = function () {};
+  img.onload = function () {// This is intentional
+  };
 }
 /**
  * Video event listener.
@@ -86638,8 +87246,8 @@ mainVideo.addEventListener('loadeddata', function (event) {
         canvas.width = 600;
       }
 
-      var playlerContainerDIV = document.getElementById("player-container");
-      playlerContainerDIV.appendChild(canvas); // adds the canvas to the body element
+      var videoContainerDIV = document.getElementsByClassName("html5-video-container")[0];
+      videoContainerDIV.appendChild(canvas); // adds the canvas to the body element
 
       setCanvasStyle(canvas);
       ctx = canvas.getContext('2d');
@@ -86659,9 +87267,9 @@ mainVideo.addEventListener('loadeddata', function (event) {
         canvasGL.width = 600;
       }
 
-      var _playlerContainerDIV = document.getElementById("player-container");
+      var _videoContainerDIV = document.getElementsByClassName("html5-video-container")[0];
 
-      _playlerContainerDIV.appendChild(canvasGL); // adds the canvas to the body element
+      _videoContainerDIV.appendChild(canvasGL); // adds the canvas to the body element
 
 
       setCanvasStyle(canvasGL);
@@ -86684,13 +87292,23 @@ mainVideo.addEventListener('loadeddata', function (event) {
             if (pose !== undefined && pose[0] !== undefined && pose[0].keypoints !== undefined) {
               if (currentAnimation === "skeleton") {
                 ctx.clearRect(0, 0, canvas.width, canvas.height);
-                drawKeyPoints(pose[0].keypoints, ctx);
-                drawSkeleton(pose[0].keypoints, ctx);
+                drawKeyPoints(pose[0].keypoints);
+                drawSkeleton(pose[0].keypoints);
+              }
+
+              if (currentAnimation === "puppetsPlayer") {
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                drawPuppets(pose[0].keypoints);
+              }
+
+              if (currentAnimation === "spiderWeb") {
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                drawSpiderWeb(pose[0].keypoints);
               }
 
               if (currentAnimation === "img") {
                 ctx.clearRect(0, 0, canvas.width, canvas.height);
-                drawImage(pose[0].keypoints, ctx);
+                drawImage(pose[0].keypoints);
               }
 
               if (currentAnimation === "particle") {
@@ -86726,7 +87344,7 @@ var resizeObserver = new ResizeObserver(function (entries) {
   webGLtx.height = entries[0].target.clientHeight - 50;
 });
 
-function drawImage(keypoints, ctx) {
+function drawImage(keypoints) {
   if (keypoints !== undefined) {
     var spaceBetweenRightLeftEye = keypoints[1].x - keypoints[2].x;
     var ratio = spaceBetweenRightLeftEye / imgArray[usedImageArrayIndex].pixelsBetweenEyes;
@@ -86735,17 +87353,26 @@ function drawImage(keypoints, ctx) {
   }
 }
 
-function drawKeyPoints(keypoints, ctx) {
-  for (var i = 0; i < keypoints.length; i++) {
-    var keypoint = keypoints[i];
-    ctx.beginPath();
-    ctx.arc(keypoint.x, keypoint.y, 2, 0, 2 * Math.PI);
-    ctx.fillStyle = 'blue';
-    ctx.fill();
+function drawKeyPoints(keypoints) {
+  var _iterator = _createForOfIteratorHelper(keypoints),
+      _step;
+
+  try {
+    for (_iterator.s(); !(_step = _iterator.n()).done;) {
+      var keypoint = _step.value;
+      ctx.beginPath();
+      ctx.arc(keypoint.x, keypoint.y, 2, 0, 2 * Math.PI);
+      ctx.fillStyle = 'blue';
+      ctx.fill();
+    }
+  } catch (err) {
+    _iterator.e(err);
+  } finally {
+    _iterator.f();
   }
 }
 
-function drawSkeleton(keypoints, ctx) {
+function drawSkeleton(keypoints) {
   ctx.fillStyle = 'white';
   ctx.strokeStyle = 'red';
   ctx.lineWidth = 1;
@@ -86768,6 +87395,49 @@ function drawSkeleton(keypoints, ctx) {
       ctx.stroke();
     }
   });
+}
+
+function drawPuppets(keypoints) {
+  ctx.fillStyle = 'white';
+  ctx.strokeStyle = 'blue';
+  ctx.lineWidth = 2;
+  drawLine(keypoints[10].x, keypoints[10].y, keypoints[10].x, 0);
+  drawLine(keypoints[9].x, keypoints[9].y, keypoints[9].x, 0);
+  drawLine(keypoints[0].x, keypoints[0].y, keypoints[0].x, 0);
+  drawLine(keypoints[6].x, keypoints[6].y, keypoints[6].x, 0);
+  drawLine(keypoints[5].x, keypoints[5].y, keypoints[5].x, 0);
+  drawLine(keypoints[15].x, keypoints[15].y, keypoints[15].x, 0);
+  drawLine(keypoints[16].x, keypoints[16].y, keypoints[16].x, 0);
+}
+
+function drawLine(startX, startY, endX, endY) {
+  ctx.beginPath();
+  ctx.moveTo(startX, startY);
+  ctx.lineTo(endX, endY);
+  ctx.stroke();
+}
+
+function drawSpiderWeb(keypoints) {
+  ctx.fillStyle = 'white';
+  ctx.strokeStyle = 'yellow';
+  ctx.lineWidth = 2;
+  drawLine(keypoints[0].x, keypoints[0].y, canvas.width / 2, 0);
+  drawLine(keypoints[1].x, keypoints[1].y, canvas.width / 2 * (1 + 0.25), 0);
+  drawLine(keypoints[3].x, keypoints[3].y, canvas.width / 2 * (1 + 0.5), 0);
+  drawLine(keypoints[2].x, keypoints[2].y, canvas.width / 2 * (1 - 0.25), 0);
+  drawLine(keypoints[4].x, keypoints[4].y, canvas.width / 2 * (1 - 0.5), 0);
+  drawLine(keypoints[6].x, keypoints[6].y, 0, canvas.height / 2 * (1 - 0.5));
+  drawLine(keypoints[8].x, keypoints[8].y, 0, canvas.height / 2 * (1 - 0.25));
+  drawLine(keypoints[9].x, keypoints[9].y, canvas.width, canvas.height / 2);
+  drawLine(keypoints[10].x, keypoints[10].y, 0, canvas.height / 2);
+  drawLine(keypoints[12].x, keypoints[12].y, 0, canvas.height / 2 * (1 + 0.3));
+  drawLine(keypoints[14].x, keypoints[14].y, 0, canvas.height / 2 * (1 + 0.6));
+  drawLine(keypoints[16].x, keypoints[16].y, 0, canvas.height / 2 * (1 + 0.9));
+  drawLine(keypoints[5].x, keypoints[5].y, canvas.width, canvas.height / 2 * (1 - 0.5));
+  drawLine(keypoints[7].x, keypoints[7].y, canvas.width, canvas.height / 2 * (1 - 0.25));
+  drawLine(keypoints[11].x, keypoints[11].y, canvas.width, canvas.height / 2 * (1 + 0.3));
+  drawLine(keypoints[13].x, keypoints[13].y, canvas.width, canvas.height / 2 * (1 + 0.6));
+  drawLine(keypoints[15].x, keypoints[15].y, canvas.width, canvas.height / 2 * (1 + 0.9));
 }
 },{"regenerator-runtime/runtime":"QVnC","@tensorflow-models/pose-detection":"CoLD","@tensorflow/tfjs-backend-webgl":"gNVZ","proton-engine":"l8qd"}]},{},["pILq"], null)
 //# sourceMappingURL=/content.js.map
