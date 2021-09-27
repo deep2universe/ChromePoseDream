@@ -1,6 +1,6 @@
 # YouTube pose dream
 ![Teaser](assets/teaser.gif)  
-Some examples from this video: [Fatboy Slim - praise you - wedding music video, BEST Marryoke wedding music video ever !!!](https://www.youtube.com/watch?v=eRjUmsB9lMk)  
+Some examples from this [Video source](https://www.youtube.com/watch?v=eRjUmsB9lMk)    
 
 ![Logo](assets/logo128.png)  
 _The logo was designed by a 3 year old girl._
@@ -75,7 +75,12 @@ We use these keypoints to place animations or static content in the video.
 
 After the installation you can select the following visualizations via the extension menu.  
 You can change the visualization while the video is playing.  
-![popup menu](assets/popup.png)
+![popup menu](assets/popup.png)  
+
+Or you can change the visualization directly in the video player.  
+This also works in full screen mode.   
+With the new button the popup can be displayed or disabled.  
+![player popup](assets/playerPopup.png)  
 
 
 The video [Fatboy Slim ft. Bootsy Collins - Weapon Of Choice Official 4k Video](https://www.youtube.com/watch?v=wCDIYvFmgW8) was used for all screenshots.
@@ -285,7 +290,6 @@ The following is still on the TODO list:
 - Fill settings page with content (default animation, disable extension, language settings etc.)
 - Publish to Chrome extension store.
 - Check size changes during video playback.
-- Enlarge the drawing canvas area over the whole video and move the video control bar down.
 - Clean up code.
 - Add support for [three.proton](https://github.com/drawcall/three.proton/) to enable 3D particles.
 - Check content.js video event listener, - sometimes you have to reload the page to start pose dream.

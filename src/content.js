@@ -41,8 +41,12 @@ var rightHandPosition = {
 var conf = { radius: 170, tha: 0 };
 var isParticleInit=false; // only once init the particle system
 var rendererGL;
+var startParticleInit=true; //
 
 var startTick=false;
+
+// Player popup initial don't show
+var showPlayerPopup=false;
 
 
 // Config images to replace face
@@ -126,110 +130,112 @@ function onUrlChange() {
  */
 chrome.runtime.onMessage.addListener(
     function(request, sender, sendResponse) {
-        clearWebGL();
-        if (request.animation === "skeleton"){
-            currentAnimation="skeleton";
-
-        }else if (request.animation === "puppetsPlayer"){
-            currentAnimation="puppetsPlayer";
-
-        }else if (request.animation === "spiderWeb"){
-            currentAnimation="spiderWeb";
-
-        }else if(request.animation === "imgCat"){
-            usedImageArrayIndex=0;
-            loadImage();
-            currentAnimation="img";
-
-        }else if(request.animation === "imgSmiley"){
-            usedImageArrayIndex=1;
-            loadImage();
-            currentAnimation="img";
-
-        }else if(request.animation === "imgSun"){
-            usedImageArrayIndex=2;
-            loadImage();
-            currentAnimation="img";
-
-        }else if(request.animation === "imgMonkey") {
-            usedImageArrayIndex = 3;
-            loadImage();
-            currentAnimation = "img";
-        }else if(request.animation === "imgAnonymous"){
-            usedImageArrayIndex=4;
-            loadImage();
-            currentAnimation="img";
-
-        }else if(request.animation === "particleHandsBall"){
-            currentAnimation="particle";
-            particlesEffectType=0;
-            initParticles();
-
-        }else if(request.animation === "particle2BalHead"){
-            currentAnimation="particle";
-            particlesEffectType=1;
-            initParticles();
-
-        }else if(request.animation === "particleRightHandLine"){
-            currentAnimation="particle";
-            particlesEffectType=2;
-            initParticles();
-
-        }else if(request.animation === "particleNoseGravity"){
-            currentAnimation="particle";
-            particlesEffectType=3;
-            initParticles();
-
-        }else if(request.animation === "particleNoseSupernova"){
-            currentAnimation="particle";
-            particlesEffectType=4;
-            initParticles();
-
-        }else if(request.animation === "particleHandsTrackFromBorder"){
-            currentAnimation="particle";
-            particlesEffectType=5;
-            initParticles();
-
-        }else if(request.animation === "particleUpperBodyGlow"){
-            currentAnimation="particle";
-            particlesEffectType=6;
-            initParticles();
-
-        }else if(request.animation === "particleGlowPainting"){
-            currentAnimation="particle";
-            particlesEffectType=7;
-            initParticles();
-
-        }else if(request.animation === "particlePainting"){
-            currentAnimation="particle";
-            particlesEffectType=8;
-            initParticles();
-
-        }else if(request.animation === "particlePaintRandomDrift"){
-            currentAnimation="particle";
-            particlesEffectType=9;
-            initParticles();
-
-        }else if(request.animation === "particleCometThrower"){
-            currentAnimation="particle";
-            particlesEffectType=10;
-            initParticles();
-
-        }else if(request.animation === "particleBodyGlow"){
-            currentAnimation="particle";
-            particlesEffectType=11;
-            initParticles();
-
-        }else if(request.animation === "particleBurningMan"){
-            currentAnimation="particle";
-            particlesEffectType=12;
-            initParticles();
-
-        }
-
-
+        setNewAnimation(request.animation);
     }
 );
+
+function setNewAnimation(animationId){
+    clearWebGL();
+    if (animationId === "skeleton"){
+        currentAnimation="skeleton";
+
+    }else if (animationId === "puppetsPlayer"){
+        currentAnimation="puppetsPlayer";
+
+    }else if (animationId === "spiderWeb"){
+        currentAnimation="spiderWeb";
+
+    }else if(animationId === "imgCat"){
+        usedImageArrayIndex=0;
+        loadImage();
+        currentAnimation="img";
+
+    }else if(animationId === "imgSmiley"){
+        usedImageArrayIndex=1;
+        loadImage();
+        currentAnimation="img";
+
+    }else if(animationId === "imgSun"){
+        usedImageArrayIndex=2;
+        loadImage();
+        currentAnimation="img";
+
+    }else if(animationId === "imgMonkey") {
+        usedImageArrayIndex = 3;
+        loadImage();
+        currentAnimation = "img";
+    }else if(animationId === "imgAnonymous"){
+        usedImageArrayIndex=4;
+        loadImage();
+        currentAnimation="img";
+
+    }else if(animationId === "particleHandsBall"){
+        currentAnimation="particle";
+        particlesEffectType=0;
+        initParticles();
+
+    }else if(animationId === "particle2BalHead"){
+        currentAnimation="particle";
+        particlesEffectType=1;
+        initParticles();
+
+    }else if(animationId === "particleRightHandLine"){
+        currentAnimation="particle";
+        particlesEffectType=2;
+        initParticles();
+
+    }else if(animationId === "particleNoseGravity"){
+        currentAnimation="particle";
+        particlesEffectType=3;
+        initParticles();
+
+    }else if(animationId === "particleNoseSupernova"){
+        currentAnimation="particle";
+        particlesEffectType=4;
+        initParticles();
+
+    }else if(animationId === "particleHandsTrackFromBorder"){
+        currentAnimation="particle";
+        particlesEffectType=5;
+        initParticles();
+
+    }else if(animationId === "particleUpperBodyGlow"){
+        currentAnimation="particle";
+        particlesEffectType=6;
+        initParticles();
+
+    }else if(animationId === "particleGlowPainting"){
+        currentAnimation="particle";
+        particlesEffectType=7;
+        initParticles();
+
+    }else if(animationId === "particlePainting"){
+        currentAnimation="particle";
+        particlesEffectType=8;
+        initParticles();
+
+    }else if(animationId === "particlePaintRandomDrift"){
+        currentAnimation="particle";
+        particlesEffectType=9;
+        initParticles();
+
+    }else if(animationId === "particleCometThrower"){
+        currentAnimation="particle";
+        particlesEffectType=10;
+        initParticles();
+
+    }else if(animationId === "particleBodyGlow"){
+        currentAnimation="particle";
+        particlesEffectType=11;
+        initParticles();
+
+    }else if(animationId === "particleBurningMan"){
+        currentAnimation="particle";
+        particlesEffectType=12;
+        initParticles();
+
+    }
+}
 
 /**
  * Prepare particle system
@@ -238,6 +244,8 @@ function initParticles(){
     if(!currentAnimation.startsWith("particle")){
         return;
     }
+    startParticleInit=true;
+
     protonEmitterArray = [];
 
     // clear canvas2D content
@@ -512,6 +520,7 @@ function initParticles(){
 
         tryWebGLRendererInit();
     }
+    startParticleInit=false;
 
 }
 
@@ -686,6 +695,10 @@ function createImageEmitter(x, y, color1, color2) {
  */
 function updateParticles(keypoints){
     if(keypoints === undefined){
+        return;
+    }
+
+    if(startParticleInit===true){
         return;
     }
 
@@ -868,7 +881,7 @@ function tick() {
         return;
     }
     if(proton !== null){
-        proton.update();
+       proton.update();
     }
 }
 
@@ -896,23 +909,70 @@ function loadImage() {
  */
 mainVideo.addEventListener('loadeddata', (event) => {
 
-    function setCanvasStyle(tmpCanvas) {
-        tmpCanvas.style.position = "absolute";
-        tmpCanvas.style.top = "0px";
-        tmpCanvas.style.right = "0px";
-        tmpCanvas.style.left = mainVideo.style.cssText.split("; ")[2].split(": ")[1]
-        tmpCanvas.style.bottom = "0px";
+    var animControlsButton = document.getElementsByClassName("ytp-right-controls");
+    var button = document.createElement('button');
+    button.className = 'ytp-button it-player-button';
+    button.dataset.title = "PoseDream";
+    button.onclick = function(){document.dispatchEvent(new CustomEvent('displayPoseDreamPopup', { detail: {animationID:'skeleton'} }));}
+    animControlsButton[0].insertBefore(button, animControlsButton[0].childNodes[0]);
+
+    let playerImage = new Image();
+    playerImage.src = chrome.runtime.getURL("/images/logo48.png");
+    playerImage.onload = () => {
+        var imgTag = document.createElement('img');
+        imgTag.src=playerImage.src;
+        button.appendChild(imgTag);
     }
 
-    mainVideo.onplaying = function (){
+    const div = document.createElement('div');
 
-    resizeObserver.observe(mainVideo);
+    div.className = 'posedream-video-popup';
+    div.innerHTML = `
+    Fun with lines
+<ol>
+  <li><button id="particleBurningMan" class="pdVideoButton" onclick="document.dispatchEvent(new CustomEvent('changeVisualizationFromPlayer', { detail: {animationID:'skeleton'} }));">skeleton</button></li>
+  <li><button id="particleBurningMan" class="pdVideoButton" onclick="document.dispatchEvent(new CustomEvent('changeVisualizationFromPlayer', { detail: {animationID:'puppetsPlayer'} }));">Puppets player</button></li>
+  <li><button id="particleBurningMan" class="pdVideoButton" onclick="document.dispatchEvent(new CustomEvent('changeVisualizationFromPlayer', { detail: {animationID:'spiderWeb'} }));">Spider web</button></li>
+</ol>
+<br>
+Replace head with image
+<ol>
+  <li><button id="particleBurningMan" class="pdVideoButton" onclick="document.dispatchEvent(new CustomEvent('changeVisualizationFromPlayer', { detail: {animationID:'imgCat'} }));">Cat</button></li>
+  <li><button id="particleBurningMan" class="pdVideoButton" onclick="document.dispatchEvent(new CustomEvent('changeVisualizationFromPlayer', { detail: {animationID:'imgSmiley'} }));">Smiley</button></li>
+  <li><button id="particleBurningMan" class="pdVideoButton" onclick="document.dispatchEvent(new CustomEvent('changeVisualizationFromPlayer', { detail: {animationID:'imgSun'} }));">Sun</button></li>
+  <li><button id="particleBurningMan" class="pdVideoButton" onclick="document.dispatchEvent(new CustomEvent('changeVisualizationFromPlayer', { detail: {animationID:'imgMonkey'} }));">Monkey</button></li>
+  <li><button id="particleBurningMan" class="pdVideoButton" onclick="document.dispatchEvent(new CustomEvent('changeVisualizationFromPlayer', { detail: {animationID:'imgAnonymous'} }));">Anonymous</button></li>
+</ol>
+<br>
+Show particle animation
+<ol>
+  <li><button id="particleBurningMan" class="pdVideoButton" onclick="document.dispatchEvent(new CustomEvent('changeVisualizationFromPlayer', { detail: {animationID:'particleHandsBall'} }));">Hand power balls</button></li>
+  <li><button id="particleBurningMan" class="pdVideoButton" onclick="document.dispatchEvent(new CustomEvent('changeVisualizationFromPlayer', { detail: {animationID:'particle2BalHead'} }));">Two head balls</button></li>
+  <li><button id="particleBurningMan" class="pdVideoButton" onclick="document.dispatchEvent(new CustomEvent('changeVisualizationFromPlayer', { detail: {animationID:'particleRightHandLine'} }));">Right hand line</button></li>
+  <li><button id="particleBurningMan" class="pdVideoButton" onclick="document.dispatchEvent(new CustomEvent('changeVisualizationFromPlayer', { detail: {animationID:'particleNoseGravity'} }));">Nose gravity</button></li>
+  <li><button id="particleBurningMan" class="pdVideoButton" onclick="document.dispatchEvent(new CustomEvent('changeVisualizationFromPlayer', { detail: {animationID:'particleNoseSupernova'} }));">Nose supernova</button></li>
+  <li><button id="particleBurningMan" class="pdVideoButton" onclick="document.dispatchEvent(new CustomEvent('changeVisualizationFromPlayer', { detail: {animationID:'particleHandsTrackFromBorder'} }));">Hands track from border</button></li>
+  <li><button id="particleBurningMan" class="pdVideoButton" onclick="document.dispatchEvent(new CustomEvent('changeVisualizationFromPlayer', { detail: {animationID:'particleUpperBodyGlow'} }));">Upper body glow</button></li>
+  <li><button id="particleBurningMan" class="pdVideoButton" onclick="document.dispatchEvent(new CustomEvent('changeVisualizationFromPlayer', { detail: {animationID:'particleGlowPainting'} }));">Glow painting</button></li>
+  <li><button id="particleBurningMan" class="pdVideoButton" onclick="document.dispatchEvent(new CustomEvent('changeVisualizationFromPlayer', { detail: {animationID:'particlePainting'} }));">Particle painting</button></li>
+  <li><button id="particleBurningMan" class="pdVideoButton" onclick="document.dispatchEvent(new CustomEvent('changeVisualizationFromPlayer', { detail: {animationID:'particlePaintRandomDrift'} }));">Particle painting with random drift</button></li>
+  <li><button id="particleBurningMan" class="pdVideoButton" onclick="document.dispatchEvent(new CustomEvent('changeVisualizationFromPlayer', { detail: {animationID:'particleCometThrower'} }));">Comet thrower</button></li>
+  <li><button id="particleBurningMan" class="pdVideoButton" onclick="document.dispatchEvent(new CustomEvent('changeVisualizationFromPlayer', { detail: {animationID:'particleBodyGlow'} }));">Body glow</button></li>
+  <li><button id="particleBurningMan" class="pdVideoButton" onclick="document.dispatchEvent(new CustomEvent('changeVisualizationFromPlayer', { detail: {animationID:'particleBurningMan'} }));">Burning Man</button></li>
+</ol>
+    `;
+
+    var html5VideoPlayer = document.getElementsByClassName("html5-video-player");
+    html5VideoPlayer[0].appendChild(div);
+
+
+    mainVideo.onplaying = function (){
 
     if(document.getElementById("canvasdummy") === null){
         canvas = document.createElement('canvas'); // creates new canvas element
         canvas.id = 'canvasdummy'; // gives canvas id
         if(mainVideo.length !== 0){
-            canvas.height = mainVideo.clientHeight-50; //get original canvas height
+            canvas.height = mainVideo.clientHeight; //get original canvas height
             canvas.width = mainVideo.clientWidth; // get original canvas width
         }else {
             canvas.height = 600;
@@ -929,7 +989,7 @@ mainVideo.addEventListener('loadeddata', (event) => {
         canvasGL = document.createElement('canvas'); // creates new canvas element
         canvasGL.id = 'canvasdummyGL'; // gives canvas id
         if(mainVideo.length !== 0){
-            canvasGL.height = mainVideo.clientHeight-50; //get original canvas height
+            canvasGL.height = mainVideo.clientHeight; //get original canvas height
             canvasGL.width = mainVideo.clientWidth; // get original canvas width
         }else {
             canvasGL.height = 600;
@@ -947,8 +1007,22 @@ mainVideo.addEventListener('loadeddata', (event) => {
             initParticles();
         }
 
+        resizeObserver.observe(mainVideo);
 
-        intervalVideoPlayId= setInterval(function (){
+        createDetectorInterval();
+
+        // only call tick once.
+        if(startTick===false){
+            startTick=true;
+            tick();
+        }
+}
+})
+
+
+
+function createDetectorInterval(){
+    intervalVideoPlayId= setInterval(function (){
 
         if(detector !== undefined){
 
@@ -992,35 +1066,40 @@ mainVideo.addEventListener('loadeddata', (event) => {
         }
 
     }, 100);
-
-        // only call tick once.
-        if(startTick===false){
-            startTick=true;
-            tick();
-        }
 }
-})
-
 
 mainVideo.onpause = function (){
     clearInterval(intervalVideoPlayId);
 }
 
+function setCanvasStyle(tmpCanvas) {
+    tmpCanvas.style.position = "absolute";
+    tmpCanvas.style.top = "0px";
+    tmpCanvas.style.right = "0px";
+    tmpCanvas.style.left = mainVideo.style.cssText.split("; ")[2].split(": ")[1]
+    tmpCanvas.style.bottom = "0px";
+}
 
 const resizeObserver = new ResizeObserver(entries => {
-    canvas.style.left   = mainVideo.style.cssText.split("; ")[2].split(": ")[1]
+    if(intervalVideoPlayId!==undefined){
+        clearInterval(intervalVideoPlayId);
+    }
+    mainVideo = document.getElementsByClassName("html5-main-video")[0];
+    setCanvasStyle(canvas);
     canvas.width=entries[0].target.clientWidth;
-    canvas.height=entries[0].target.clientHeight-50;
+    canvas.height=entries[0].target.clientHeight;
     ctx.width=entries[0].target.clientWidth;
-    ctx.height=entries[0].target.clientHeight-50;
+    ctx.height=entries[0].target.clientHeight;
 
-    canvasGL.style.left   = mainVideo.style.cssText.split("; ")[2].split(": ")[1]
+    // canvasGL.style.left   = mainVideo.style.cssText.split("; ")[2].split(": ")[1]
+    setCanvasStyle(canvasGL);
     canvasGL.width=entries[0].target.clientWidth;
-    canvasGL.height=entries[0].target.clientHeight-50;
+    canvasGL.height=entries[0].target.clientHeight;
     webGLtx.width=entries[0].target.clientWidth;
-    webGLtx.height=entries[0].target.clientHeight-50;
+    webGLtx.height=entries[0].target.clientHeight;
 
-
+    initParticles();
+    createDetectorInterval();
 });
 
 
@@ -1122,3 +1201,23 @@ function drawSpiderWeb(keypoints){
     drawLine(keypoints[15].x, keypoints[15].y, canvas.width, canvas.height/2 *(1+0.9));
 
 }
+
+/**
+ * Called from player popup to change visualization.
+ */
+document.addEventListener('changeVisualizationFromPlayer', function (e) {
+    setNewAnimation(e.detail.animationID)
+});
+
+/**
+ * Called from player control icon to switch display of player popup
+ */
+document.addEventListener('displayPoseDreamPopup', function (e) {
+    var playerPopup = document.getElementsByClassName('posedream-video-popup');
+    if(showPlayerPopup){
+        playerPopup[0].style.display = "none"
+    }else{
+        playerPopup[0].style.display = "block"
+    }
+    showPlayerPopup = !showPlayerPopup;
+});
