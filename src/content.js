@@ -910,19 +910,23 @@ function loadImage() {
 mainVideo.addEventListener('loadeddata', (event) => {
 
     var animControlsButton = document.getElementsByClassName("ytp-right-controls");
-    var button = document.createElement('button');
-    button.className = 'ytp-button it-player-button';
-    button.dataset.title = "PoseDream";
-    button.onclick = function(){document.dispatchEvent(new CustomEvent('displayPoseDreamPopup', { detail: {animationID:'skeleton'} }));}
-    animControlsButton[0].insertBefore(button, animControlsButton[0].childNodes[0]);
+    if(document.getElementById("posedream-popup-btn") === null){
+        var button = document.createElement('button');
+        button.id="posedream-popup-btn";
+        button.className = 'ytp-button it-player-button';
+        button.dataset.title = "PoseDream";
+        button.onclick = function(){document.dispatchEvent(new CustomEvent('displayPoseDreamPopup', { detail: {animationID:'skeleton'} }));}
+        animControlsButton[0].insertBefore(button, animControlsButton[0].childNodes[0]);
 
-    let playerImage = new Image();
-    playerImage.src = chrome.runtime.getURL("/images/logo48.png");
-    playerImage.onload = () => {
-        var imgTag = document.createElement('img');
-        imgTag.src=playerImage.src;
-        button.appendChild(imgTag);
+        let playerImage = new Image();
+        playerImage.src = chrome.runtime.getURL("/images/logo48.png");
+        playerImage.onload = () => {
+            var imgTag = document.createElement('img');
+            imgTag.src=playerImage.src;
+            button.appendChild(imgTag);
+        }
     }
+
 
     const div = document.createElement('div');
 
