@@ -112,3 +112,13 @@ document.getElementById("particleBurningMan").addEventListener("click", async ()
         chrome.tabs.sendMessage(tabs[0].id, {animation: "particleBurningMan"});
     });
 });
+document.getElementById("skeleton3Times").addEventListener("click", async ()=>{
+    chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
+        chrome.tabs.sendMessage(tabs[0].id, {animation: "skeleton3Times"});
+    });
+});
+document.getElementById("skeleton5Times").addEventListener("click", async ()=>{
+    chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
+        chrome.tabs.sendMessage(tabs[0].id, {animation: "skeleton5Times"});
+    });
+});

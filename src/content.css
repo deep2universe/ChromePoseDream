@@ -1,7 +1,8 @@
 .posedream-video-popup{
     display: none;
     position: absolute;
-    overflow: hidden;
+    overflow:scroll;
+    overflow-x:hidden;
     border-radius: 2px;
     background: rgba(28,28,28,0.9);
     text-shadow: 0 0 2px rgba(0,0,0,0.5);
@@ -10,7 +11,7 @@
     -moz-user-select: none;
     -ms-user-select: none;
     -webkit-user-select: none;
-    width: 250px; height: 600px; right: 160px; bottom: 60px; z-index: 71
+    width: 250px; height: 600px; right: 160px; bottom: 70px; z-index: 71
 }
 
 .pdVideoButton {

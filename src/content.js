@@ -5,20 +5,54 @@ import Proton from 'proton-engine';
 
 var mainVideo = document.getElementsByClassName("html5-main-video")[0];
 var intervalVideoPlayId;
-const detector = poseDetection.createDetector(poseDetection.SupportedModels.MoveNet, {modelType: poseDetection.movenet.modelType.SINGLEPOSE_THUNDER}).then(console.log("detector created"));
+var detector = poseDetection.createDetector(poseDetection.SupportedModels.MoveNet, {modelType: poseDetection.movenet.modelType.SINGLEPOSE_THUNDER}).then(console.log("detector created"));
 var img = new Image();
 
 /**
  * Current animation type. Can be 'skeleton', 'img', 'particle'
  * @type {string}
  */
-var currentAnimation = "skeleton";
+var currentAnimation = "skeleton5Times";
+// used for random switch
+var allAnimationIDs=["skeleton",
+    "skeleton3Times",
+    "skeleton5Times",
+    "puppetsPlayer",
+    "spiderWeb",
+    "imgCat",
+    "imgSmiley",
+    // "imgSun",
+    // "imgMonkey",
+    // "imgAnonymous",
+    "particleHandsBall",
+    "particle2BalHead",
+    // "particleRightHandLine",
+    "particleNoseGravity",
+    "particleNoseSupernova",
+    "particleHandsTrackFromBorder",
+    "particleUpperBodyGlow",
+    "particleGlowPainting",
+    "particlePainting",
+    "particlePaintRandomDrift",
+    "particleCometThrower",
+    "particleBodyGlow",
+    "particleBurningMan"];
+var randomSwitchSec=10;    // sec between animation switch
+var randomSwitchIntervalID=null;
+
+
+// skeleton settings
+var skeletonLineSize=1;
 
 
 var ctx;
 var webGLtx;
 var canvas;
 var canvasGL;
+
+// for resize. initial size of video.
+var wVideo;
+var hVideo;
 
 // Proton stuff (particles)
 var proton;
@@ -118,26 +152,42 @@ new MutationObserver(() => {
 function onUrlChange() {
     if(!location.href.includes("watch")){
         clearInterval(intervalVideoPlayId);
+        clearRandomSwitchInterval();
     }
 }
 
 /**
  * Get message from popup.js and update content
- * We have 3 kinds of messages for the animation request
+ * We have 3 kinds of messages for the animation request. And some that don't fit the scheme
  * - skeleton: show skeleton
  * - img<value>: replace head with image
  * - particle<value>: show particle
+ * - puppetsPlayer, spiderWeb
  */
 chrome.runtime.onMessage.addListener(
     function(request, sender, sendResponse) {
+        if(randomSwitchIntervalID){
+            clearInterval(randomSwitchIntervalID);
+        }
         setNewAnimation(request.animation);
     }
 );
 
+/**
+ * Switch and prepare current animation.
+ * @param animationId new animation ID
+ */
 function setNewAnimation(animationId){
+
     clearWebGL();
     if (animationId === "skeleton"){
         currentAnimation="skeleton";
+
+    }else if (animationId === "skeleton3Times"){
+        currentAnimation="skeleton3Times";
+
+    }else if (animationId === "skeleton5Times"){
+        currentAnimation="skeleton5Times";
 
     }else if (animationId === "puppetsPlayer"){
         currentAnimation="puppetsPlayer";
@@ -342,7 +392,7 @@ function initParticles(){
             x: canvas.width / 2,
             y: canvas.height / 2
         };
-        attractionBehaviour = new Proton.Attraction(nosePosition, 10, 100);
+        attractionBehaviour = new Proton.Attraction(nosePosition, 10, 1000);
         protonEmitterArray[0].addBehaviour(attractionBehaviour,  new Proton.Color('random'));
         protonEmitterArray[0].addBehaviour(new Proton.Scale(Proton.getSpan(.1, .7)));
 
@@ -524,6 +574,12 @@ function initParticles(){
 
 }
 
+/**
+ * Help function to create particle system with image for 'cometThrower'
+ *
+ * @param emitterIndex index of the emitter
+ * @param image image to use for this emiter
+ */
 function createEmitterCometThrower(emitterIndex, image){
     protonEmitterArray[emitterIndex] = new Proton.Emitter();
     protonEmitterArray[emitterIndex].rate = new Proton.Rate(new Proton.Span(2, 5), .05);
@@ -543,6 +599,15 @@ function createEmitterCometThrower(emitterIndex, image){
     protonEmitterArray[emitterIndex].emit();
 }
 
+/**
+ * Help function to create particle system with different angel and colors for 'pointDrawRandomDrift'
+ *
+ * @param emitterIndex index of the emitter
+ * @param colorT
+ * @param colorE
+ * @param angle angle for the emission of the particle
+ * @param image particle image to use
+ */
 function createEmitterPointDrawRandomDrift(emitterIndex, colorT, colorE, angle, image){
     protonEmitterArray[emitterIndex]= new Proton.Emitter();
     protonEmitterArray[emitterIndex].rate = new Proton.Rate(new Proton.Span(.1, .2), new Proton.Span(.01, .015));
@@ -565,6 +630,15 @@ function createEmitterPointDrawRandomDrift(emitterIndex, colorT, colorE, angle, 
     proton.addEmitter(protonEmitterArray[emitterIndex]);
 }
 
+/**
+ * Help function to create particle system with different angel and colors for 'pointDraw'
+ *
+ * @param emitterIndex
+ * @param colorT
+ * @param colorE
+ * @param angle
+ * @param image
+ */
 function createEmitterPointDraw(emitterIndex, colorT, colorE, angle, image){
     protonEmitterArray[emitterIndex]= new Proton.Emitter();
     protonEmitterArray[emitterIndex].rate = new Proton.Rate(new Proton.Span(.1, .2), new Proton.Span(.01, .015));
@@ -586,6 +660,15 @@ function createEmitterPointDraw(emitterIndex, colorT, colorE, angle, image){
     proton.addEmitter(protonEmitterArray[emitterIndex]);
 }
 
+/**
+ * Help function to create particle system with different angel and colors for 'pointGlow'
+ *
+ * @param emitterIndex
+ * @param colorT
+ * @param colorE
+ * @param angle
+ * @param image
+ */
 function createEmitterPointGlow(emitterIndex, colorT, colorE, angle, image){
     protonEmitterArray[emitterIndex]= new Proton.Emitter();
     protonEmitterArray[emitterIndex].rate = new Proton.Rate(new Proton.Span(.1, .2), new Proton.Span(.01, .015));
@@ -607,6 +690,14 @@ function createEmitterPointGlow(emitterIndex, colorT, colorE, angle, image){
     proton.addEmitter(protonEmitterArray[emitterIndex]);
 }
 
+/**
+ * Help function to create particle system with different angel and colors for 'drawGlow'
+ * @param emitterIndex
+ * @param colorT
+ * @param colorE
+ * @param angle
+ * @param image
+ */
 function createEmitterDrawGlow(emitterIndex, colorT, colorE, angle, image){
     protonEmitterArray[emitterIndex]= new Proton.Emitter();
     protonEmitterArray[emitterIndex].rate = new Proton.Rate(new Proton.Span(.1, .2), new Proton.Span(.01, .015));
@@ -649,7 +740,7 @@ function createEmitter(x, y, angle, color, handPos, emitterIndex) {
     protonEmitterArray[emitterIndex].addInitialize(new Proton.V(new Proton.Span(0.5, 1), new Proton.Span(90, 10, true), 'polar'));
     protonEmitterArray[emitterIndex].addBehaviour(new Proton.Alpha(1, 0));
     protonEmitterArray[emitterIndex].addBehaviour(new Proton.Color(color));
-    protonEmitterArray[emitterIndex].addBehaviour(new Proton.Attraction(handPos, 10, 500));
+    protonEmitterArray[emitterIndex].addBehaviour(new Proton.Attraction(handPos, 10, 1500));
     protonEmitterArray[emitterIndex].addBehaviour(new Proton.CrossZone(new Proton.RectZone(0, 0, canvas.width, canvas.height), 'cross'));
     protonEmitterArray[emitterIndex].p.x = x;
     protonEmitterArray[emitterIndex].p.y = y;
@@ -909,6 +1000,9 @@ function loadImage() {
  */
 mainVideo.addEventListener('loadeddata', (event) => {
 
+    wVideo=mainVideo.clientWidth;
+    hVideo=mainVideo.clientHeight;
+
     var animControlsButton = document.getElementsByClassName("ytp-right-controls");
     if(document.getElementById("posedream-popup-btn") === null){
         var button = document.createElement('button');
@@ -928,50 +1022,74 @@ mainVideo.addEventListener('loadeddata', (event) => {
     }
 
 
+    initVideoPlayerPopup();
+
+
+
+})
+
+/**
+ * Add popup to video player
+ */
+function initVideoPlayerPopup(){
     const div = document.createElement('div');
 
     div.className = 'posedream-video-popup';
     div.innerHTML = `
+<div>
+<button id="randomButton" class="pdVideoButton" onclick="document.dispatchEvent(new CustomEvent('runRandomAnimation'));">Random 10s</button>
+<input type="range" min="2" max="60" value="10" id="randomRange" onclick="document.dispatchEvent(new CustomEvent('changeRandomInterval', { detail: {interval:this.value} }));">
+</div>
+<div>
+<p id="changeSizeSkeletonText" ">Skeleton size 1px</p>
+<input type="range" min="1" max="10" value="1" id="sizeSkeleton" onclick="document.dispatchEvent(new CustomEvent('changeSizeSkeleton', { detail: {interval:this.value} }));">
+</div>
     Fun with lines
 <ol>
-  <li><button id="particleBurningMan" class="pdVideoButton" onclick="document.dispatchEvent(new CustomEvent('changeVisualizationFromPlayer', { detail: {animationID:'skeleton'} }));">skeleton</button></li>
-  <li><button id="particleBurningMan" class="pdVideoButton" onclick="document.dispatchEvent(new CustomEvent('changeVisualizationFromPlayer', { detail: {animationID:'puppetsPlayer'} }));">Puppets player</button></li>
-  <li><button id="particleBurningMan" class="pdVideoButton" onclick="document.dispatchEvent(new CustomEvent('changeVisualizationFromPlayer', { detail: {animationID:'spiderWeb'} }));">Spider web</button></li>
+  <li><button class="pdVideoButton" onclick="document.dispatchEvent(new CustomEvent('changeVisualizationFromPlayer', { detail: {animationID:'skeleton'} }));">Skeleton</button></li>
+  <li><button class="pdVideoButton" onclick="document.dispatchEvent(new CustomEvent('changeVisualizationFromPlayer', { detail: {animationID:'skeleton3Times'} }));">Skeletons 3 times</button></li>
+  <li><button class="pdVideoButton" onclick="document.dispatchEvent(new CustomEvent('changeVisualizationFromPlayer', { detail: {animationID:'skeleton5Times'} }));">Skeletons 5 times</button></li>
+  <li><button class="pdVideoButton" onclick="document.dispatchEvent(new CustomEvent('changeVisualizationFromPlayer', { detail: {animationID:'puppetsPlayer'} }));">Puppets player</button></li>
+  <li><button class="pdVideoButton" onclick="document.dispatchEvent(new CustomEvent('changeVisualizationFromPlayer', { detail: {animationID:'spiderWeb'} }));">Spider web</button></li>
 </ol>
 <br>
 Replace head with image
 <ol>
-  <li><button id="particleBurningMan" class="pdVideoButton" onclick="document.dispatchEvent(new CustomEvent('changeVisualizationFromPlayer', { detail: {animationID:'imgCat'} }));">Cat</button></li>
-  <li><button id="particleBurningMan" class="pdVideoButton" onclick="document.dispatchEvent(new CustomEvent('changeVisualizationFromPlayer', { detail: {animationID:'imgSmiley'} }));">Smiley</button></li>
-  <li><button id="particleBurningMan" class="pdVideoButton" onclick="document.dispatchEvent(new CustomEvent('changeVisualizationFromPlayer', { detail: {animationID:'imgSun'} }));">Sun</button></li>
-  <li><button id="particleBurningMan" class="pdVideoButton" onclick="document.dispatchEvent(new CustomEvent('changeVisualizationFromPlayer', { detail: {animationID:'imgMonkey'} }));">Monkey</button></li>
-  <li><button id="particleBurningMan" class="pdVideoButton" onclick="document.dispatchEvent(new CustomEvent('changeVisualizationFromPlayer', { detail: {animationID:'imgAnonymous'} }));">Anonymous</button></li>
+  <li><button class="pdVideoButton" onclick="document.dispatchEvent(new CustomEvent('changeVisualizationFromPlayer', { detail: {animationID:'imgCat'} }));">Cat</button></li>
+  <li><button class="pdVideoButton" onclick="document.dispatchEvent(new CustomEvent('changeVisualizationFromPlayer', { detail: {animationID:'imgSmiley'} }));">Smiley</button></li>
+  <li><button class="pdVideoButton" onclick="document.dispatchEvent(new CustomEvent('changeVisualizationFromPlayer', { detail: {animationID:'imgSun'} }));">Sun</button></li>
+  <li><button class="pdVideoButton" onclick="document.dispatchEvent(new CustomEvent('changeVisualizationFromPlayer', { detail: {animationID:'imgMonkey'} }));">Monkey</button></li>
+  <li><button class="pdVideoButton" onclick="document.dispatchEvent(new CustomEvent('changeVisualizationFromPlayer', { detail: {animationID:'imgAnonymous'} }));">Anonymous</button></li>
 </ol>
 <br>
 Show particle animation
 <ol>
-  <li><button id="particleBurningMan" class="pdVideoButton" onclick="document.dispatchEvent(new CustomEvent('changeVisualizationFromPlayer', { detail: {animationID:'particleHandsBall'} }));">Hand power balls</button></li>
-  <li><button id="particleBurningMan" class="pdVideoButton" onclick="document.dispatchEvent(new CustomEvent('changeVisualizationFromPlayer', { detail: {animationID:'particle2BalHead'} }));">Two head balls</button></li>
-  <li><button id="particleBurningMan" class="pdVideoButton" onclick="document.dispatchEvent(new CustomEvent('changeVisualizationFromPlayer', { detail: {animationID:'particleRightHandLine'} }));">Right hand line</button></li>
-  <li><button id="particleBurningMan" class="pdVideoButton" onclick="document.dispatchEvent(new CustomEvent('changeVisualizationFromPlayer', { detail: {animationID:'particleNoseGravity'} }));">Nose gravity</button></li>
-  <li><button id="particleBurningMan" class="pdVideoButton" onclick="document.dispatchEvent(new CustomEvent('changeVisualizationFromPlayer', { detail: {animationID:'particleNoseSupernova'} }));">Nose supernova</button></li>
-  <li><button id="particleBurningMan" class="pdVideoButton" onclick="document.dispatchEvent(new CustomEvent('changeVisualizationFromPlayer', { detail: {animationID:'particleHandsTrackFromBorder'} }));">Hands track from border</button></li>
-  <li><button id="particleBurningMan" class="pdVideoButton" onclick="document.dispatchEvent(new CustomEvent('changeVisualizationFromPlayer', { detail: {animationID:'particleUpperBodyGlow'} }));">Upper body glow</button></li>
-  <li><button id="particleBurningMan" class="pdVideoButton" onclick="document.dispatchEvent(new CustomEvent('changeVisualizationFromPlayer', { detail: {animationID:'particleGlowPainting'} }));">Glow painting</button></li>
-  <li><button id="particleBurningMan" class="pdVideoButton" onclick="document.dispatchEvent(new CustomEvent('changeVisualizationFromPlayer', { detail: {animationID:'particlePainting'} }));">Particle painting</button></li>
-  <li><button id="particleBurningMan" class="pdVideoButton" onclick="document.dispatchEvent(new CustomEvent('changeVisualizationFromPlayer', { detail: {animationID:'particlePaintRandomDrift'} }));">Particle painting with random drift</button></li>
-  <li><button id="particleBurningMan" class="pdVideoButton" onclick="document.dispatchEvent(new CustomEvent('changeVisualizationFromPlayer', { detail: {animationID:'particleCometThrower'} }));">Comet thrower</button></li>
-  <li><button id="particleBurningMan" class="pdVideoButton" onclick="document.dispatchEvent(new CustomEvent('changeVisualizationFromPlayer', { detail: {animationID:'particleBodyGlow'} }));">Body glow</button></li>
-  <li><button id="particleBurningMan" class="pdVideoButton" onclick="document.dispatchEvent(new CustomEvent('changeVisualizationFromPlayer', { detail: {animationID:'particleBurningMan'} }));">Burning Man</button></li>
+  <li><button class="pdVideoButton" onclick="document.dispatchEvent(new CustomEvent('changeVisualizationFromPlayer', { detail: {animationID:'particleHandsBall'} }));">Hand power balls</button></li>
+  <li><button class="pdVideoButton" onclick="document.dispatchEvent(new CustomEvent('changeVisualizationFromPlayer', { detail: {animationID:'particle2BalHead'} }));">Two head balls</button></li>
+  <li><button class="pdVideoButton" onclick="document.dispatchEvent(new CustomEvent('changeVisualizationFromPlayer', { detail: {animationID:'particleRightHandLine'} }));">Right hand line</button></li>
+  <li><button class="pdVideoButton" onclick="document.dispatchEvent(new CustomEvent('changeVisualizationFromPlayer', { detail: {animationID:'particleNoseGravity'} }));">Nose gravity</button></li>
+  <li><button class="pdVideoButton" onclick="document.dispatchEvent(new CustomEvent('changeVisualizationFromPlayer', { detail: {animationID:'particleNoseSupernova'} }));">Nose supernova</button></li>
+  <li><button class="pdVideoButton" onclick="document.dispatchEvent(new CustomEvent('changeVisualizationFromPlayer', { detail: {animationID:'particleHandsTrackFromBorder'} }));">Hands track from border</button></li>
+  <li><button class="pdVideoButton" onclick="document.dispatchEvent(new CustomEvent('changeVisualizationFromPlayer', { detail: {animationID:'particleUpperBodyGlow'} }));">Upper body glow</button></li>
+  <li><button class="pdVideoButton" onclick="document.dispatchEvent(new CustomEvent('changeVisualizationFromPlayer', { detail: {animationID:'particleGlowPainting'} }));">Glow painting</button></li>
+  <li><button class="pdVideoButton" onclick="document.dispatchEvent(new CustomEvent('changeVisualizationFromPlayer', { detail: {animationID:'particlePainting'} }));">Particle painting</button></li>
+  <li><button class="pdVideoButton" onclick="document.dispatchEvent(new CustomEvent('changeVisualizationFromPlayer', { detail: {animationID:'particlePaintRandomDrift'} }));">Particle painting with random drift</button></li>
+  <li><button class="pdVideoButton" onclick="document.dispatchEvent(new CustomEvent('changeVisualizationFromPlayer', { detail: {animationID:'particleCometThrower'} }));">Comet thrower</button></li>
+  <li><button class="pdVideoButton" onclick="document.dispatchEvent(new CustomEvent('changeVisualizationFromPlayer', { detail: {animationID:'particleBodyGlow'} }));">Body glow</button></li>
+  <li><button class="pdVideoButton" onclick="document.dispatchEvent(new CustomEvent('changeVisualizationFromPlayer', { detail: {animationID:'particleBurningMan'} }));">Burning Man</button></li>
 </ol>
     `;
 
     var html5VideoPlayer = document.getElementsByClassName("html5-video-player");
     html5VideoPlayer[0].appendChild(div);
+}
 
 
-    mainVideo.onplaying = function (){
+mainVideo.oncanplay = (event) => {
+    console.log('Video can start, but not sure it will play through.');
+};
 
+mainVideo.onplaying = (event) => {
     if(document.getElementById("canvasdummy") === null){
         canvas = document.createElement('canvas'); // creates new canvas element
         canvas.id = 'canvasdummy'; // gives canvas id
@@ -1006,25 +1124,26 @@ Show particle animation
         webGLtx = canvasGL.getContext("experimental-webgl");
     }
 
-        if(isParticleInit===false){
-            isParticleInit=true;
-            initParticles();
-        }
+    if(isParticleInit===false){
+        isParticleInit=true;
+        initParticles();
+    }
 
-        resizeObserver.observe(mainVideo);
+    resizeObserver.observe(mainVideo);
 
-        createDetectorInterval();
+    createDetectorInterval();
 
-        // only call tick once.
-        if(startTick===false){
-            startTick=true;
-            tick();
-        }
+    // only call tick once.
+    if(startTick===false){
+        startTick=true;
+        tick();
+    }
 }
-})
 
-
-
+/**
+ * Create interval to detect poses
+ * CHECKME: use requestAnimationFrame
+ */
 function createDetectorInterval(){
     intervalVideoPlayId= setInterval(function (){
 
@@ -1036,30 +1155,70 @@ function createDetectorInterval(){
                     return;
                 }
                 poseDetector.estimatePoses(mainVideo).then((pose)=>{
+                    if(mainVideo.paused){
+                        return;
+                    }
                     if(pose !== undefined && pose[0] !== undefined && pose[0].keypoints !== undefined){
+                        let canvasPoseCoordinates = transformKeypointsForRender(pose[0].keypoints);
                         if(currentAnimation==="skeleton"){
                             ctx.clearRect(0,0,canvas.width,canvas.height);
-                            drawKeyPoints(pose[0].keypoints);
-                            drawSkeleton(pose[0].keypoints);
+                            drawKeyPoints(canvasPoseCoordinates);
+                            drawSkeleton(canvasPoseCoordinates);
+                        }
+
+                        if(currentAnimation==="skeleton3Times"){
+                            ctx.clearRect(0,0,canvas.width,canvas.height);
+                            drawKeyPoints(canvasPoseCoordinates);
+                            drawSkeleton(canvasPoseCoordinates);
+
+                            canvasPoseCoordinates = transformKeypointsForRender(pose[0].keypoints, 0.5, 0.5);
+                            drawKeyPoints(canvasPoseCoordinates);
+                            drawSkeleton(canvasPoseCoordinates);
+
+                            canvasPoseCoordinates = transformKeypointsForRender(pose[0].keypoints, 1.5, 1.5);
+                            drawKeyPoints(canvasPoseCoordinates);
+                            drawSkeleton(canvasPoseCoordinates);
+                        }
+
+                        if(currentAnimation==="skeleton5Times"){
+                            ctx.clearRect(0,0,canvas.width,canvas.height);
+                            drawKeyPoints(canvasPoseCoordinates);
+                            drawSkeleton(canvasPoseCoordinates);
+
+                            canvasPoseCoordinates = transformKeypointsForRender(pose[0].keypoints, 0.5, 0.5);
+                            drawKeyPoints(canvasPoseCoordinates);
+                            drawSkeleton(canvasPoseCoordinates);
+
+                            canvasPoseCoordinates = transformKeypointsForRender(pose[0].keypoints, 0.5, 0.5, canvas.width/2, canvas.height/2);
+                            drawKeyPoints(canvasPoseCoordinates);
+                            drawSkeleton(canvasPoseCoordinates);
+
+                            canvasPoseCoordinates = transformKeypointsForRender(pose[0].keypoints, 0.5, 0.5, canvas.width/2);
+                            drawKeyPoints(canvasPoseCoordinates);
+                            drawSkeleton(canvasPoseCoordinates);
+
+                            canvasPoseCoordinates = transformKeypointsForRender(pose[0].keypoints, 0.5, 0.5, 0, canvas.height/2);
+                            drawKeyPoints(canvasPoseCoordinates);
+                            drawSkeleton(canvasPoseCoordinates);
                         }
 
                         if(currentAnimation==="puppetsPlayer"){
                             ctx.clearRect(0,0,canvas.width,canvas.height);
-                            drawPuppets(pose[0].keypoints);
+                            drawPuppets(canvasPoseCoordinates);
                         }
 
                         if(currentAnimation==="spiderWeb"){
                             ctx.clearRect(0,0,canvas.width,canvas.height);
-                            drawSpiderWeb(pose[0].keypoints);
+                            drawSpiderWeb(canvasPoseCoordinates);
                         }
 
                         if(currentAnimation === "img"){
                             ctx.clearRect(0,0,canvas.width,canvas.height);
-                            drawImage(pose[0].keypoints);
+                            drawImage(canvasPoseCoordinates);
                         }
 
                         if(currentAnimation === "particle"){
-                            updateParticles(pose[0].keypoints);
+                            updateParticles(canvasPoseCoordinates);
                         }
 
 
@@ -1072,10 +1231,38 @@ function createDetectorInterval(){
     }, 100);
 }
 
+/**
+ * Transformer for the detector keypoints
+ * This allows you to move and scale the keypoints before drawing them.
+ *
+ * @param keypoints original keypoints from detector
+ * @param scaleX scale in x direction
+ * @param scaleY scale in y direction
+ * @param shiftX shift in x direction
+ * @param shiftY shift in y direction
+ * @returns {*[]} new array with transformed keypoints
+ */
+function transformKeypointsForRender(keypoints, scaleX=1, scaleY=1, shiftX=0, shiftY=0){
+    let canvasCoordinates=[];
+    for(let kp of keypoints){
+        let { x, y, score } = kp;
+        canvasCoordinates.push({x: scaleX * canvas.width * x/wVideo +shiftX, y: scaleY * canvas.height * y/hVideo + shiftY, score: score});
+    }
+    return canvasCoordinates;
+}
+
+/**
+ * Event to disable the detection interval
+ */
 mainVideo.onpause = function (){
     clearInterval(intervalVideoPlayId);
 }
 
+/**
+ * Helper function to style the canvas.
+ * We have one canvas for 'normal' paintings and another for WebGL
+ * @param tmpCanvas
+ */
 function setCanvasStyle(tmpCanvas) {
     tmpCanvas.style.position = "absolute";
     tmpCanvas.style.top = "0px";
@@ -1084,10 +1271,16 @@ function setCanvasStyle(tmpCanvas) {
     tmpCanvas.style.bottom = "0px";
 }
 
+/**
+ * Check resize event for video.
+ *
+ * @type {ResizeObserver}
+ */
 const resizeObserver = new ResizeObserver(entries => {
     if(intervalVideoPlayId!==undefined){
         clearInterval(intervalVideoPlayId);
     }
+
     mainVideo = document.getElementsByClassName("html5-main-video")[0];
     setCanvasStyle(canvas);
     canvas.width=entries[0].target.clientWidth;
@@ -1095,7 +1288,6 @@ const resizeObserver = new ResizeObserver(entries => {
     ctx.width=entries[0].target.clientWidth;
     ctx.height=entries[0].target.clientHeight;
 
-    // canvasGL.style.left   = mainVideo.style.cssText.split("; ")[2].split(": ")[1]
     setCanvasStyle(canvasGL);
     canvasGL.width=entries[0].target.clientWidth;
     canvasGL.height=entries[0].target.clientHeight;
@@ -1107,8 +1299,11 @@ const resizeObserver = new ResizeObserver(entries => {
 });
 
 
-
-
+/**
+ * Draw image at nose keypoint
+ *
+ * @param keypoints
+ */
 function drawImage(keypoints){
     if(keypoints!== undefined){
         let spaceBetweenRightLeftEye = keypoints[1].x - keypoints[2].x;
@@ -1119,21 +1314,27 @@ function drawImage(keypoints){
 
 }
 
-
+/**
+ * Draw cicle at every keypoint from detector
+ * @param keypoints
+ */
 function drawKeyPoints(keypoints){
     for(let keypoint of keypoints){
         ctx.beginPath();
-        ctx.arc(keypoint.x, keypoint.y, 2, 0, 2 * Math.PI);
+        ctx.arc(keypoint.x, keypoint.y, 2*skeletonLineSize, 0, 2 * Math.PI);
         ctx.fillStyle = 'blue';
         ctx.fill();
     }
 }
 
-
+/**
+ * Draw lines between all keypoints in the order
+ * @param keypoints
+ */
 function drawSkeleton(keypoints){
     ctx.fillStyle = 'white';
     ctx.strokeStyle = 'red';
-    ctx.lineWidth = 1;
+    ctx.lineWidth = skeletonLineSize;
 
     poseDetection.util.getAdjacentPairs(poseDetection.SupportedModels.MoveNet).forEach(([i, j]) => {
         const kp1 = keypoints[i];
@@ -1153,6 +1354,10 @@ function drawSkeleton(keypoints){
     });
 }
 
+/**
+ * Draw lines from top to some keypoints
+ * @param keypoints
+ */
 function drawPuppets(keypoints){
     ctx.fillStyle = 'white';
     ctx.strokeStyle = 'blue';
@@ -1168,6 +1373,13 @@ function drawPuppets(keypoints){
 
 }
 
+/**
+ * Helper function to draw line
+ * @param startX
+ * @param startY
+ * @param endX
+ * @param endY
+ */
 function drawLine(startX, startY, endX, endY){
     ctx.beginPath();
     ctx.moveTo(startX, startY);
@@ -1175,6 +1387,10 @@ function drawLine(startX, startY, endX, endY){
     ctx.stroke();
 }
 
+/**
+ * Draw lines from the border to all keypoints from the detector
+ * @param keypoints
+ */
 function drawSpiderWeb(keypoints){
     ctx.fillStyle = 'white';
     ctx.strokeStyle = 'yellow';
@@ -1210,6 +1426,7 @@ function drawSpiderWeb(keypoints){
  * Called from player popup to change visualization.
  */
 document.addEventListener('changeVisualizationFromPlayer', function (e) {
+    clearRandomSwitchInterval();
     setNewAnimation(e.detail.animationID)
 });
 
@@ -1225,3 +1442,38 @@ document.addEventListener('displayPoseDreamPopup', function (e) {
     }
     showPlayerPopup = !showPlayerPopup;
 });
+
+/**
+ * Event to change the random interval from popup
+ */
+document.addEventListener('changeRandomInterval', function (e) {
+    document.getElementById("randomButton").innerText="Random " + e.detail.interval +"s";
+    randomSwitchSec= e.detail.interval;
+});
+
+function clearRandomSwitchInterval(){
+    if(randomSwitchIntervalID){
+        clearInterval(randomSwitchIntervalID);
+    }
+}
+/**
+ * Event to start the random animation
+ */
+document.addEventListener('runRandomAnimation', function (e) {
+
+    clearRandomSwitchInterval();
+
+    randomSwitchIntervalID = setInterval(function (){
+        let rndNum = Math.floor(Math.random() * allAnimationIDs.length) + 1;
+        setNewAnimation(allAnimationIDs[rndNum]);
+    }, 1000*randomSwitchSec);
+});
+
+/**
+ * Event to change the line size for all skeleton animations
+ */
+document.addEventListener('changeSizeSkeleton', function (e) {
+    document.getElementById("changeSizeSkeletonText").innerText="Skeleton size " + e.detail.interval +"px";
+    skeletonLineSize= e.detail.interval;
+});
+

@@ -2,6 +2,8 @@
 ![Teaser](assets/teaser.gif)  
 Some examples from this [Video source](https://www.youtube.com/watch?v=eRjUmsB9lMk)    
 
+For more examples and the current progress see [#visualizeYouTube playlist](https://youtube.com/playlist?list=PLl4gbkccaJWkY4CXwfhImgY-AmR9UvWH0)
+
 ![Logo](assets/logo128.png)  
 _The logo was designed by a 3 year old girl._
 
@@ -9,7 +11,10 @@ YouTube pose dream is a Chrome AI extension to visualize videos. (Soon also avai
 
 When you're old enough, you may remember [Winamp](http://www.winamp.com/). There is the possibility to visualize music.   
 However, this extension makes similar with videos. The human pose in the video is used as input for the visualization.  
-In the process, the existing video is transformed into a psychedelic work of art. But this depends on the video you are watching.     
+In the process, the existing video is transformed into a psychedelic work of art. But this depends on the video you are watching. 
+
+The goal of this project is for anyone, with or without programming experience, to be able to visualize YouTube.   
+In addition, animations should be interchangeable between users.  
 
 Pose estimation is done with [TensorFlow.js](https://www.tensorflow.org/js)  
 Particle animation is done with [Proton](https://github.com/drawcall/Proton)  
@@ -21,8 +26,10 @@ This project is a [Google Chrome](https://www.google.com/intl/en/chrome/) browse
 2. [Features](#Features)
    1. [Fun with lines](#showPoseDetection)
       1. [Skeleton](#skeleton)
-      2. [Puppets player](#puppetPlayer)
-      3. [Spider web](#spiderWeb)
+      2. [Skeleton three times](#skeleton3times)
+      3. [Skeleton five times](#skeleton5times)
+      4. [Puppets player](#puppetPlayer)
+      5. [Spider web](#spiderWeb)
    2. [Replace head with image](#img)
       1. [Cat](#cat)
       2. [Smiley](#smiley)
@@ -96,6 +103,16 @@ This is TensorFlow.js in action.
 [MoveNet](https://blog.tensorflow.org/2021/05/next-generation-pose-detection-with-movenet-and-tensorflowjs.html) is used for the detection.  
 Use: `all keypoints`  
 ![pose detection](assets/skeleton.png)
+
+<a name="skeleton3times"></a>
+### Skeleton 3 times
+Use: `all keypoints`  
+![skeleton3times](assets/skeleton3Times.png)
+
+<a name="skeleton5times"></a>
+### Skeleton 5 times
+Use: `all keypoints`  
+![skeleton5times](assets/skeleton5Times.png)
 
 <a name="puppetPlayer"></a>
 ### Puppets player
@@ -289,7 +306,6 @@ The following is still on the TODO list:
 - It should be possible to deactivate the extension. Currently, you must do this in `chrome://extensions`
 - Fill settings page with content (default animation, disable extension, language settings etc.)
 - Publish to Chrome extension store.
-- Check size changes during video playback.
 - Clean up code.
 - Add support for [three.proton](https://github.com/drawcall/three.proton/) to enable 3D particles.
 - Check content.js video event listener, - sometimes you have to reload the page to start pose dream.

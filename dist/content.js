@@ -85941,11 +85941,25 @@ var img = new Image();
  * @type {string}
  */
 
-var currentAnimation = "skeleton";
+var currentAnimation = "skeleton5Times"; // used for random switch
+
+var allAnimationIDs = ["skeleton", "skeleton3Times", "skeleton5Times", "puppetsPlayer", "spiderWeb", "imgCat", "imgSmiley", // "imgSun",
+// "imgMonkey",
+// "imgAnonymous",
+"particleHandsBall", "particle2BalHead", // "particleRightHandLine",
+"particleNoseGravity", "particleNoseSupernova", "particleHandsTrackFromBorder", "particleUpperBodyGlow", "particleGlowPainting", "particlePainting", "particlePaintRandomDrift", "particleCometThrower", "particleBodyGlow", "particleBurningMan"];
+var randomSwitchSec = 10; // sec between animation switch
+
+var randomSwitchIntervalID = null; // skeleton settings
+
+var skeletonLineSize = 1;
 var ctx;
 var webGLtx;
 var canvas;
-var canvasGL; // Proton stuff (particles)
+var canvasGL; // for resize. initial size of video.
+
+var wVideo;
+var hVideo; // Proton stuff (particles)
 
 var proton;
 var protonEmitterArray = [];
@@ -86041,26 +86055,40 @@ new MutationObserver(function () {
 function onUrlChange() {
   if (!location.href.includes("watch")) {
     clearInterval(intervalVideoPlayId);
+    clearRandomSwitchInterval();
   }
 }
 /**
  * Get message from popup.js and update content
- * We have 3 kinds of messages for the animation request
+ * We have 3 kinds of messages for the animation request. And some that don't fit the scheme
  * - skeleton: show skeleton
  * - img<value>: replace head with image
  * - particle<value>: show particle
+ * - puppetsPlayer, spiderWeb
  */
 
 
 chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
+  if (randomSwitchIntervalID) {
+    clearInterval(randomSwitchIntervalID);
+  }
+
   setNewAnimation(request.animation);
 });
+/**
+ * Switch and prepare current animation.
+ * @param animationId new animation ID
+ */
 
 function setNewAnimation(animationId) {
   clearWebGL();
 
   if (animationId === "skeleton") {
     currentAnimation = "skeleton";
+  } else if (animationId === "skeleton3Times") {
+    currentAnimation = "skeleton3Times";
+  } else if (animationId === "skeleton5Times") {
+    currentAnimation = "skeleton5Times";
   } else if (animationId === "puppetsPlayer") {
     currentAnimation = "puppetsPlayer";
   } else if (animationId === "spiderWeb") {
@@ -86243,7 +86271,7 @@ function initParticles() {
       x: canvas.width / 2,
       y: canvas.height / 2
     };
-    attractionBehaviour = new _protonEngine.default.Attraction(nosePosition, 10, 100);
+    attractionBehaviour = new _protonEngine.default.Attraction(nosePosition, 10, 1000);
     protonEmitterArray[0].addBehaviour(attractionBehaviour, new _protonEngine.default.Color('random'));
     protonEmitterArray[0].addBehaviour(new _protonEngine.default.Scale(_protonEngine.default.getSpan(.1, .7)));
     protonEmitterArray[0].p.x = canvas.width / 2;
@@ -86436,6 +86464,13 @@ function initParticles() {
 
   startParticleInit = false;
 }
+/**
+ * Help function to create particle system with image for 'cometThrower'
+ *
+ * @param emitterIndex index of the emitter
+ * @param image image to use for this emiter
+ */
+
 
 function createEmitterCometThrower(emitterIndex, image) {
   protonEmitterArray[emitterIndex] = new _protonEngine.default.Emitter();
@@ -86453,6 +86488,16 @@ function createEmitterCometThrower(emitterIndex, image) {
   proton.addEmitter(protonEmitterArray[emitterIndex]);
   protonEmitterArray[emitterIndex].emit();
 }
+/**
+ * Help function to create particle system with different angel and colors for 'pointDrawRandomDrift'
+ *
+ * @param emitterIndex index of the emitter
+ * @param colorT
+ * @param colorE
+ * @param angle angle for the emission of the particle
+ * @param image particle image to use
+ */
+
 
 function createEmitterPointDrawRandomDrift(emitterIndex, colorT, colorE, angle, image) {
   protonEmitterArray[emitterIndex] = new _protonEngine.default.Emitter();
@@ -86472,6 +86517,16 @@ function createEmitterPointDrawRandomDrift(emitterIndex, colorT, colorE, angle, 
   protonEmitterArray[emitterIndex].emit();
   proton.addEmitter(protonEmitterArray[emitterIndex]);
 }
+/**
+ * Help function to create particle system with different angel and colors for 'pointDraw'
+ *
+ * @param emitterIndex
+ * @param colorT
+ * @param colorE
+ * @param angle
+ * @param image
+ */
+
 
 function createEmitterPointDraw(emitterIndex, colorT, colorE, angle, image) {
   protonEmitterArray[emitterIndex] = new _protonEngine.default.Emitter();
@@ -86490,6 +86545,16 @@ function createEmitterPointDraw(emitterIndex, colorT, colorE, angle, image) {
   protonEmitterArray[emitterIndex].emit();
   proton.addEmitter(protonEmitterArray[emitterIndex]);
 }
+/**
+ * Help function to create particle system with different angel and colors for 'pointGlow'
+ *
+ * @param emitterIndex
+ * @param colorT
+ * @param colorE
+ * @param angle
+ * @param image
+ */
+
 
 function createEmitterPointGlow(emitterIndex, colorT, colorE, angle, image) {
   protonEmitterArray[emitterIndex] = new _protonEngine.default.Emitter();
@@ -86508,6 +86573,15 @@ function createEmitterPointGlow(emitterIndex, colorT, colorE, angle, image) {
   protonEmitterArray[emitterIndex].emit();
   proton.addEmitter(protonEmitterArray[emitterIndex]);
 }
+/**
+ * Help function to create particle system with different angel and colors for 'drawGlow'
+ * @param emitterIndex
+ * @param colorT
+ * @param colorE
+ * @param angle
+ * @param image
+ */
+
 
 function createEmitterDrawGlow(emitterIndex, colorT, colorE, angle, image) {
   protonEmitterArray[emitterIndex] = new _protonEngine.default.Emitter();
@@ -86550,7 +86624,7 @@ function createEmitter(x, y, angle, color, handPos, emitterIndex) {
   protonEmitterArray[emitterIndex].addInitialize(new _protonEngine.default.V(new _protonEngine.default.Span(0.5, 1), new _protonEngine.default.Span(90, 10, true), 'polar'));
   protonEmitterArray[emitterIndex].addBehaviour(new _protonEngine.default.Alpha(1, 0));
   protonEmitterArray[emitterIndex].addBehaviour(new _protonEngine.default.Color(color));
-  protonEmitterArray[emitterIndex].addBehaviour(new _protonEngine.default.Attraction(handPos, 10, 500));
+  protonEmitterArray[emitterIndex].addBehaviour(new _protonEngine.default.Attraction(handPos, 10, 1500));
   protonEmitterArray[emitterIndex].addBehaviour(new _protonEngine.default.CrossZone(new _protonEngine.default.RectZone(0, 0, canvas.width, canvas.height), 'cross'));
   protonEmitterArray[emitterIndex].p.x = x;
   protonEmitterArray[emitterIndex].p.y = y;
@@ -86820,6 +86894,8 @@ function loadImage() {
 
 
 mainVideo.addEventListener('loadeddata', function (event) {
+  wVideo = mainVideo.clientWidth;
+  hVideo = mainVideo.clientHeight;
   var animControlsButton = document.getElementsByClassName("ytp-right-controls");
 
   if (document.getElementById("posedream-popup-btn") === null) {
@@ -86847,71 +86923,87 @@ mainVideo.addEventListener('loadeddata', function (event) {
     };
   }
 
+  initVideoPlayerPopup();
+});
+/**
+ * Add popup to video player
+ */
+
+function initVideoPlayerPopup() {
   var div = document.createElement('div');
   div.className = 'posedream-video-popup';
-  div.innerHTML = "\n    Fun with lines\n<ol>\n  <li><button id=\"particleBurningMan\" class=\"pdVideoButton\" onclick=\"document.dispatchEvent(new CustomEvent('changeVisualizationFromPlayer', { detail: {animationID:'skeleton'} }));\">skeleton</button></li>\n  <li><button id=\"particleBurningMan\" class=\"pdVideoButton\" onclick=\"document.dispatchEvent(new CustomEvent('changeVisualizationFromPlayer', { detail: {animationID:'puppetsPlayer'} }));\">Puppets player</button></li>\n  <li><button id=\"particleBurningMan\" class=\"pdVideoButton\" onclick=\"document.dispatchEvent(new CustomEvent('changeVisualizationFromPlayer', { detail: {animationID:'spiderWeb'} }));\">Spider web</button></li>\n</ol>\n<br>\nReplace head with image\n<ol>\n  <li><button id=\"particleBurningMan\" class=\"pdVideoButton\" onclick=\"document.dispatchEvent(new CustomEvent('changeVisualizationFromPlayer', { detail: {animationID:'imgCat'} }));\">Cat</button></li>\n  <li><button id=\"particleBurningMan\" class=\"pdVideoButton\" onclick=\"document.dispatchEvent(new CustomEvent('changeVisualizationFromPlayer', { detail: {animationID:'imgSmiley'} }));\">Smiley</button></li>\n  <li><button id=\"particleBurningMan\" class=\"pdVideoButton\" onclick=\"document.dispatchEvent(new CustomEvent('changeVisualizationFromPlayer', { detail: {animationID:'imgSun'} }));\">Sun</button></li>\n  <li><button id=\"particleBurningMan\" class=\"pdVideoButton\" onclick=\"document.dispatchEvent(new CustomEvent('changeVisualizationFromPlayer', { detail: {animationID:'imgMonkey'} }));\">Monkey</button></li>\n  <li><button id=\"particleBurningMan\" class=\"pdVideoButton\" onclick=\"document.dispatchEvent(new CustomEvent('changeVisualizationFromPlayer', { detail: {animationID:'imgAnonymous'} }));\">Anonymous</button></li>\n</ol>\n<br>\nShow particle animation\n<ol>\n  <li><button id=\"particleBurningMan\" class=\"pdVideoButton\" onclick=\"document.dispatchEvent(new CustomEvent('changeVisualizationFromPlayer', { detail: {animationID:'particleHandsBall'} }));\">Hand power balls</button></li>\n  <li><button id=\"particleBurningMan\" class=\"pdVideoButton\" onclick=\"document.dispatchEvent(new CustomEvent('changeVisualizationFromPlayer', { detail: {animationID:'particle2BalHead'} }));\">Two head balls</button></li>\n  <li><button id=\"particleBurningMan\" class=\"pdVideoButton\" onclick=\"document.dispatchEvent(new CustomEvent('changeVisualizationFromPlayer', { detail: {animationID:'particleRightHandLine'} }));\">Right hand line</button></li>\n  <li><button id=\"particleBurningMan\" class=\"pdVideoButton\" onclick=\"document.dispatchEvent(new CustomEvent('changeVisualizationFromPlayer', { detail: {animationID:'particleNoseGravity'} }));\">Nose gravity</button></li>\n  <li><button id=\"particleBurningMan\" class=\"pdVideoButton\" onclick=\"document.dispatchEvent(new CustomEvent('changeVisualizationFromPlayer', { detail: {animationID:'particleNoseSupernova'} }));\">Nose supernova</button></li>\n  <li><button id=\"particleBurningMan\" class=\"pdVideoButton\" onclick=\"document.dispatchEvent(new CustomEvent('changeVisualizationFromPlayer', { detail: {animationID:'particleHandsTrackFromBorder'} }));\">Hands track from border</button></li>\n  <li><button id=\"particleBurningMan\" class=\"pdVideoButton\" onclick=\"document.dispatchEvent(new CustomEvent('changeVisualizationFromPlayer', { detail: {animationID:'particleUpperBodyGlow'} }));\">Upper body glow</button></li>\n  <li><button id=\"particleBurningMan\" class=\"pdVideoButton\" onclick=\"document.dispatchEvent(new CustomEvent('changeVisualizationFromPlayer', { detail: {animationID:'particleGlowPainting'} }));\">Glow painting</button></li>\n  <li><button id=\"particleBurningMan\" class=\"pdVideoButton\" onclick=\"document.dispatchEvent(new CustomEvent('changeVisualizationFromPlayer', { detail: {animationID:'particlePainting'} }));\">Particle painting</button></li>\n  <li><button id=\"particleBurningMan\" class=\"pdVideoButton\" onclick=\"document.dispatchEvent(new CustomEvent('changeVisualizationFromPlayer', { detail: {animationID:'particlePaintRandomDrift'} }));\">Particle painting with random drift</button></li>\n  <li><button id=\"particleBurningMan\" class=\"pdVideoButton\" onclick=\"document.dispatchEvent(new CustomEvent('changeVisualizationFromPlayer', { detail: {animationID:'particleCometThrower'} }));\">Comet thrower</button></li>\n  <li><button id=\"particleBurningMan\" class=\"pdVideoButton\" onclick=\"document.dispatchEvent(new CustomEvent('changeVisualizationFromPlayer', { detail: {animationID:'particleBodyGlow'} }));\">Body glow</button></li>\n  <li><button id=\"particleBurningMan\" class=\"pdVideoButton\" onclick=\"document.dispatchEvent(new CustomEvent('changeVisualizationFromPlayer', { detail: {animationID:'particleBurningMan'} }));\">Burning Man</button></li>\n</ol>\n    ";
+  div.innerHTML = "\n<div>\n<button id=\"randomButton\" class=\"pdVideoButton\" onclick=\"document.dispatchEvent(new CustomEvent('runRandomAnimation'));\">Random 10s</button>\n<input type=\"range\" min=\"2\" max=\"60\" value=\"10\" id=\"randomRange\" onclick=\"document.dispatchEvent(new CustomEvent('changeRandomInterval', { detail: {interval:this.value} }));\">\n</div>\n<div>\n<p id=\"changeSizeSkeletonText\" \">Skeleton size 1px</p>\n<input type=\"range\" min=\"1\" max=\"10\" value=\"1\" id=\"sizeSkeleton\" onclick=\"document.dispatchEvent(new CustomEvent('changeSizeSkeleton', { detail: {interval:this.value} }));\">\n</div>\n    Fun with lines\n<ol>\n  <li><button class=\"pdVideoButton\" onclick=\"document.dispatchEvent(new CustomEvent('changeVisualizationFromPlayer', { detail: {animationID:'skeleton'} }));\">Skeleton</button></li>\n  <li><button class=\"pdVideoButton\" onclick=\"document.dispatchEvent(new CustomEvent('changeVisualizationFromPlayer', { detail: {animationID:'skeleton3Times'} }));\">Skeletons 3 times</button></li>\n  <li><button class=\"pdVideoButton\" onclick=\"document.dispatchEvent(new CustomEvent('changeVisualizationFromPlayer', { detail: {animationID:'skeleton5Times'} }));\">Skeletons 5 times</button></li>\n  <li><button class=\"pdVideoButton\" onclick=\"document.dispatchEvent(new CustomEvent('changeVisualizationFromPlayer', { detail: {animationID:'puppetsPlayer'} }));\">Puppets player</button></li>\n  <li><button class=\"pdVideoButton\" onclick=\"document.dispatchEvent(new CustomEvent('changeVisualizationFromPlayer', { detail: {animationID:'spiderWeb'} }));\">Spider web</button></li>\n</ol>\n<br>\nReplace head with image\n<ol>\n  <li><button class=\"pdVideoButton\" onclick=\"document.dispatchEvent(new CustomEvent('changeVisualizationFromPlayer', { detail: {animationID:'imgCat'} }));\">Cat</button></li>\n  <li><button class=\"pdVideoButton\" onclick=\"document.dispatchEvent(new CustomEvent('changeVisualizationFromPlayer', { detail: {animationID:'imgSmiley'} }));\">Smiley</button></li>\n  <li><button class=\"pdVideoButton\" onclick=\"document.dispatchEvent(new CustomEvent('changeVisualizationFromPlayer', { detail: {animationID:'imgSun'} }));\">Sun</button></li>\n  <li><button class=\"pdVideoButton\" onclick=\"document.dispatchEvent(new CustomEvent('changeVisualizationFromPlayer', { detail: {animationID:'imgMonkey'} }));\">Monkey</button></li>\n  <li><button class=\"pdVideoButton\" onclick=\"document.dispatchEvent(new CustomEvent('changeVisualizationFromPlayer', { detail: {animationID:'imgAnonymous'} }));\">Anonymous</button></li>\n</ol>\n<br>\nShow particle animation\n<ol>\n  <li><button class=\"pdVideoButton\" onclick=\"document.dispatchEvent(new CustomEvent('changeVisualizationFromPlayer', { detail: {animationID:'particleHandsBall'} }));\">Hand power balls</button></li>\n  <li><button class=\"pdVideoButton\" onclick=\"document.dispatchEvent(new CustomEvent('changeVisualizationFromPlayer', { detail: {animationID:'particle2BalHead'} }));\">Two head balls</button></li>\n  <li><button class=\"pdVideoButton\" onclick=\"document.dispatchEvent(new CustomEvent('changeVisualizationFromPlayer', { detail: {animationID:'particleRightHandLine'} }));\">Right hand line</button></li>\n  <li><button class=\"pdVideoButton\" onclick=\"document.dispatchEvent(new CustomEvent('changeVisualizationFromPlayer', { detail: {animationID:'particleNoseGravity'} }));\">Nose gravity</button></li>\n  <li><button class=\"pdVideoButton\" onclick=\"document.dispatchEvent(new CustomEvent('changeVisualizationFromPlayer', { detail: {animationID:'particleNoseSupernova'} }));\">Nose supernova</button></li>\n  <li><button class=\"pdVideoButton\" onclick=\"document.dispatchEvent(new CustomEvent('changeVisualizationFromPlayer', { detail: {animationID:'particleHandsTrackFromBorder'} }));\">Hands track from border</button></li>\n  <li><button class=\"pdVideoButton\" onclick=\"document.dispatchEvent(new CustomEvent('changeVisualizationFromPlayer', { detail: {animationID:'particleUpperBodyGlow'} }));\">Upper body glow</button></li>\n  <li><button class=\"pdVideoButton\" onclick=\"document.dispatchEvent(new CustomEvent('changeVisualizationFromPlayer', { detail: {animationID:'particleGlowPainting'} }));\">Glow painting</button></li>\n  <li><button class=\"pdVideoButton\" onclick=\"document.dispatchEvent(new CustomEvent('changeVisualizationFromPlayer', { detail: {animationID:'particlePainting'} }));\">Particle painting</button></li>\n  <li><button class=\"pdVideoButton\" onclick=\"document.dispatchEvent(new CustomEvent('changeVisualizationFromPlayer', { detail: {animationID:'particlePaintRandomDrift'} }));\">Particle painting with random drift</button></li>\n  <li><button class=\"pdVideoButton\" onclick=\"document.dispatchEvent(new CustomEvent('changeVisualizationFromPlayer', { detail: {animationID:'particleCometThrower'} }));\">Comet thrower</button></li>\n  <li><button class=\"pdVideoButton\" onclick=\"document.dispatchEvent(new CustomEvent('changeVisualizationFromPlayer', { detail: {animationID:'particleBodyGlow'} }));\">Body glow</button></li>\n  <li><button class=\"pdVideoButton\" onclick=\"document.dispatchEvent(new CustomEvent('changeVisualizationFromPlayer', { detail: {animationID:'particleBurningMan'} }));\">Burning Man</button></li>\n</ol>\n    ";
   var html5VideoPlayer = document.getElementsByClassName("html5-video-player");
   html5VideoPlayer[0].appendChild(div);
+}
 
-  mainVideo.onplaying = function () {
-    if (document.getElementById("canvasdummy") === null) {
-      canvas = document.createElement('canvas'); // creates new canvas element
+mainVideo.oncanplay = function (event) {
+  console.log('Video can start, but not sure it will play through.');
+};
 
-      canvas.id = 'canvasdummy'; // gives canvas id
+mainVideo.onplaying = function (event) {
+  if (document.getElementById("canvasdummy") === null) {
+    canvas = document.createElement('canvas'); // creates new canvas element
 
-      if (mainVideo.length !== 0) {
-        canvas.height = mainVideo.clientHeight; //get original canvas height
+    canvas.id = 'canvasdummy'; // gives canvas id
 
-        canvas.width = mainVideo.clientWidth; // get original canvas width
-      } else {
-        canvas.height = 600;
-        canvas.width = 600;
-      }
+    if (mainVideo.length !== 0) {
+      canvas.height = mainVideo.clientHeight; //get original canvas height
 
-      var videoContainerDIV = document.getElementsByClassName("html5-video-container")[0];
-      videoContainerDIV.appendChild(canvas); // adds the canvas to the body element
-
-      setCanvasStyle(canvas);
-      ctx = canvas.getContext('2d');
+      canvas.width = mainVideo.clientWidth; // get original canvas width
+    } else {
+      canvas.height = 600;
+      canvas.width = 600;
     }
 
-    if (document.getElementById("canvasdummyGL") === null) {
-      canvasGL = document.createElement('canvas'); // creates new canvas element
+    var videoContainerDIV = document.getElementsByClassName("html5-video-container")[0];
+    videoContainerDIV.appendChild(canvas); // adds the canvas to the body element
 
-      canvasGL.id = 'canvasdummyGL'; // gives canvas id
+    setCanvasStyle(canvas);
+    ctx = canvas.getContext('2d');
+  }
 
-      if (mainVideo.length !== 0) {
-        canvasGL.height = mainVideo.clientHeight; //get original canvas height
+  if (document.getElementById("canvasdummyGL") === null) {
+    canvasGL = document.createElement('canvas'); // creates new canvas element
 
-        canvasGL.width = mainVideo.clientWidth; // get original canvas width
-      } else {
-        canvasGL.height = 600;
-        canvasGL.width = 600;
-      }
+    canvasGL.id = 'canvasdummyGL'; // gives canvas id
 
-      var _videoContainerDIV = document.getElementsByClassName("html5-video-container")[0];
+    if (mainVideo.length !== 0) {
+      canvasGL.height = mainVideo.clientHeight; //get original canvas height
 
-      _videoContainerDIV.appendChild(canvasGL); // adds the canvas to the body element
-
-
-      setCanvasStyle(canvasGL);
-      webGLtx = canvasGL.getContext("experimental-webgl");
+      canvasGL.width = mainVideo.clientWidth; // get original canvas width
+    } else {
+      canvasGL.height = 600;
+      canvasGL.width = 600;
     }
 
-    if (isParticleInit === false) {
-      isParticleInit = true;
-      initParticles();
-    }
+    var _videoContainerDIV = document.getElementsByClassName("html5-video-container")[0];
 
-    resizeObserver.observe(mainVideo);
-    createDetectorInterval(); // only call tick once.
+    _videoContainerDIV.appendChild(canvasGL); // adds the canvas to the body element
 
-    if (startTick === false) {
-      startTick = true;
-      tick();
-    }
-  };
-});
+
+    setCanvasStyle(canvasGL);
+    webGLtx = canvasGL.getContext("experimental-webgl");
+  }
+
+  if (isParticleInit === false) {
+    isParticleInit = true;
+    initParticles();
+  }
+
+  resizeObserver.observe(mainVideo);
+  createDetectorInterval(); // only call tick once.
+
+  if (startTick === false) {
+    startTick = true;
+    tick();
+  }
+};
+/**
+ * Create interval to detect poses
+ * CHECKME: use requestAnimationFrame
+ */
+
 
 function createDetectorInterval() {
   intervalVideoPlayId = setInterval(function () {
@@ -86922,30 +87014,66 @@ function createDetectorInterval() {
         }
 
         poseDetector.estimatePoses(mainVideo).then(function (pose) {
+          if (mainVideo.paused) {
+            return;
+          }
+
           if (pose !== undefined && pose[0] !== undefined && pose[0].keypoints !== undefined) {
+            var canvasPoseCoordinates = transformKeypointsForRender(pose[0].keypoints);
+
             if (currentAnimation === "skeleton") {
               ctx.clearRect(0, 0, canvas.width, canvas.height);
-              drawKeyPoints(pose[0].keypoints);
-              drawSkeleton(pose[0].keypoints);
+              drawKeyPoints(canvasPoseCoordinates);
+              drawSkeleton(canvasPoseCoordinates);
+            }
+
+            if (currentAnimation === "skeleton3Times") {
+              ctx.clearRect(0, 0, canvas.width, canvas.height);
+              drawKeyPoints(canvasPoseCoordinates);
+              drawSkeleton(canvasPoseCoordinates);
+              canvasPoseCoordinates = transformKeypointsForRender(pose[0].keypoints, 0.5, 0.5);
+              drawKeyPoints(canvasPoseCoordinates);
+              drawSkeleton(canvasPoseCoordinates);
+              canvasPoseCoordinates = transformKeypointsForRender(pose[0].keypoints, 1.5, 1.5);
+              drawKeyPoints(canvasPoseCoordinates);
+              drawSkeleton(canvasPoseCoordinates);
+            }
+
+            if (currentAnimation === "skeleton5Times") {
+              ctx.clearRect(0, 0, canvas.width, canvas.height);
+              drawKeyPoints(canvasPoseCoordinates);
+              drawSkeleton(canvasPoseCoordinates);
+              canvasPoseCoordinates = transformKeypointsForRender(pose[0].keypoints, 0.5, 0.5);
+              drawKeyPoints(canvasPoseCoordinates);
+              drawSkeleton(canvasPoseCoordinates);
+              canvasPoseCoordinates = transformKeypointsForRender(pose[0].keypoints, 0.5, 0.5, canvas.width / 2, canvas.height / 2);
+              drawKeyPoints(canvasPoseCoordinates);
+              drawSkeleton(canvasPoseCoordinates);
+              canvasPoseCoordinates = transformKeypointsForRender(pose[0].keypoints, 0.5, 0.5, canvas.width / 2);
+              drawKeyPoints(canvasPoseCoordinates);
+              drawSkeleton(canvasPoseCoordinates);
+              canvasPoseCoordinates = transformKeypointsForRender(pose[0].keypoints, 0.5, 0.5, 0, canvas.height / 2);
+              drawKeyPoints(canvasPoseCoordinates);
+              drawSkeleton(canvasPoseCoordinates);
             }
 
             if (currentAnimation === "puppetsPlayer") {
               ctx.clearRect(0, 0, canvas.width, canvas.height);
-              drawPuppets(pose[0].keypoints);
+              drawPuppets(canvasPoseCoordinates);
             }
 
             if (currentAnimation === "spiderWeb") {
               ctx.clearRect(0, 0, canvas.width, canvas.height);
-              drawSpiderWeb(pose[0].keypoints);
+              drawSpiderWeb(canvasPoseCoordinates);
             }
 
             if (currentAnimation === "img") {
               ctx.clearRect(0, 0, canvas.width, canvas.height);
-              drawImage(pose[0].keypoints);
+              drawImage(canvasPoseCoordinates);
             }
 
             if (currentAnimation === "particle") {
-              updateParticles(pose[0].keypoints);
+              updateParticles(canvasPoseCoordinates);
             }
           }
         });
@@ -86953,10 +87081,63 @@ function createDetectorInterval() {
     }
   }, 100);
 }
+/**
+ * Transformer for the detector keypoints
+ * This allows you to move and scale the keypoints before drawing them.
+ *
+ * @param keypoints original keypoints from detector
+ * @param scaleX scale in x direction
+ * @param scaleY scale in y direction
+ * @param shiftX shift in x direction
+ * @param shiftY shift in y direction
+ * @returns {*[]} new array with transformed keypoints
+ */
+
+
+function transformKeypointsForRender(keypoints) {
+  var scaleX = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 1;
+  var scaleY = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : 1;
+  var shiftX = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : 0;
+  var shiftY = arguments.length > 4 && arguments[4] !== undefined ? arguments[4] : 0;
+  var canvasCoordinates = [];
+
+  var _iterator = _createForOfIteratorHelper(keypoints),
+      _step;
+
+  try {
+    for (_iterator.s(); !(_step = _iterator.n()).done;) {
+      var kp = _step.value;
+      var x = kp.x,
+          y = kp.y,
+          score = kp.score;
+      canvasCoordinates.push({
+        x: scaleX * canvas.width * x / wVideo + shiftX,
+        y: scaleY * canvas.height * y / hVideo + shiftY,
+        score: score
+      });
+    }
+  } catch (err) {
+    _iterator.e(err);
+  } finally {
+    _iterator.f();
+  }
+
+  return canvasCoordinates;
+}
+/**
+ * Event to disable the detection interval
+ */
+
 
 mainVideo.onpause = function () {
   clearInterval(intervalVideoPlayId);
 };
+/**
+ * Helper function to style the canvas.
+ * We have one canvas for 'normal' paintings and another for WebGL
+ * @param tmpCanvas
+ */
+
 
 function setCanvasStyle(tmpCanvas) {
   tmpCanvas.style.position = "absolute";
@@ -86965,6 +87146,12 @@ function setCanvasStyle(tmpCanvas) {
   tmpCanvas.style.left = mainVideo.style.cssText.split("; ")[2].split(": ")[1];
   tmpCanvas.style.bottom = "0px";
 }
+/**
+ * Check resize event for video.
+ *
+ * @type {ResizeObserver}
+ */
+
 
 var resizeObserver = new ResizeObserver(function (entries) {
   if (intervalVideoPlayId !== undefined) {
@@ -86976,8 +87163,7 @@ var resizeObserver = new ResizeObserver(function (entries) {
   canvas.width = entries[0].target.clientWidth;
   canvas.height = entries[0].target.clientHeight;
   ctx.width = entries[0].target.clientWidth;
-  ctx.height = entries[0].target.clientHeight; // canvasGL.style.left   = mainVideo.style.cssText.split("; ")[2].split(": ")[1]
-
+  ctx.height = entries[0].target.clientHeight;
   setCanvasStyle(canvasGL);
   canvasGL.width = entries[0].target.clientWidth;
   canvasGL.height = entries[0].target.clientHeight;
@@ -86986,6 +87172,11 @@ var resizeObserver = new ResizeObserver(function (entries) {
   initParticles();
   createDetectorInterval();
 });
+/**
+ * Draw image at nose keypoint
+ *
+ * @param keypoints
+ */
 
 function drawImage(keypoints) {
   if (keypoints !== undefined) {
@@ -86995,30 +87186,40 @@ function drawImage(keypoints) {
     ctx.drawImage(img, keypoints[2].x - imgArray[usedImageArrayIndex].rightEyeToLeft * ratio, keypoints[2].y - imgArray[usedImageArrayIndex].rightEyeToTop * ratio, imgArray[usedImageArrayIndex].imgWidth * ratio, imgArray[usedImageArrayIndex].imgHeight * ratio);
   }
 }
+/**
+ * Draw cicle at every keypoint from detector
+ * @param keypoints
+ */
+
 
 function drawKeyPoints(keypoints) {
-  var _iterator = _createForOfIteratorHelper(keypoints),
-      _step;
+  var _iterator2 = _createForOfIteratorHelper(keypoints),
+      _step2;
 
   try {
-    for (_iterator.s(); !(_step = _iterator.n()).done;) {
-      var keypoint = _step.value;
+    for (_iterator2.s(); !(_step2 = _iterator2.n()).done;) {
+      var keypoint = _step2.value;
       ctx.beginPath();
-      ctx.arc(keypoint.x, keypoint.y, 2, 0, 2 * Math.PI);
+      ctx.arc(keypoint.x, keypoint.y, 2 * skeletonLineSize, 0, 2 * Math.PI);
       ctx.fillStyle = 'blue';
       ctx.fill();
     }
   } catch (err) {
-    _iterator.e(err);
+    _iterator2.e(err);
   } finally {
-    _iterator.f();
+    _iterator2.f();
   }
 }
+/**
+ * Draw lines between all keypoints in the order
+ * @param keypoints
+ */
+
 
 function drawSkeleton(keypoints) {
   ctx.fillStyle = 'white';
   ctx.strokeStyle = 'red';
-  ctx.lineWidth = 1;
+  ctx.lineWidth = skeletonLineSize;
   poseDetection.util.getAdjacentPairs(poseDetection.SupportedModels.MoveNet).forEach(function (_ref) {
     var _ref2 = _slicedToArray(_ref, 2),
         i = _ref2[0],
@@ -87039,6 +87240,11 @@ function drawSkeleton(keypoints) {
     }
   });
 }
+/**
+ * Draw lines from top to some keypoints
+ * @param keypoints
+ */
+
 
 function drawPuppets(keypoints) {
   ctx.fillStyle = 'white';
@@ -87052,6 +87258,14 @@ function drawPuppets(keypoints) {
   drawLine(keypoints[15].x, keypoints[15].y, keypoints[15].x, 0);
   drawLine(keypoints[16].x, keypoints[16].y, keypoints[16].x, 0);
 }
+/**
+ * Helper function to draw line
+ * @param startX
+ * @param startY
+ * @param endX
+ * @param endY
+ */
+
 
 function drawLine(startX, startY, endX, endY) {
   ctx.beginPath();
@@ -87059,6 +87273,11 @@ function drawLine(startX, startY, endX, endY) {
   ctx.lineTo(endX, endY);
   ctx.stroke();
 }
+/**
+ * Draw lines from the border to all keypoints from the detector
+ * @param keypoints
+ */
+
 
 function drawSpiderWeb(keypoints) {
   ctx.fillStyle = 'white';
@@ -87088,6 +87307,7 @@ function drawSpiderWeb(keypoints) {
 
 
 document.addEventListener('changeVisualizationFromPlayer', function (e) {
+  clearRandomSwitchInterval();
   setNewAnimation(e.detail.animationID);
 });
 /**
@@ -87104,6 +87324,40 @@ document.addEventListener('displayPoseDreamPopup', function (e) {
   }
 
   showPlayerPopup = !showPlayerPopup;
+});
+/**
+ * Event to change the random interval from popup
+ */
+
+document.addEventListener('changeRandomInterval', function (e) {
+  document.getElementById("randomButton").innerText = "Random " + e.detail.interval + "s";
+  randomSwitchSec = e.detail.interval;
+});
+
+function clearRandomSwitchInterval() {
+  if (randomSwitchIntervalID) {
+    clearInterval(randomSwitchIntervalID);
+  }
+}
+/**
+ * Event to start the random animation
+ */
+
+
+document.addEventListener('runRandomAnimation', function (e) {
+  clearRandomSwitchInterval();
+  randomSwitchIntervalID = setInterval(function () {
+    var rndNum = Math.floor(Math.random() * allAnimationIDs.length) + 1;
+    setNewAnimation(allAnimationIDs[rndNum]);
+  }, 1000 * randomSwitchSec);
+});
+/**
+ * Event to change the line size for all skeleton animations
+ */
+
+document.addEventListener('changeSizeSkeleton', function (e) {
+  document.getElementById("changeSizeSkeletonText").innerText = "Skeleton size " + e.detail.interval + "px";
+  skeletonLineSize = e.detail.interval;
 });
 },{"regenerator-runtime/runtime":"QVnC","@tensorflow-models/pose-detection":"CoLD","@tensorflow/tfjs-backend-webgl":"gNVZ","proton-engine":"l8qd"}]},{},["pILq"], null)
 //# sourceMappingURL=/content.js.map
