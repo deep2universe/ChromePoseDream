@@ -1,3 +1,10 @@
+# DEPRECATED Repository
+Use [YouTube-Motion-Tracking](https://github.com/deep2universe/YouTube-Motion-Tracking)  
+
+
+
+
+
 # YouTube pose dream
 ![Teaser](assets/teaser.gif)  
 Some examples from this [Video source](https://www.youtube.com/watch?v=eRjUmsB9lMk)    
